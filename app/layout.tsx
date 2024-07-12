@@ -1,11 +1,13 @@
 import type { Metadata } from "next"
 import { Recursive } from "next/font/google"
 import "./globals.css"
+import { ClerkProvider } from "@clerk/nextjs"
+import { dark } from "@clerk/themes"
 
 const recursive = Recursive({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Code Snippet",
+  title: "Snippet Share",
   description: "Code snippet app, for storing and reuse code",
 }
 
@@ -16,9 +18,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`dark ${recursive.className}`}>
-        {children}
-      </body>
+      <ClerkProvider appearance={{ baseTheme: dark }}>
+        <body className={`dark ${recursive.className}`}>{children}</body>
+      </ClerkProvider>
     </html>
   )
 }
