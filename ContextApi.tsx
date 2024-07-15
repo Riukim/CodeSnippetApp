@@ -1,6 +1,6 @@
 "use client"
 
-import { Grid2X2, Heart, Trash2 } from "lucide-react"
+import { Grid2X2, Heart, LogOut, Trash2 } from "lucide-react"
 import { createContext, useContext, useState } from "react"
 
 // Definisce l'interfaccia per un elemento del menu della sidebar
@@ -61,6 +61,17 @@ export default function AppContextProvider({
       isSelected: false,
       icon: (
         <Trash2
+          size={18}
+          className="flex-none"
+        />
+      ),
+    },
+    {
+      id: 4,
+      name: "Log Out",
+      isSelected: false,
+      icon: (
+        <LogOut
           size={18}
           className="flex-none"
         />

@@ -1,11 +1,11 @@
-import { UserButton } from "@clerk/nextjs"
-import Sidebar from "./components/Sidebar"
+import ContentSection from "./components/Content/ContentSection"
+import Sidebar from "./components/Sidebar/Sidebar"
 
 const page = () => {
   return (
-    <div>
+    <div className="flex">
       <Sidebar />
-      {/* <UserButton /> */}
+      <ContentSection />
     </div>
   )
 }
