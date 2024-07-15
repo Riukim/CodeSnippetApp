@@ -24,7 +24,7 @@ const Languages = () => {
           <div className="flex gap-2 items-center">
             <SiCplusplus size={18} /> C++
           </div>
-          <span className="font-bold">3</span>
+          <span className="font-bold">10</span>
         </div>
       </div>
     </div>
