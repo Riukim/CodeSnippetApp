@@ -2,10 +2,8 @@ import { Menu } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import {
   Sheet,
-  SheetClose,
   SheetContent,
   SheetDescription,
-  SheetFooter,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
@@ -19,8 +17,11 @@ const SidebarMenu = () => {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="ghost">
-          <Menu className="text-slate-500 cursor-pointer hidden max-md:block" />
+        <Button
+          variant="ghost"
+          className="hidden max-md:block"
+        >
+          <Menu className="text-slate-500 cursor-pointer" />
         </Button>
       </SheetTrigger>
       <SheetContent side="left">
