@@ -4,6 +4,7 @@ import "./globals.css"
 import { ClerkProvider } from "@clerk/nextjs"
 import { dark } from "@clerk/themes"
 import GlobalContextProvider from "@/ContextApi"
+import { ThemeProvider } from "@/components/ThemeProvider"
 
 const recursive = Recursive({ subsets: ["latin"] })
 
@@ -18,11 +19,16 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <ClerkProvider appearance={{ baseTheme: dark }}>
         <GlobalContextProvider>
-          <body className={`dark ${recursive.className}`}>
-            {children}
+          <body className={`${recursive.className}`}>
+            <ThemeProvider
+              defaultTheme="light"
+              attribute="class"
+            >
+              {children}
+            </ThemeProvider>
           </body>
         </GlobalContextProvider>
       </ClerkProvider>

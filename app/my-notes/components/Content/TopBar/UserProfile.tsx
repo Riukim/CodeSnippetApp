@@ -1,35 +1,57 @@
 "use client"
 
-import { useUser } from '@clerk/nextjs'
-import React from 'react'
+import { useUser } from "@clerk/nextjs"
+import Image from "next/image"
+import React from "react"
 
 const UserProfile = () => {
-  const {user} = useUser()
+  const { user } = useUser()
   const imgUrl = user?.imageUrl
 
-  const loading = (
-    <div className='w-9 h-9 rounded-full mb-[5px] bg-slate-600'></div>
+  const loadingImage = (
+    <div className="w-9 h-9 rounded-full mb-[5px] bg-muted animate-pulse"></div>
+  )
+
+  const loadingEmail = (
+    <span className="bg-muted animate-pulse text-[14px] h-2 w-[130px]"></span>
+  )
+
+  const loadingUser = (
+    <span className="font-semibold animate-pulse bg-muted h-4 w-[100px]"></span>
   )
 
   return (
-    <div className='flex gap-3 items-center'>
+    <div className="flex gap-3 items-center">
       {!user ? (
-        loading 
+        loadingImage
+      ) : imgUrl ? (
+        <Image
+          src={imgUrl}
+          width={36}
+          height={36}
+          alt={`${user?.firstName} ${user?.lastName}`}
+          className="w-9 h-9 rounded-full mb-[5px]"
+        />
       ) : (
-          <img
-            src={imgUrl}
-            alt={`${user?.firstName} ${user?.lastName}`}
-            className='w-9 h-9 rounded-full mb-[5px]'
-          />
+        loadingImage
       )}
 
-      <div className='flex flex-col text-sm'>
-        <span className='font-semibold'>
-          {user?.lastName} {user?.firstName}
-        </span>
-        <span className='text-slate-500 text-[11px]'>
-          {user?.emailAddresses[0].emailAddress}
-        </span>
+      <div className={`flex flex-col text-sm ${!user ? "gap-1" : ""}`}>
+        {!user ? (
+          loadingUser
+        ) : (
+          <span className="font-semibold">
+            {user?.lastName} {user?.firstName}
+          </span>
+        )}
+
+        {!user ? (
+          loadingEmail
+        ) : (
+          <span className="text-slate-500 text-[11px]">
+            {user?.emailAddresses[0].emailAddress}
+          </span>
+        )}
       </div>
     </div>
   )
