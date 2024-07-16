@@ -3,7 +3,7 @@ import TopBar from './TopBar/TopBar'
 
 const ContentSection = () => {
   return (
-    <div className='w-[80%] bg-secondary p-5'>
+    <div className='w-full bg-secondary p-5 shadow-md'>
       <TopBar />
     </div>
   )

@@ -22,13 +22,13 @@ const QuickLinks = () => {
 
   return (
     <div className="mt-20 text-sm">
-      <div className="font-bold text-slate-400">Quick Links</div>
+      <div className="font-bold">Quick Links</div>
       <ul className="text-slate-400 mt-4 flex flex-col gap-2">
         {menuItems.map((menu, index) => (
           <li
             key={index}
             onClick={() => clickedMenuItem(index)}
-            className={`flex cursor-pointer select-none gap-2 p-[7px] px-2 items-center w-[60%] rounded-md ${
+            className={`flex cursor-pointer select-none gap-2 p-[7px] px-2 items-center w-[80%] rounded-md ${
               menu.isSelected ? "bg-primary text-foreground font-semibold" : "text-slate-400"
             }`}
           >

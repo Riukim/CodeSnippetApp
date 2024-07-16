@@ -21,7 +21,7 @@ const UserProfile = () => {
   )
 
   return (
-    <div className="flex gap-3 items-center">
+    <div className="flex gap-3 items-center justify-center">
       {!user ? (
         loadingImage
       ) : imgUrl ? (
@@ -30,13 +30,17 @@ const UserProfile = () => {
           width={36}
           height={36}
           alt={`${user?.firstName} ${user?.lastName}`}
-          className="w-9 h-9 rounded-full mb-[5px]"
+          className="rounded-full h-9 w-9 max-lg:mr-2"
         />
       ) : (
         loadingImage
       )}
 
-      <div className={`flex flex-col text-sm ${!user ? "gap-1" : ""}`}>
+      <div
+        className={`max-lg:hidden flex flex-col text-sm ${
+          !user ? "gap-1" : ""
+        }`}
+      >
         {!user ? (
           loadingUser
         ) : (
