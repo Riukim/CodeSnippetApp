@@ -19,7 +19,10 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html
+      lang="en"
+      suppressHydrationWarning
+    >
       <ClerkProvider appearance={{ baseTheme: dark }}>
         <GlobalContextProvider>
           <body className={`${recursive.className}`}>
