@@ -14,7 +14,7 @@ const Navbar = () => {
       <div className="max-sm:w-full">
         {userId ? (
           <Link href="/my-notes">
-            <Button className="max-sm:w-full bg-primary p-[8px] px-6 text-sm text-white rounded-md">
+            <Button className="max-sm:w-full bg-primary p-[8px] px-6 text-sm text-white rounded-md max-sm:mt-8">
               Access To The App
             </Button>
           </Link>

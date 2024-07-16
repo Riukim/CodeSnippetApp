@@ -1,7 +1,6 @@
 "use client"
 
 import { useAppContext } from "@/ContextApi"
-import { Grid2X2, Heart, Trash2 } from "lucide-react"
 import React from "react"
 
 const QuickLinks = () => {
@@ -30,7 +29,7 @@ const QuickLinks = () => {
             key={index}
             onClick={() => clickedMenuItem(index)}
             className={`flex cursor-pointer select-none gap-2 p-[7px] px-2 items-center w-[60%] rounded-md ${
-              menu.isSelected ? "bg-primary text-white" : "text-slate-400"
+              menu.isSelected ? "bg-primary text-foreground font-semibold" : "text-slate-400"
             }`}
           >
             {menu.icon}
