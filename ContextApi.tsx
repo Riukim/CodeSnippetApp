@@ -1,6 +1,6 @@
 "use client"
 
-import { Grid2X2, Heart, LogOut, Trash2 } from "lucide-react"
+import { Grid2X2, Heart, LogOut, Moon, Sun, Trash2 } from "lucide-react"
 import { createContext, useContext, useState } from "react"
 
 // Definisce l'interfaccia per un elemento del menu della sidebar
@@ -11,11 +11,21 @@ interface MenuItem {
   icon: React.ReactNode
 }
 
+interface DarkModeType {
+  id: number
+  icon: React.ReactNode,
+  isSelected: boolean
+}
+
 // Definisce il tipo del contesto dell'applicazione con lo stato del menu della sidebar e la funzione per aggiornarlo
 interface AppContextType {
   menuState: {
     menuItems: MenuItem[]
     setMenuItems: React.Dispatch<React.SetStateAction<MenuItem[]>>
+  }
+  darkModeObject: {
+    darkMode: DarkModeType[],
+    setDarkMode: React.Dispatch<React.SetStateAction<DarkModeType[]>>
   }
 }
 
@@ -24,6 +34,10 @@ const AppContext = createContext<AppContextType>({
     menuItems: [],
     setMenuItems: () => {},
   },
+  darkModeObject: {
+    darkMode: [],
+    setDarkMode: () => {}
+  }
 })
 
 export default function AppContextProvider({
@@ -79,8 +93,24 @@ export default function AppContextProvider({
     },
   ])
 
+  const [darkMode, setDarkMode] = useState<DarkModeType[]>([
+    {
+      id: 1,
+      icon: <Sun size={18} />,
+      isSelected: true
+    },
+    {
+      id: 2,
+      icon: <Moon size={18} />,
+      isSelected: false
+    }
+  ])
+
   return (
-    <AppContext.Provider value={{ menuState: { menuItems, setMenuItems } }}>
+    <AppContext.Provider value={{
+      menuState: { menuItems, setMenuItems },
+      darkModeObject: { darkMode, setDarkMode}
+    }}>
       {children}
     </AppContext.Provider>
   )
