@@ -1,11 +1,15 @@
-import React from 'react'
-import TopBar from './TopBar/TopBar'
+import React from "react"
+import TopBar from "./TopBar/TopBar"
+import TagSwiper from "../TagsArea/TagSwiper"
 
 const ContentSection = () => {
   return (
-    <div className='w-full bg-secondary p-5 shadow-md'>
-      <TopBar />
-    </div>
+      <section className="bg-secondary p-5 shadow-md overflow-auto">
+        <TopBar />
+        <div className="mt-5">
+          <TagSwiper />
+        </div>
+      </section>
   )
 }
 
