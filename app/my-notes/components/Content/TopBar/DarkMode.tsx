@@ -23,21 +23,36 @@ const DarkMode = () => {
     return <Skeleton />
   }
 
+  const changeTheme = () => {
+    const newTheme = theme === "light" ? "dark" : "light"
+    setTheme(newTheme)
+  }
+
   return (
-    <div className="bg-accent h-[36px] w-[74px] rounded-3xl flex items-center gap-2 pl-[5px]">
+    <div className="relative bg-accent h-[36px] w-[74px] rounded-3xl flex items-center justify-between overflow-hidden">
       <div
-        className={`${theme === "light" ? "bg-primary" : "bg-card"}
-          text-foreground font-semibold w-7 h-7 flex items-center justify-center rounded-full top-[4px] p-1 left-1 cursor-pointer select-none`}
-        onClick={() => setTheme("light")}
+        className={`absolute inset-0 flex items-center justify-start transition-transform duration-700  ${
+          theme === "light"
+            ? "opacity-100 transform translate-x-0"
+            : "opacity-0 transform translate-x-10"
+        }`}
+        onClick={changeTheme}
       >
-        <Sun size={18} />
+        <div className="bg-primary text-foreground font-semibold w-[36px] h-[36px] flex items-center justify-center rounded-full cursor-pointer select-none">
+          <Sun size={18} />
+        </div>
       </div>
       <div
-        className={`${theme === "dark" ? "bg-primary" : "bg-card"}
-          text-foreground font-semibold w-7 h-7 flex items-center justify-center rounded-full top-[4px] p-1 left-1 cursor-pointer select-none`}
-        onClick={() => setTheme("dark")}
+        className={`absolute inset-0 flex justify-end transition-transform duration-700 ${
+          theme === "dark"
+            ? "opacity-100 transform translate-x-0"
+            : "opacity-0 transform -translate-x-10"
+        }`}
+        onClick={changeTheme}
       >
-        <Moon size={18} />
+        <div className="bg-primary text-foreground font-semibold w-[36px] h-[36px] flex items-center justify-center rounded-full cursor-pointer select-none">
+          <Moon size={18} />
+        </div>
       </div>
     </div>
   )
