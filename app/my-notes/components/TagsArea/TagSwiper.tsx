@@ -22,7 +22,6 @@ export default function TagSwiper() {
         <Swiper
           slidesPerView="auto"
           direction="horizontal"
-          grabCursor
           spaceBetween={10}
           breakpoints={{
             320: {

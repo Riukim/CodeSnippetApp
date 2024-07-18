@@ -3,10 +3,10 @@ import Sidebar from "./components/Sidebar/Sidebar"
 
 const page = () => {
   return (
-    <div className="flex">
+    <section className="flex h-dvh">
       <Sidebar />
       <ContentSection />
-    </div>
+    </section>
   )
 }
 

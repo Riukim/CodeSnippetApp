@@ -1,6 +1,6 @@
 "use client"
 
-import { useUser } from "@clerk/nextjs"
+import { UserButton, useUser } from "@clerk/nextjs"
 import Image from "next/image"
 import React from "react"
 
@@ -35,7 +35,6 @@ const UserProfile = () => {
       ) : (
         loadingImage
       )}
-
       <div
         className={`max-lg:hidden flex flex-col text-sm ${
           !user ? "gap-1" : ""

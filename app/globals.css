@@ -74,6 +74,7 @@
   margin-right: 30px;
   text-align: center;
   justify-content: center;
+  cursor: pointer;
   font-size: 14px;
   text-wrap: nowrap;
 }

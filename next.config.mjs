@@ -1,12 +1,17 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
+    dangerouslyAllowSVG: true,
     remotePatterns: [
       {
         protocol: "https",
         hostname: "img.clerk.com",
-        port: ""
-      }
+        port: "",
+      },
+      {
+        protocol: "https",
+        hostname: "skillicons.dev",
+      },
     ],
   },
 }
