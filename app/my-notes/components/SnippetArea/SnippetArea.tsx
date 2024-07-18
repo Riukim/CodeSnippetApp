@@ -3,7 +3,7 @@ import SingleSnippet from './Components/SingleSnippet'
 
 const SnippetArea = () => {
   return (
-    <div className='mt-5 flex flex-wrap gap-4'>
+    <div className='flex flex-wrap gap-4'>
       <SingleSnippet />
       <SingleSnippet />
       <SingleSnippet />

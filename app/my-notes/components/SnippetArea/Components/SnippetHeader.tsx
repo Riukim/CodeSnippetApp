@@ -1,11 +1,19 @@
+"use client"
+
+import { useAppContext } from '@/ContextApi'
 import { Heart } from 'lucide-react'
 import React from 'react'
 
 const SnippetHeader = () => {
+  const {snippetPanel: {setIsOpen} } = useAppContext()
+
   return (
     <>
       <div className="flex justify-between mx-4">
-        <span className="font-bold text-lg w-[87%] text-ring">
+        <span
+          className="font-bold text-lg w-[87%] hover:text-primary cursor-pointer"
+          onClick={() => setIsOpen(true)}
+        >
           Lorem ipsum dolor sit amet consectetur adipisicing elit.
         </span>
         <div className='pt-1'>

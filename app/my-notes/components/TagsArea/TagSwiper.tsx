@@ -14,10 +14,20 @@ import 'swiper/css/pagination';
 
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
+import { useAppContext } from "@/ContextApi";
 
 export default function TagSwiper() {
+    const {
+      snippetPanel: { isOpen },
+      isMobileState: { isMobile },
+    } = useAppContext()
+
   return (
-    <div className="p-3 bg-card rounded-lg flex items-center gap-5">
+    <div
+      className={`p-3 bg-card rounded-lg flex items-center mt-4 gap-5 ${
+        isOpen ? `${isMobile ? "blur-sm" : ""}` : ""
+      }`}
+    >
       <div className="overflow-auto">
         <Swiper
           slidesPerView="auto"
@@ -46,9 +56,7 @@ export default function TagSwiper() {
           modules={[FreeMode, Mousewheel, Pagination]}
           className="mySwiper max-w-[100vw]"
         >
-          <SwiperSlide className="bg-primary">
-            All
-          </SwiperSlide>
+          <SwiperSlide className="bg-primary">All</SwiperSlide>
           <SwiperSlide className="text-slate-400">
             JavaScript Exercise
           </SwiperSlide>

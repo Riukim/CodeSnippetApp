@@ -1,7 +1,7 @@
 "use client"
 
 import { Grid2X2, Heart, LogOut, Moon, Sun, Trash2 } from "lucide-react"
-import { createContext, useContext, useEffect, useState } from "react"
+import React, { createContext, useContext, useEffect, useState } from "react"
 
 // Definisce l'interfaccia per un elemento del menu della sidebar
 interface MenuItem {
@@ -17,7 +17,14 @@ interface AppContextType {
     menuItems: MenuItem[]
     setMenuItems: React.Dispatch<React.SetStateAction<MenuItem[]>>
   }
-
+  snippetPanel: {
+    isOpen: boolean
+    setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
+  }
+  isMobileState: {
+    isMobile: boolean
+    setIsMobile: React.Dispatch<React.SetStateAction<boolean>>
+  }
 }
 
 const AppContext = createContext<AppContextType>({
@@ -25,7 +32,14 @@ const AppContext = createContext<AppContextType>({
     menuItems: [],
     setMenuItems: () => {},
   },
-
+  snippetPanel: {
+    isOpen: false,
+    setIsOpen: () => {},
+  },
+  isMobileState: {
+    isMobile: false,
+    setIsMobile: () => {}
+  }
 })
 
 export default function AppContextProvider({
@@ -81,10 +95,29 @@ export default function AppContextProvider({
     },
   ])
 
+  const [isOpen, setIsOpen] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
+
+  const handleResize = () => {
+    setIsMobile(window.innerWidth <=  700)
+  }
+
+  useEffect(() => {
+    handleResize()
+
+    window.addEventListener("resize", handleResize)
+
+    return () => {
+      window.removeEventListener("resize", handleResize)
+    }
+  }, []);
+
   return (
     <AppContext.Provider
       value={{
         menuState: { menuItems, setMenuItems },
+        snippetPanel: { isOpen, setIsOpen },
+        isMobileState: {isMobile, setIsMobile}
       }}
     >
       {children}
