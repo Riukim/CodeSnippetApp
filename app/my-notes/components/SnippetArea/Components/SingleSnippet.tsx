@@ -12,7 +12,7 @@ const SingleSnippet = () => {
   const {snippetPanel: {isOpen}} = useAppContext()
 
   return (
-    <div className={`bg-card max-sm:w-full ${isOpen ? "w-full" : "w-[320px]"} rounded-lg shadow-md py-4`}>
+    <div className={`bg-card flex-1 max-sm:w-full ${isOpen ? "w-full" : "w-auto"} rounded-lg shadow-md py-4`}>
       <SnippetHeader />
       <SnippetTags />
       <SnippetDescription />

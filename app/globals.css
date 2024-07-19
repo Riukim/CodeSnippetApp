@@ -78,3 +78,9 @@
   font-size: 14px;
   text-wrap: nowrap;
 }
+
+.swiper-slide {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

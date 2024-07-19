@@ -15,14 +15,14 @@ const TopBar = () => {
 
   return (
     <div
-      className={`rounded-lg flex justify-between items-center bg-card p-3 shadow-md ${
+      className={`rounded-lg flex justify-between items-center bg-card p-3 shadow-md gap-1 ${
         isOpen ? `${isMobile ? "blur-sm" : ""}` : ""
       }`}
     >
       <UserProfile />
       <Searchbar />
 
-      <div className="flex gap-4 items-center">
+      <div className="flex justify-between items-center">
         <DarkMode />
         <SidebarMenu />
       </div>
