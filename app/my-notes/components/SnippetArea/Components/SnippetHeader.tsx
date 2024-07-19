@@ -1,25 +1,29 @@
 "use client"
 
-import { useAppContext } from '@/ContextApi'
-import { Heart } from 'lucide-react'
-import React, { useState } from 'react'
+import { useAppContext } from "@/ContextApi"
+import { Heart } from "lucide-react"
+import React, { useState } from "react"
+import { SingleSnippetTypes } from "@/types/context"
 
 interface SnippetHeaderProps {
-  title: string,
-  date: string,
-  isFavorite: boolean,
-  isPublic: boolean
+  snippet: SingleSnippetTypes
 }
 
-const SnippetHeader = ({ title, date, isFavorite: initialIsFavorite ,isPublic}: SnippetHeaderProps) => {
+const SnippetHeader = ({ snippet }: SnippetHeaderProps) => {
   const {
     snippetPanel: { setIsOpen },
+    SelectedSnippetState: { setSelectedSnippet },
   } = useAppContext()
 
-  const [isFavorite, setIsFavorite] = useState(initialIsFavorite)
+  const [isFavorite, setIsFavorite] = useState(snippet.isFavorite)
 
   const toggleFavorite = () => {
-    setIsFavorite(prevIsFavorite => !prevIsFavorite)
+    setIsFavorite((prevIsFavorite) => !prevIsFavorite)
+  }
+
+  const handleTitleClick = () => {
+    setSelectedSnippet(snippet)
+    setIsOpen(true)
   }
 
   return (
@@ -27,9 +31,9 @@ const SnippetHeader = ({ title, date, isFavorite: initialIsFavorite ,isPublic}: 
       <div className="flex justify-between mx-4">
         <span
           className="font-bold text-lg w-[87%] hover:text-primary cursor-pointer"
-          onClick={() => setIsOpen(true)}
+          onClick={handleTitleClick}
         >
-          {title}
+          {snippet.title}
         </span>
         <div className="pt-1">
           <Heart
@@ -42,7 +46,7 @@ const SnippetHeader = ({ title, date, isFavorite: initialIsFavorite ,isPublic}: 
         </div>
       </div>
       <div className="text-muted-foreground text-[12px] flex gap-1 font-normal mx-4 mt-1">
-        <span>{date}</span>
+        <span>{snippet.creationDate}</span>
       </div>
     </>
   )

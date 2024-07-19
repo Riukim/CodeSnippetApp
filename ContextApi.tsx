@@ -22,6 +22,10 @@ const AppContext = createContext<AppContextType>({
     allSnippets: [],
     setAllSnippets: () => {},
   },
+  SelectedSnippetState: {
+    selectedSnippet: null,
+    setSelectedSnippet: () => {}
+  }
 })
 
 export default function AppContextProvider({
@@ -80,6 +84,7 @@ export default function AppContextProvider({
   const [isOpen, setIsOpen] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
   const [allSnippets, setAllSnippets] = useState<SingleSnippetTypes[]>([])
+  const [selectedSnippet, setSelectedSnippet] = useState<SingleSnippetTypes | null>(null)
 
   // Effeto per gestire il ridimensionamento della pagina
   const handleResize = () => {
@@ -112,7 +117,7 @@ const CodeSnippet = () => {
     <div>CodeSnippet</div>
     )
   }
-    
+
 export default CodeSnippet`,
           language: "Javascript",
           creationDate: formatDate(new Date()),
@@ -165,6 +170,7 @@ int main() {
         snippetPanel: { isOpen, setIsOpen },
         isMobileState: { isMobile, setIsMobile },
         snippetsState: { allSnippets, setAllSnippets },
+        SelectedSnippetState: { selectedSnippet, setSelectedSnippet }
       }}
     >
       {children}
@@ -181,17 +187,3 @@ export const useAppContext = () => {
 
   return context
 }
-
-
-/*   const codeSnippet = `
-  import React from 'react'
-
-  const CodeSnippet = () => {
-    return (
-      <div>CodeSnippet</div>
-      )
-    }
-
-  export default CodeSnippet
-  `
- */

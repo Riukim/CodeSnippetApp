@@ -32,9 +32,15 @@ export interface AppContextType {
   isMobileState: {
     isMobile: boolean
     setIsMobile: React.Dispatch<React.SetStateAction<boolean>>
-  },
+  }
   snippetsState: {
-    allSnippets: SingleSnippetTypes[],
+    allSnippets: SingleSnippetTypes[]
     setAllSnippets: React.Dispatch<React.SetStateAction<SingleSnippetTypes[]>>
+  }
+  SelectedSnippetState: {
+    selectedSnippet: SingleSnippetTypes | null
+    setSelectedSnippet: React.Dispatch<
+      React.SetStateAction<SingleSnippetTypes | null>
+    >
   }
 }

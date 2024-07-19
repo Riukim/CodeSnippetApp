@@ -1,12 +1,49 @@
 "use client"
 
 import { useAppContext } from "@/ContextApi"
+import { useEffect, useState } from "react"
+import { snippetSchema } from "@/schema/snippetSchema"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
+import { SingleSnippetTypes } from "@/types/context"
 
 const ModifySnippet = () => {
   const {
     snippetPanel: { isOpen, setIsOpen },
-    isMobileState: {isMobile}
+    isMobileState: { isMobile },
+    SelectedSnippetState: { selectedSnippet, setSelectedSnippet },
   } = useAppContext()
+
+  const { register, handleSubmit, reset, formState: {errors} } = useForm({
+    resolver: zodResolver(snippetSchema)
+  })
+
+  const [singleSnippet, setSingleSnippet] = useState<SingleSnippetTypes | undefined>(undefined)
+  
+  useEffect(() => {
+    if (isOpen) {
+      if (selectedSnippet) {
+        console.log(selectedSnippet);
+        
+        setSingleSnippet(selectedSnippet)
+      }
+    }
+  }, [isOpen, selectedSnippet]);
+
+  console.log(singleSnippet)
 
   return (
     <div
@@ -21,7 +58,7 @@ const ModifySnippet = () => {
         ${isMobile ? "w-4/5" : "w-1/2"}
       `}
     >
-      ModifySnippet
+      {singleSnippet?.title}
       <div
         onClick={() => setIsOpen(false)}
         className="cursor-pointer mt-2"

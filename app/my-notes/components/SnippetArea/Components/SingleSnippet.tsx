@@ -26,10 +26,7 @@ const SingleSnippet = ({ snippet }: SingleSnippetProps) => {
     >
       <div className="flex-1">
         <SnippetHeader
-          title={snippet.title}
-          date={snippet.creationDate}
-          isFavorite={snippet.isFavorite}
-          isPublic={snippet.isPublic}
+          snippet={snippet}
         />
         <SnippetTags tags={snippet.tags} />
         <SnippetDescription description={snippet.description} />
