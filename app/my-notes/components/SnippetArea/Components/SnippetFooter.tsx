@@ -7,18 +7,18 @@ interface SnippetFooterProps {
 }
 
 const SnippetFooter = ({ language }: SnippetFooterProps) => {
+  const imagePath = `/icons/${language.toLowerCase()}.svg`
+
   return (
     <div className="flex justify-between text-[14px] mx-4 mt-4 border-t">
       <div className="flex gap-2 mt-4 items-center">
         <Image
-          src={`/icons/${language}.svg`}
+          src={imagePath}
           alt="js"
           width={18}
           height={18}
         />
-        <span className="dark:text-zinc-400 text-zinc-600">
-          {language}
-        </span>
+        <span className="dark:text-zinc-400 text-zinc-600">{language}</span>
       </div>
       <div className="mt-4">
         <Trash2
