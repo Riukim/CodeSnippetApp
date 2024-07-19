@@ -10,7 +10,8 @@ import {
 } from "react-syntax-highlighter/dist/esm/styles/hljs"
 
 interface CodeSnippetProps {
-  language: string
+  language: string,
+  code: string
 }
 
 const Skeleton = () => {
@@ -26,7 +27,7 @@ const Skeleton = () => {
   )
 }
 
-const CodeSnippet = ({ language }: CodeSnippetProps) => {
+const CodeSnippet = ({ language, code }: CodeSnippetProps) => {
   const [mounted, setMounted] = useState(false)
   const { theme } = useTheme()
 
@@ -40,25 +41,15 @@ const CodeSnippet = ({ language }: CodeSnippetProps) => {
 
   const style = theme === "dark" ? atomOneDark : atomOneLight
 
-  const codeSnippet = `
-  import React from 'react'
-
-  const CodeSnippet = () => {
-    return (
-      <div>CodeSnippet</div>
-      )
-    }
-
-  export default CodeSnippet
-  `
 
   return (
     <div className="rounded-lg overflow-hidden text-sm mt-4 mx-4 shadow-md">
       <SyntaxHighlighter
         language={language}
         style={style}
+        showLineNumbers
       >
-        {codeSnippet}
+        {code}
       </SyntaxHighlighter>
     </div>
   )

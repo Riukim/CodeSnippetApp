@@ -1,31 +1,9 @@
 "use client"
 
-import { Grid2X2, Heart, LogOut, Moon, Sun, Trash2 } from "lucide-react"
+import { Grid2X2, Heart, LogOut, Trash2 } from "lucide-react"
 import React, { createContext, useContext, useEffect, useState } from "react"
-
-// Definisce l'interfaccia per un elemento del menu della sidebar
-interface MenuItem {
-  id: number
-  name: string
-  isSelected: boolean
-  icon: React.ReactNode
-}
-
-// Definisce il tipo del contesto dell'applicazione con lo stato del menu della sidebar e la funzione per aggiornarlo
-interface AppContextType {
-  menuState: {
-    menuItems: MenuItem[]
-    setMenuItems: React.Dispatch<React.SetStateAction<MenuItem[]>>
-  }
-  snippetPanel: {
-    isOpen: boolean
-    setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
-  }
-  isMobileState: {
-    isMobile: boolean
-    setIsMobile: React.Dispatch<React.SetStateAction<boolean>>
-  }
-}
+import { AppContextType, MenuItem, SingleSnippetTypes } from "./types/context"
+import { formatDate } from "./lib/formatDate"
 
 const AppContext = createContext<AppContextType>({
   menuState: {
@@ -38,8 +16,12 @@ const AppContext = createContext<AppContextType>({
   },
   isMobileState: {
     isMobile: false,
-    setIsMobile: () => {}
-  }
+    setIsMobile: () => {},
+  },
+  snippetsState: {
+    allSnippets: [],
+    setAllSnippets: () => {},
+  },
 })
 
 export default function AppContextProvider({
@@ -97,9 +79,11 @@ export default function AppContextProvider({
 
   const [isOpen, setIsOpen] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
+  const [allSnippets, setAllSnippets] = useState<SingleSnippetTypes[]>([])
 
+  // Effeto per gestire il ridimensionamento della pagina
   const handleResize = () => {
-    setIsMobile(window.innerWidth <=  700)
+    setIsMobile(window.innerWidth <= 700)
   }
 
   useEffect(() => {
@@ -110,14 +94,77 @@ export default function AppContextProvider({
     return () => {
       window.removeEventListener("resize", handleResize)
     }
-  }, []);
+  }, [])
+
+  // Effect che simula il caricamento degli snippet di codice
+  useEffect(() => {
+    const updateSnippets = () => {
+      const newSnippets: SingleSnippetTypes[] = [
+        {
+          id: 1,
+          title: "Test",
+          tags: ["react", "nextjs"],
+          description: "Test Description",
+          code: `import React from 'react'
+
+const CodeSnippet = () => {
+  return (
+    <div>CodeSnippet</div>
+    )
+  }
+    
+export default CodeSnippet`,
+          language: "Javascript",
+          creationDate: formatDate(new Date()),
+          isFavorite: false,
+          isPublic: false,
+        },
+        {
+          id: 2,
+          title: "Test",
+          tags: ["My Snippet", "nextjs"],
+          description: "Test Description",
+          code: `#include <iostream>
+
+class CodeSnippet {
+public:
+    void render() const {
+        std::cout << "CodeSnippet" << std::endl;
+    }
+};
+
+int main() {
+    CodeSnippet snippet;
+    snippet.render();
+    return 0;
+}
+`,
+          language: "C++",
+          creationDate: formatDate(new Date()),
+          isFavorite: false,
+          isPublic: false,
+        },
+      ]
+      setAllSnippets(newSnippets)
+    }
+
+    const timeoutId = setTimeout(() => {
+      updateSnippets()
+    }, 2000)
+
+    return () => {
+      clearTimeout(timeoutId)
+    }
+
+  }, [])
 
   return (
     <AppContext.Provider
       value={{
         menuState: { menuItems, setMenuItems },
         snippetPanel: { isOpen, setIsOpen },
-        isMobileState: {isMobile, setIsMobile}
+        isMobileState: { isMobile, setIsMobile },
+        snippetsState: { allSnippets, setAllSnippets },
       }}
     >
       {children}
@@ -134,3 +181,17 @@ export const useAppContext = () => {
 
   return context
 }
+
+
+/*   const codeSnippet = `
+  import React from 'react'
+
+  const CodeSnippet = () => {
+    return (
+      <div>CodeSnippet</div>
+      )
+    }
+
+  export default CodeSnippet
+  `
+ */

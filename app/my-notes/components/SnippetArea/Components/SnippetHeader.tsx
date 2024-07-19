@@ -2,10 +2,25 @@
 
 import { useAppContext } from '@/ContextApi'
 import { Heart } from 'lucide-react'
-import React from 'react'
+import React, { useState } from 'react'
 
-const SnippetHeader = () => {
-  const {snippetPanel: {setIsOpen} } = useAppContext()
+interface SnippetHeaderProps {
+  title: string,
+  date: string,
+  isFavorite: boolean,
+  isPublic: boolean
+}
+
+const SnippetHeader = ({ title, date, isFavorite: initialIsFavorite ,isPublic}: SnippetHeaderProps) => {
+  const {
+    snippetPanel: { setIsOpen },
+  } = useAppContext()
+
+  const [isFavorite, setIsFavorite] = useState(initialIsFavorite)
+
+  const toggleFavorite = () => {
+    setIsFavorite(prevIsFavorite => !prevIsFavorite)
+  }
 
   return (
     <>
@@ -14,19 +29,20 @@ const SnippetHeader = () => {
           className="font-bold text-lg w-[87%] hover:text-primary cursor-pointer"
           onClick={() => setIsOpen(true)}
         >
-          Lorem ipsum dolor sit amet consectetur adipisicing elit.
+          {title}
         </span>
-        <div className='pt-1'>
+        <div className="pt-1">
           <Heart
             size={20}
-            fill="red"
-            stroke=''
+            fill={isFavorite ? "red" : "none"}
+            stroke={isFavorite ? "red" : "currentColor"}
             className="cursor-pointer"
+            onClick={toggleFavorite}
           />
         </div>
       </div>
-      <div className='text-muted-foreground text-[12px] flex gap-1 font-normal mx-4 mt-1'>
-        <span>18th July 2024</span>
+      <div className="text-muted-foreground text-[12px] flex gap-1 font-normal mx-4 mt-1">
+        <span>{date}</span>
       </div>
     </>
   )

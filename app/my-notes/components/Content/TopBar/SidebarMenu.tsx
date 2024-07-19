@@ -19,7 +19,7 @@ const SidebarMenu = () => {
       <SheetTrigger asChild>
         <Button
           variant="ghost"
-          className="hidden max-md:block"
+          className="hidden max-lg:block"
         >
           <Menu className="text-slate-500 cursor-pointer" />
         </Button>

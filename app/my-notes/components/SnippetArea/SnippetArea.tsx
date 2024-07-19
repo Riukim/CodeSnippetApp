@@ -5,6 +5,7 @@ import { useAppContext } from '@/ContextApi'
 const SnippetArea = () => {
   const {
     snippetPanel: { isOpen },
+    snippetsState: { allSnippets }
   } = useAppContext()
 
   return (
@@ -15,13 +16,9 @@ const SnippetArea = () => {
           : "grid-cols-3 max-sm:grid-cols-1 max-xl:grid-cols-2"
       }`}
     >
-      <SingleSnippet />
-      <SingleSnippet />
-      <SingleSnippet />
-      <SingleSnippet />
-      <SingleSnippet />
-      <SingleSnippet />
-      <SingleSnippet />
+      {allSnippets.map(snippet => (
+        <SingleSnippet key={snippet.id} snippet={snippet} />
+      ))}
     </div>
   )
 }
