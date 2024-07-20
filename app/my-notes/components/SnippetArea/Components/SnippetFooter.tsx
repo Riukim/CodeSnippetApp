@@ -14,7 +14,7 @@ const SnippetFooter = ({ language }: SnippetFooterProps) => {
       <div className="flex gap-2 mt-4 items-center">
         <Image
           src={imagePath}
-          alt="js"
+          alt={`${language} icon`}
           width={18}
           height={18}
         />
