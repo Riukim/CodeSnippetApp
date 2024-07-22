@@ -1,12 +1,22 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import SingleSnippet from './Components/SingleSnippet'
 import { useAppContext } from '@/ContextApi'
+import { useUser } from '@clerk/nextjs'
 
 const SnippetArea = () => {
   const {
     snippetPanel: { isOpen },
-    snippetsState: { allSnippets }
+    snippetsState: { allSnippets, clerkId, setClerkId }
   } = useAppContext()
+
+  const {user} = useUser()
+
+  useEffect(() => {
+    if (user) {
+      const clerkId = user.id
+      setClerkId(clerkId)
+    }
+  }, [setClerkId, user]);
 
   return (
     <div
@@ -17,7 +27,7 @@ const SnippetArea = () => {
       }`}
     >
       {allSnippets.map(snippet => (
-        <SingleSnippet key={snippet.id} snippet={snippet} />
+        <SingleSnippet key={snippet._id} snippet={snippet} />
       ))}
     </div>
   )

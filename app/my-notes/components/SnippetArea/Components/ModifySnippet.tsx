@@ -14,15 +14,15 @@ import {
 } from "@/components/ui/form"
 
 import { z } from "zod"
-import { useForm, SubmitHandler } from "react-hook-form"
-import { snippetFormSchema } from "@/schema/snippetSchema"
+import { useForm } from "react-hook-form"
+import { snippetFormSchema } from "@/schema/snippetFormSchema"
 import { zodResolver } from "@hookform/resolvers/zod"
 
 const ModifySnippet = () => {
   const {
     snippetPanel: { isOpen, setIsOpen },
     isMobileState: { isMobile },
-    snippetsState: { allSnippets, setAllSnippets },
+    snippetsState: { allSnippets, setAllSnippets, updateSnippet },
     SelectedSnippetState: { selectedSnippet, setSelectedSnippet },
   } = useAppContext()
 
@@ -38,20 +38,28 @@ const ModifySnippet = () => {
     }
   }, [isOpen, selectedSnippet])
 
-  const onUpdateTitle = () => {
+  const onUpdateTitle = async () => {
     if (!singleSnippet) return
 
     const newSingleSnippet = { ...singleSnippet, title }
-    setSingleSnippet(newSingleSnippet)
 
-    const newAllSnippets = allSnippets.map((snippet) => {
-      if (snippet.id === singleSnippet.id) {
-        return newSingleSnippet
-      }
-      return snippet
-    })
-    setAllSnippets(newAllSnippets)
-    setIsOpen(false)
+    try {
+      await updateSnippet(singleSnippet._id, title)
+
+      const newAllSnippets = allSnippets.map((snippet) => {
+        if (snippet._id === singleSnippet._id) {
+          return newSingleSnippet
+        }
+        return snippet
+      })
+
+      setSingleSnippet(newSingleSnippet)
+      setAllSnippets(newAllSnippets)
+      setIsOpen(false)
+
+    } catch (error) {
+      console.error("Failed to update the snippet in the database:", error)
+    }
   }
 
   const form = useForm({
@@ -71,27 +79,20 @@ const ModifySnippet = () => {
         ${isMobile ? "w-4/5" : "w-1/2"}
       `}
     >
-      <h2>Modify your Snippet</h2>
-      <Form {...form}>
-        <form onSubmit={onUpdateTitle}>
-          <FormItem>
-            <FormLabel>New Title</FormLabel>
-            <FormControl>
-              <Input
-                placeholder="New Title..."
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-              />
-            </FormControl>
-          </FormItem>
-          <Button
-            type="submit"
-            className="mt-4"
-          >
-            Update Title
-          </Button>
-        </form>
-      </Form>
+      <h2 className="font-semibold text-lg mb-2">Modify your Snippet</h2>
+      <span>
+        <Input
+          placeholder="New Title..."
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
+      </span>
+      <Button
+        onClick={onUpdateTitle}
+        className="mt-4"
+      >
+        Update Title
+      </Button>
 
       <div
         onClick={() => setIsOpen(false)}

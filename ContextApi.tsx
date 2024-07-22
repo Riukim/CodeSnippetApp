@@ -21,11 +21,14 @@ const AppContext = createContext<AppContextType>({
   snippetsState: {
     allSnippets: [],
     setAllSnippets: () => {},
+    clerkId: "",
+    setClerkId: () => {},
+    updateSnippet: async () => {},
   },
   SelectedSnippetState: {
     selectedSnippet: null,
-    setSelectedSnippet: () => {}
-  }
+    setSelectedSnippet: () => {},
+  },
 })
 
 export default function AppContextProvider({
@@ -84,7 +87,9 @@ export default function AppContextProvider({
   const [isOpen, setIsOpen] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
   const [allSnippets, setAllSnippets] = useState<SingleSnippetTypes[]>([])
-  const [selectedSnippet, setSelectedSnippet] = useState<SingleSnippetTypes | null>(null)
+  const [selectedSnippet, setSelectedSnippet] =
+    useState<SingleSnippetTypes | null>(null)
+  const [clerkId, setClerkId] = useState("")
 
   // Effeto per gestire il ridimensionamento della pagina
   const handleResize = () => {
@@ -102,7 +107,7 @@ export default function AppContextProvider({
   }, [])
 
   // Effect che simula il caricamento degli snippet di codice
-  useEffect(() => {
+  /*   useEffect(() => {
     const updateSnippets = () => {
       const newSnippets: SingleSnippetTypes[] = [
         {
@@ -161,7 +166,66 @@ int main() {
       clearTimeout(timeoutId)
     }
 
-  }, [])
+  }, []) */
+
+  // Use Effect per il fetch di tutti gli snippet in base al clerkID
+  useEffect(() => {
+    if (!clerkId) return
+
+    const fetchAllSnippets = async () => {
+      try {
+        const response = await fetch(`/api/snippets?clerkId=${clerkId}`)
+        if (!response) {
+          throw new Error("Unable to fetch code snippets")
+        }
+        const data = await response.json()
+
+        if (data.snippets) {
+          console.log("snippets: ", data.snippets)
+          const formattedSnippets = data.snippets.map(
+            (snippet: SingleSnippetTypes) => ({
+              ...snippet,
+              creationDate: formatDate(snippet.creationDate), // Format the date
+            })
+          )
+          setAllSnippets(formattedSnippets)
+        }
+      } catch (error) {
+        console.log("Error fetching snippets:", error)
+      }
+    }
+
+    fetchAllSnippets()
+  }, [clerkId])
+
+  // Funzione per aggiornare gli Snippet
+  const updateSnippet = async (snippetId: number, newTitle: string) => {
+    try {
+      const response = await fetch(`/api/snippets?id=${snippetId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ title: newTitle }),
+      })
+
+      if (!response.ok) {
+        throw new Error("Failed to update the snippet")
+      }
+
+      const updatedSnippet = await response.json()
+
+      setAllSnippets((prevSnippets) =>
+        prevSnippets.map((snippet) =>
+          snippet._id === snippetId ? { ...snippet, title: newTitle } : snippet
+        )
+      )
+      return updatedSnippet
+    } catch (error) {
+      console.log(error)
+      throw new Error("Failed to update the snippet")
+    }
+  }
 
   return (
     <AppContext.Provider
@@ -169,8 +233,14 @@ int main() {
         menuState: { menuItems, setMenuItems },
         snippetPanel: { isOpen, setIsOpen },
         isMobileState: { isMobile, setIsMobile },
-        snippetsState: { allSnippets, setAllSnippets },
-        SelectedSnippetState: { selectedSnippet, setSelectedSnippet }
+        snippetsState: {
+          allSnippets,
+          setAllSnippets,
+          clerkId,
+          setClerkId,
+          updateSnippet,
+        },
+        SelectedSnippetState: { selectedSnippet, setSelectedSnippet },
       }}
     >
       {children}
