@@ -13,12 +13,24 @@ const SnippetHeader = ({ snippet }: SnippetHeaderProps) => {
   const {
     snippetPanel: { setIsOpen },
     SelectedSnippetState: { setSelectedSnippet },
+    snippetsState: { updateSnippet },
   } = useAppContext()
 
   const [isFavorite, setIsFavorite] = useState(snippet.isFavorite)
 
-  const toggleFavorite = () => {
-    setIsFavorite((prevIsFavorite) => !prevIsFavorite)
+  const toggleFavorite = async () => {
+    // Toggle lo stato di isFavorite
+    const newFavoriteStatus = !isFavorite
+    setIsFavorite(newFavoriteStatus)
+
+    try {
+      await updateSnippet(snippet._id, { isFavorite: newFavoriteStatus })
+      
+    } catch (error) {
+      console.error("Failed to update favorite status:", error)
+      // Riporta lo stato al valore precedente in caso di errore
+      setIsFavorite(isFavorite)
+    }
   }
 
   const handleTitleClick = () => {
