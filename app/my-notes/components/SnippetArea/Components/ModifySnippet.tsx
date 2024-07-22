@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react"
 import { SingleSnippetTypes } from "@/types/context"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
+import { Textarea } from "@/components/ui/textarea"
 import {
   Form,
   FormControl,
@@ -30,33 +31,34 @@ const ModifySnippet = () => {
     SingleSnippetTypes | undefined
   >(undefined)
   const [title, setTitle] = useState<string>("")
+  const [description, setDescritpion] = useState<string>("")
 
   useEffect(() => {
     if (isOpen && selectedSnippet) {
       setSingleSnippet(selectedSnippet)
       setTitle(selectedSnippet.title)
+      setDescritpion(selectedSnippet.description)
     }
   }, [isOpen, selectedSnippet])
 
-  const onUpdateTitle = async () => {
+  const onUpdate = async () => {
     if (!singleSnippet) return
 
-    const newSingleSnippet = { ...singleSnippet, title }
+    const updatedData = { title, description }
 
     try {
-      await updateSnippet(singleSnippet._id, title)
+      await updateSnippet(singleSnippet._id, updatedData)
 
       const newAllSnippets = allSnippets.map((snippet) => {
         if (snippet._id === singleSnippet._id) {
-          return newSingleSnippet
+          return { ...snippet, ...updatedData }
         }
         return snippet
       })
 
-      setSingleSnippet(newSingleSnippet)
+      setSingleSnippet({ ...singleSnippet, ...updatedData })
       setAllSnippets(newAllSnippets)
       setIsOpen(false)
-
     } catch (error) {
       console.error("Failed to update the snippet in the database:", error)
     }
@@ -79,20 +81,41 @@ const ModifySnippet = () => {
         ${isMobile ? "w-4/5" : "w-1/2"}
       `}
     >
-      <h2 className="font-semibold text-lg mb-2">Modify your Snippet</h2>
-      <span>
+      <div>
+        <h2 className="font-semibold text-lg mb-2">Modify your Snippet</h2>
         <Input
           placeholder="New Title..."
           value={title}
+          className="bg-accent"
           onChange={(e) => setTitle(e.target.value)}
         />
-      </span>
-      <Button
-        onClick={onUpdateTitle}
-        className="mt-4"
-      >
-        Update Title
-      </Button>
+        <div className="flex justify-end">
+          <Button
+            onClick={onUpdate}
+            className="mt-4"
+            size="sm"
+          >
+            Update Title
+          </Button>
+        </div>
+
+        <Textarea
+          placeholder="New Description..."
+          value={description}
+          className="mt-4 bg-accent"
+          onChange={(e) => setDescritpion(e.target.value)}
+          rows={5}
+        />
+        <div className="flex justify-end">
+          <Button
+            onClick={onUpdate}
+            className="mt-4"
+            size="sm"
+          >
+            Update Description
+          </Button>
+        </div>
+      </div>
 
       <div
         onClick={() => setIsOpen(false)}
@@ -105,19 +128,3 @@ const ModifySnippet = () => {
 }
 
 export default ModifySnippet
-
-{
-  /*       <span>
-        <Input
-          placeholder="New Title..."
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-      </span>
-      <Button
-        onClick={onUpdateTitle}
-        className="mt-4"
-      >
-        Update Title
-      </Button> */
-}

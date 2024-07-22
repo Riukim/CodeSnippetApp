@@ -68,17 +68,37 @@ export async function PATCH(req: any) {
   try {
     await connect()
 
-    const url = new URL(req.url) 
-    const id = url.searchParams.get("id") 
-    const { title } = await req.json()
+    const url = new URL(req.url)
+    const id = url.searchParams.get("id")
+    const {
+      title,
+      description,
+      code,
+      language,
+      tags,
+      isFavorite,
+      isPublic,
+      isTrash,
+    } = await req.json()
 
     if (!id) {
       return NextResponse.json({ error: "ID is required" }, { status: 400 })
     }
 
+    const updateData = {
+      ...(title && { title }),
+      ...(isFavorite !== undefined && { isFavorite }),
+      ...(isPublic !== undefined && { isPublic }),
+      ...(tags && { tags }),
+      ...(description && { description }),
+      ...(code && { code }),
+      ...(language && { language }),
+      ...(isTrash !== undefined && { isTrash }),
+    }
+
     const result = await SingleSnippet.updateOne(
       { _id: id },
-      { $set: { title } }
+      { $set:  updateData  }
     )
 
     if (result.modifiedCount === 0) {

@@ -199,14 +199,14 @@ int main() {
   }, [clerkId])
 
   // Funzione per aggiornare gli Snippet
-  const updateSnippet = async (snippetId: number, newTitle: string) => {
+  const updateSnippet = async (snippetId: number, updatedData: Partial<SingleSnippetTypes>) => {
     try {
       const response = await fetch(`/api/snippets?id=${snippetId}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ title: newTitle }),
+        body: JSON.stringify(updatedData),
       })
 
       if (!response.ok) {
@@ -217,10 +217,11 @@ int main() {
 
       setAllSnippets((prevSnippets) =>
         prevSnippets.map((snippet) =>
-          snippet._id === snippetId ? { ...snippet, title: newTitle } : snippet
+          snippet._id === snippetId ? { ...snippet, ...updatedData } : snippet
         )
       )
       return updatedSnippet
+      
     } catch (error) {
       console.log(error)
       throw new Error("Failed to update the snippet")

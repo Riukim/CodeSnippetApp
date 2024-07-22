@@ -1,9 +1,8 @@
 import React from 'react'
 
 interface SnippetTagsProps {
-  tags: { name: string; clerkUserId?: string }[] // Modifica l'interfaccia
+  tags: { name: string; clerkUserId?: string }[]
 }
-
 const SnippetTags = ({ tags }: SnippetTagsProps) => {
   return (
     <div className="text-slate-500 text-[12px] mx-4 flex-wrap flex gap-2 mt-4">

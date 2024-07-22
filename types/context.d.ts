@@ -37,10 +37,13 @@ export interface AppContextType {
   }
   snippetsState: {
     allSnippets: SingleSnippetTypes[]
-    setAllSnippets: React.Dispatch<React.SetStateAction<SingleSnippetTypes[]>>,
-    clerkId: string,
-    setClerkId: React.Dispatch<React.SetStateAction<string>>,
-    updateSnippet: (snippetId: number, newTitle: string) => Promise<any>
+    setAllSnippets: React.Dispatch<React.SetStateAction<SingleSnippetTypes[]>>
+    clerkId: string
+    setClerkId: React.Dispatch<React.SetStateAction<string>>
+    updateSnippet: (
+      snippetId: number,
+      updatedData: Partial<SingleSnippetTypes>
+    ) => Promise<any>
   }
   SelectedSnippetState: {
     selectedSnippet: SingleSnippetTypes | null
