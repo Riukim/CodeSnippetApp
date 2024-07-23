@@ -41,16 +41,18 @@ const CodeSnippet = ({ language, code }: CodeSnippetProps) => {
 
   const style = theme === "dark" ? atomOneDark : atomOneLight
 
-
   return (
     <div className="rounded-lg overflow-hidden text-sm mt-4 mx-4 shadow-md">
-      <SyntaxHighlighter
-        language={language}
-        style={style}
-        showLineNumbers
-      >
-        {code}
-      </SyntaxHighlighter>
+      <div className="max-h-[50dvh] overflow-y-auto">
+        <SyntaxHighlighter
+          language={language}
+          style={style}
+          showLineNumbers
+          wrapLines={true}
+        >
+          {code}
+        </SyntaxHighlighter>
+      </div>
     </div>
   )
 }

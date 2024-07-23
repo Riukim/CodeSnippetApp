@@ -20,7 +20,7 @@ const SingleSnippet = ({ snippet }: SingleSnippetProps) => {
 
   return (
     <div
-      className={`bg-card flex flex-col flex-1 max-sm:w-full ${
+      className={`bg-background flex flex-col flex-1 max-sm:w-full max-h-dvh ${
         isOpen ? "w-full" : "w-auto"
       } rounded-lg shadow-md py-4`}
     >

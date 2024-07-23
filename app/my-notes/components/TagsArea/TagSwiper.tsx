@@ -24,7 +24,7 @@ export default function TagSwiper() {
 
   return (
     <div
-      className={`p-3 bg-card rounded-lg flex items-center mt-4 gap-5 ${
+      className={`p-3 bg-background rounded-lg flex items-center mt-4 gap-5 ${
         isOpen ? `${isMobile ? "blur-sm" : ""}` : ""
       }`}
     >

@@ -1,9 +1,19 @@
 import { z } from "zod"
 
 export const snippetFormSchema = z.object({
-  title: z.string().min(1, "Title is required"),
-  tags: z.string().min(1, "At least one tag is required"),
-  description: z.string().min(1, "Description is required"),
-  code: z.string().min(1, "Code is required"),
-  language: z.string().min(1, "Language is required")
+  title: z.string().min(2, {
+    message: "Title is required.",
+  }),
+  tags: z.string().min(2, {
+    message: "At least one tag is required."
+  }),
+  description: z.string().min(5, {
+    message: "Description is required."
+  }),
+  code: z.string().min(1, {
+    message: "Code is required."
+  }),
+  language: z.string({
+    required_error: "Please select a language."
+  }),
 })

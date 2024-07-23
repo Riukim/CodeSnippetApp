@@ -15,7 +15,7 @@ const TopBar = () => {
 
   return (
     <div
-      className={`rounded-lg flex justify-between items-center bg-card p-3 shadow-md gap-1 ${
+      className={`rounded-lg flex justify-between items-center bg-background p-3 shadow-md gap-1 ${
         isOpen ? `${isMobile ? "blur-sm" : ""}` : ""
       }`}
     >
