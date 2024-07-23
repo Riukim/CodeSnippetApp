@@ -197,12 +197,6 @@ const ModifySnippet = () => {
           </Button>
         </div>
       </div>
-      <div
-        onClick={() => setIsOpen(false)}
-        className="cursor-pointer mt-2"
-      >
-        Close
-      </div>
     </div>
   )
 }
