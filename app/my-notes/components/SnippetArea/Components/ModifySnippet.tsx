@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 "use client"
 
 import { useAppContext } from "@/ContextApi"
@@ -11,7 +12,9 @@ import Editor, { useMonaco } from "@monaco-editor/react"
 import { z } from "zod"
 import { snippetFormSchema } from "@/schema/snippetFormSchema"
 import { useTheme } from "next-themes"
-import { X } from "lucide-react"
+import { BookText, Code, Type, X } from "lucide-react"
+import { Separator } from "@/components/ui/separator"
+import LanguageCombobox from "@/components/LanguageCombobox"
 
 type SnippetFormValues = z.infer<typeof snippetFormSchema>
 
@@ -32,6 +35,7 @@ const ModifySnippet = () => {
   const [title, setTitle] = useState<string>("")
   const [description, setDescritpion] = useState<string>("")
   const [code, setCode] = useState<string>("")
+  const [language, setLanguage] = useState<string>("")
 
   // UseEffect per impostare valori iniziali quando si apre per modificare snippet
   useEffect(() => {
@@ -40,6 +44,7 @@ const ModifySnippet = () => {
       setTitle(selectedSnippet.title)
       setDescritpion(selectedSnippet.description)
       setCode(selectedSnippet.code)
+      setLanguage(selectedSnippet.language)
     }
   }, [isOpen, selectedSnippet])
 
@@ -61,7 +66,7 @@ const ModifySnippet = () => {
 
       setSingleSnippet({ ...singleSnippet, ...updatedData })
       setAllSnippets(newAllSnippets)
-      setIsOpen(false)
+      
     } catch (error) {
       console.error(
         `Failed to update the snippet ${field} in the database:`,
@@ -69,11 +74,14 @@ const ModifySnippet = () => {
       )
     }
   }
-
+  console.log("Linguaggio", language);
+  
   const updateTitle = () => updateField("title", title)
   const updateDescription = () => updateField("description", description)
+  const updateLanguage = () => updateField("language", language)
   const updateCode = () => updateField("code", code)
-
+  
+  // Monaco Editor custom colors
   useEffect(() => {
     if (monaco) {
       monaco.editor.defineTheme("atomOneDark", {
@@ -110,7 +118,7 @@ const ModifySnippet = () => {
 
   return (
     <div
-      className={`bg-background shadow-md p-3 h-dvh rounded-lg ${
+      className={`bg-background shadow-md p-3 h-auto rounded-lg ${
         isOpen ? "block" : "hidden"
       }  
         ${
@@ -130,63 +138,114 @@ const ModifySnippet = () => {
           />
         </div>
 
-        <Input
-          placeholder="New Title..."
-          value={title}
-          className="mt-4 bg-secondary shadow-md border-none"
-          onChange={(e) => setTitle(e.target.value)}
-        />
-        <div className="flex justify-end">
+        {/* Input per modificare il titolo */}
+        <div className="flex flex-col mt-4 gap-2">
+          <div className="flex items-center gap-2">
+            <Type
+              size={24}
+              className="text-input"
+            />
+            <Input
+              placeholder="New Title..."
+              value={title}
+              className="bg-secondary shadow-md border-none"
+              onChange={(e) => setTitle(e.target.value)}
+            />
+          </div>
+          <span className="text-input text-end text-xs">
+            Enter a new title for your snippet and click "Update Title" to save
+            the changes.
+          </span>
+        </div>
+        <div className="flex justify-end mt-2">
           <Button
             onClick={updateTitle}
-            className="mt-4  text-foreground"
+            className="text-foreground"
             size="sm"
           >
             Update Title
           </Button>
         </div>
+        <Separator className="mt-2 bg-input" />
 
-        <Textarea
-          placeholder="New Description..."
-          value={description}
-          className="mt-4 bg-secondary shadow-md border-none"
-          onChange={(e) => setDescritpion(e.target.value)}
-          rows={5}
-        />
-        <div className="flex justify-end">
+        {/* Textarea per modificare la descrizione dello snippet */}
+        <div className="flex flex-col mt-4 gap-2">
+          <div className="flex items-start gap-2">
+            <BookText
+              size={24}
+              className="text-input mt-1"
+            />
+            <Textarea
+              placeholder="New Description..."
+              value={description}
+              className="bg-secondary shadow-md border-none"
+              onChange={(e) => setDescritpion(e.target.value)}
+              rows={5}
+            />
+          </div>
+          <span className="text-input text-end text-xs">
+            Enter a new description for your snippet and click "Update
+            Description" to save the changes.
+          </span>
+        </div>
+        <div className="flex justify-end mt-2">
           <Button
             onClick={updateDescription}
-            className="mt-4 text-foreground"
+            className="text-foreground"
             size="sm"
           >
             Update Description
           </Button>
         </div>
+        <Separator className="mt-2 bg-input" />
 
-        <Editor
-          height="40vh"
-          theme={theme === "dark" ? "atomOneDark" : "atomOneLight"}
-          options={{
-            dropIntoEditor: {
-              enabled: true,
-            },
-            fontSize: 14,
-            minimap: {
-              enabled: false,
-            },
-            wordWrap: "on",
-            lineNumbersMinChars: 3,
-            autoClosingQuotes: "languageDefined",
-            autoIndent: "full",
-            formatOnType: true,
-            formatOnPaste: true,
-            automaticLayout: true,
-          }}
-          defaultLanguage="javascript"
-          value={code}
-          onChange={(newValue) => setCode(newValue || "")}
-          className="mt-4 rounded-lg overflow-hidden"
-        />
+        {/* Combobox per modificare il linguaggio di programmazione */}
+        <div className="flex mt-4 gap-2 items-center justify-between">
+          <LanguageCombobox
+            language={language}
+            onChange={setLanguage}
+          />
+          <Button
+            size="sm"
+            className="text-foreground"
+            onClick={updateLanguage}
+          >
+            Change Language
+          </Button>
+        </div>
+
+        {/* Monaco Edito per modifcare il codice */}
+        <div className="flex mt-4 gap-2">
+          <Code
+            size={24}
+            className="text-input mt-1 flex-none"
+          />
+          <Editor
+            height="40vh"
+            theme={theme === "dark" ? "atomOneDark" : "atomOneLight"}
+            options={{
+              dropIntoEditor: {
+                enabled: true,
+              },
+              fontSize: 14,
+              minimap: {
+                enabled: false,
+              },
+              wordWrap: "on",
+              lineNumbersMinChars: 3,
+              autoClosingQuotes: "languageDefined",
+              autoIndent: "full",
+              formatOnType: true,
+              formatOnPaste: true,
+              automaticLayout: true,
+            }}
+            defaultLanguage="javscript"
+            language={language.toLowerCase()}
+            value={code}
+            onChange={(newValue) => setCode(newValue || "")}
+            className="rounded-lg overflow-hidden w-auto"
+          />
+        </div>
         <div className="flex justify-end">
           <Button
             onClick={updateCode}

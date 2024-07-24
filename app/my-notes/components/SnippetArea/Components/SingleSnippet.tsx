@@ -25,13 +25,11 @@ const SingleSnippet = ({ snippet }: SingleSnippetProps) => {
       } rounded-lg shadow-md py-4`}
     >
       <div className="flex-1">
-        <SnippetHeader
-          snippet={snippet}
-        />
+        <SnippetHeader snippet={snippet} />
         <SnippetTags tags={snippet.tags} />
         <SnippetDescription description={snippet.description} />
         <CodeSnippet
-          language={snippet.language}
+          language={snippet.language.toLowerCase()}
           code={snippet.code}
         />
       </div>
