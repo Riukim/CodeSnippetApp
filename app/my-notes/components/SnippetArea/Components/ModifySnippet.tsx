@@ -12,7 +12,7 @@ import Editor, { useMonaco } from "@monaco-editor/react"
 import { z } from "zod"
 import { snippetFormSchema } from "@/schema/snippetFormSchema"
 import { useTheme } from "next-themes"
-import { BookText, Code, Type, X } from "lucide-react"
+import { BookText, Code, Code2, Keyboard, Type, X } from "lucide-react"
 import { Separator } from "@/components/ui/separator"
 import LanguageCombobox from "@/components/LanguageCombobox"
 
@@ -66,7 +66,6 @@ const ModifySnippet = () => {
 
       setSingleSnippet({ ...singleSnippet, ...updatedData })
       setAllSnippets(newAllSnippets)
-      
     } catch (error) {
       console.error(
         `Failed to update the snippet ${field} in the database:`,
@@ -74,12 +73,12 @@ const ModifySnippet = () => {
       )
     }
   }
-  
+
   const updateTitle = () => updateField("title", title)
   const updateDescription = () => updateField("description", description)
   const updateLanguage = () => updateField("language", language)
   const updateCode = () => updateField("code", code)
-  
+
   // Monaco Editor custom colors
   useEffect(() => {
     if (monaco) {
@@ -120,11 +119,7 @@ const ModifySnippet = () => {
       className={`bg-background shadow-md p-3 h-auto rounded-lg ${
         isOpen ? "block" : "hidden"
       }  
-        ${
-          isMobile
-            ? "absolute left-8 right-8 top-8"
-            : "w-1/2"
-        }
+        ${isMobile ? "absolute left-8 right-8 top-8" : "w-1/2"}
       `}
     >
       <div>
@@ -200,51 +195,69 @@ const ModifySnippet = () => {
         <Separator className="mt-2 bg-input" />
 
         {/* Combobox per modificare il linguaggio di programmazione */}
-        <div className="flex mt-4 gap-2 items-center justify-between">
-          <LanguageCombobox
-            language={language}
-            onChange={setLanguage}
-          />
-          <Button
-            size="sm"
-            className="text-foreground"
-            onClick={updateLanguage}
-          >
-            Change Language
-          </Button>
+        <div className="flex flex-col mt-4 gap-2">
+          <div className="flex mt-4 gap-2 items-center justify-between">
+            <div className="flex gap-2">
+              <Keyboard
+                size={24}
+                className="mt-1 text-input" />
+              <LanguageCombobox
+                language={language}
+                onChange={setLanguage}
+              />
+            </div>
+            <Button
+              size="sm"
+              className="text-foreground"
+              onClick={updateLanguage}
+            >
+              Change Language
+            </Button>
+          </div>
+          <span className="text-input text-end text-xs">
+            Select a new language for your snippet and click "Change Language"
+            to save the changes.
+          </span>
         </div>
+        <Separator className="mt-2 bg-input" />
 
-        {/* Monaco Edito per modifcare il codice */}
-        <div className="flex mt-4 gap-2">
-          <Code
-            size={24}
-            className="text-input mt-1 flex-none"
-          />
-          <Editor
-            height="30vh"
-            theme={theme === "dark" ? "atomOneDark" : "atomOneLight"}
-            options={{
-              dropIntoEditor: {
-                enabled: true,
-              },
-              fontSize: 14,
-              minimap: {
-                enabled: false,
-              },
-              wordWrap: "on",
-              lineNumbersMinChars: 3,
-              autoClosingQuotes: "languageDefined",
-              autoIndent: "full",
-              formatOnType: true,
-              formatOnPaste: true,
-              automaticLayout: true,
-            }}
-            defaultLanguage="javscript"
-            language={language.toLowerCase()}
-            value={code}
-            onChange={(newValue) => setCode(newValue || "")}
-            className="rounded-lg overflow-hidden w-auto"
-          />
+        {/* Monaco Editor per modificare il codice */}
+        <div className="flex flex-col mt-4 gap-2">
+          <div className="flex mt-4 gap-2">
+            <Code
+              size={24}
+              className="text-input mt-1 flex-none"
+            />
+            <Editor
+              height="30vh"
+              theme={theme === "dark" ? "atomOneDark" : "atomOneLight"}
+              options={{
+                dropIntoEditor: {
+                  enabled: true,
+                },
+                fontSize: 14,
+                minimap: {
+                  enabled: false,
+                },
+                wordWrap: "on",
+                lineNumbersMinChars: 3,
+                autoClosingQuotes: "languageDefined",
+                autoIndent: "full",
+                formatOnType: true,
+                formatOnPaste: true,
+                automaticLayout: true,
+              }}
+              defaultLanguage="javascript"
+              language={language.toLowerCase()}
+              value={code}
+              onChange={(newValue) => setCode(newValue || "")}
+              className="rounded-lg overflow-hidden w-auto"
+            />
+          </div>
+          <span className="text-input text-end text-xs">
+            Enter or modify the code for your snippet and click "Update Code" to
+            save the changes.
+          </span>
         </div>
         <div className="flex justify-end">
           <Button
