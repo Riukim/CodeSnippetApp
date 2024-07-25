@@ -34,7 +34,7 @@ const LanguageCombobox = ({ language, onChange }: LanguageComboboxProps) => {
   }, [language])
 
   const handleSelect = (currentValue: string) => {
-    const newValue = currentValue === value ? "" : currentValue
+    const newValue = currentValue === value ? value : currentValue
     setValue(newValue)
     onChange(newValue)
     setOpen(false)

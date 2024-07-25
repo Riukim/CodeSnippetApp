@@ -79,8 +79,6 @@ const ModifySnippet = () => {
   const updateDescription = () => updateField("description", description)
   const updateLanguage = () => updateField("language", language)
   const updateCode = () => updateField("code", code)
-  console.log(language);
-  
   
   // Monaco Editor custom colors
   useEffect(() => {
