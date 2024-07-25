@@ -12,7 +12,7 @@ import Editor, { useMonaco } from "@monaco-editor/react"
 import { z } from "zod"
 import { snippetFormSchema } from "@/schema/snippetFormSchema"
 import { useTheme } from "next-themes"
-import { BookText, Code, Code2, Keyboard, Type, X } from "lucide-react"
+import { BookText, Code, Keyboard, Type, X } from "lucide-react"
 import { Separator } from "@/components/ui/separator"
 import LanguageCombobox from "@/components/LanguageCombobox"
 
@@ -196,16 +196,23 @@ const ModifySnippet = () => {
 
         {/* Combobox per modificare il linguaggio di programmazione */}
         <div className="flex flex-col mt-4 gap-2">
-          <div className="flex mt-4 gap-2 items-center justify-between">
-            <div className="flex gap-2">
-              <Keyboard
-                size={24}
-                className="mt-1 text-input" />
+          <div className="flex mt-4 gap-2 justify-between">
+            <Keyboard
+              size={24}
+              className="text-input"
+            />
+            <div className="justify-self-end">
               <LanguageCombobox
                 language={language}
                 onChange={setLanguage}
               />
             </div>
+          </div>
+          <span className="text-input text-end text-xs">
+            Select a new language for your snippet and click "Change Language"
+            to save the changes.
+          </span>
+          <div className="flex justify-end mt-2">
             <Button
               size="sm"
               className="text-foreground"
@@ -214,12 +221,8 @@ const ModifySnippet = () => {
               Change Language
             </Button>
           </div>
-          <span className="text-input text-end text-xs">
-            Select a new language for your snippet and click "Change Language"
-            to save the changes.
-          </span>
+          <Separator className="mt-2 bg-input" />
         </div>
-        <Separator className="mt-2 bg-input" />
 
         {/* Monaco Editor per modificare il codice */}
         <div className="flex flex-col mt-4 gap-2">
