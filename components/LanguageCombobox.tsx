@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Check, ChevronsUpDown, Vault } from "lucide-react"
 
 import { cn } from "@/lib/utils"
@@ -17,8 +17,10 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 
+import { languages } from '@/constants/languages'
+
 // Lista dei linguaggi di programmazione supportati
-const languages = [
+/* const languages = [
   { value: "C", label: "C" },
   { value: "C++", label: "C++" },
   { value: "C#", label: "C#" },
@@ -48,7 +50,7 @@ const languages = [
   { value: "VBScript", label: "VBScript" },
   { value: "XML", label: "XML" },
   { value: "YAML", label: "YAML" },
-]
+] */
 
 interface LanguageComboboxProps {
   language: string
@@ -58,6 +60,10 @@ interface LanguageComboboxProps {
 const LanguageCombobox = ({ language, onChange }: LanguageComboboxProps) => {
   const [open, setOpen] = useState(false)
   const [value, setValue] = useState(language)
+
+  useEffect(() => {
+    setValue(language)
+  }, [language])
 
   const handleSelect = (currentValue: string) => {
     const newValue = currentValue === value ? "" : currentValue
@@ -80,7 +86,7 @@ const LanguageCombobox = ({ language, onChange }: LanguageComboboxProps) => {
         >
           {value
             ? languages.find((lang) => lang.value === value)?.label
-            : "Select language..."}
+            : `${language}`}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>

@@ -79,6 +79,8 @@ const ModifySnippet = () => {
   const updateDescription = () => updateField("description", description)
   const updateLanguage = () => updateField("language", language)
   const updateCode = () => updateField("code", code)
+  console.log(language);
+  
   
   // Monaco Editor custom colors
   useEffect(() => {
@@ -123,7 +125,7 @@ const ModifySnippet = () => {
         ${
           isMobile
             ? "absolute z-[100] left-8 right-8 top-8 overflow-y-auto"
-            : ""
+            : "w-1/2"
         }
       `}
     >
@@ -132,7 +134,9 @@ const ModifySnippet = () => {
           <h2 className="font-semibold text-lg mb-2">Modify your Snippet</h2>
           <X
             className="hover:text-primary cursor-pointer"
-            onClick={() => setIsOpen(false)}
+            onClick={() => {
+              setIsOpen(false)
+            }}
           />
         </div>
 
