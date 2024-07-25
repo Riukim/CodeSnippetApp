@@ -119,12 +119,12 @@ const ModifySnippet = () => {
 
   return (
     <div
-      className={`bg-background shadow-md p-3 h-fit rounded-lg ${
+      className={`bg-background shadow-md p-3 h-auto rounded-lg ${
         isOpen ? "block" : "hidden"
       }  
         ${
           isMobile
-            ? "absolute z-[100] left-8 right-8 top-8 overflow-y-auto"
+            ? "absolute left-8 right-8 top-8"
             : "w-1/2"
         }
       `}

@@ -17,40 +17,8 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 
-import { languages } from '@/constants/languages'
-
 // Lista dei linguaggi di programmazione supportati
-/* const languages = [
-  { value: "C", label: "C" },
-  { value: "C++", label: "C++" },
-  { value: "C#", label: "C#" },
-  { value: "CSS", label: "CSS" },
-  { value: "Dart", label: "Dart" },
-  { value: "Go", label: "Go" },
-  { value: "HTML", label: "HTML" },
-  { value: "Java", label: "Java" },
-  { value: "JavaScript", label: "JavaScript" },
-  { value: "JSON", label: "JSON" },
-  { value: "Kotlin", label: "Kotlin" },
-  { value: "Lua", label: "Lua" },
-  { value: "Markdown", label: "Markdown" },
-  { value: "Matlab", label: "Matlab" },
-  { value: "Objective-C", label: "Objective-C" },
-  { value: "Perl", label: "Perl" },
-  { value: "PHP", label: "PHP" },
-  { value: "python", label: "Python" },
-  { value: "R", label: "R" },
-  { value: "Ruby", label: "Ruby" },
-  { value: "Rust", label: "Rust" },
-  { value: "Scala", label: "Scala" },
-  { value: "Shell", label: "Shell" },
-  { value: "SQL", label: "SQL" },
-  { value: "Swift", label: "Swift" },
-  { value: "Typescript", label: "TypeScript" },
-  { value: "VBScript", label: "VBScript" },
-  { value: "XML", label: "XML" },
-  { value: "YAML", label: "YAML" },
-] */
+import { languages } from '@/constants/languages'
 
 interface LanguageComboboxProps {
   language: string

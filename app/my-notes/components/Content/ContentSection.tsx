@@ -20,7 +20,7 @@ const ContentSection = () => {
       <div className="flex gap-4 mt-5">
         <div
           className={`${
-            isOpen ? `${isMobile ? "w-full blur-sm overflow-hidden" : "w-[50%]"}` : "w-full"
+            isOpen ? `${isMobile ? "w-full blur-sm" : "w-[50%]"}` : "w-full"
           }`}
         >
           <SnippetArea />
