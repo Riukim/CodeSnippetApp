@@ -74,7 +74,6 @@ const ModifySnippet = () => {
       )
     }
   }
-  console.log("Linguaggio", language);
   
   const updateTitle = () => updateField("title", title)
   const updateDescription = () => updateField("description", description)
@@ -118,15 +117,14 @@ const ModifySnippet = () => {
 
   return (
     <div
-      className={`bg-background shadow-md p-3 h-auto rounded-lg ${
+      className={`bg-background shadow-md p-3 h-fit rounded-lg ${
         isOpen ? "block" : "hidden"
       }  
         ${
           isMobile
-            ? "absolute z-[100] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+            ? "absolute z-[100] left-8 right-8 top-8 overflow-y-auto"
             : ""
         }
-        ${isMobile ? "w-4/5" : "w-1/2"}
       `}
     >
       <div>
@@ -221,7 +219,7 @@ const ModifySnippet = () => {
             className="text-input mt-1 flex-none"
           />
           <Editor
-            height="40vh"
+            height="30vh"
             theme={theme === "dark" ? "atomOneDark" : "atomOneLight"}
             options={{
               dropIntoEditor: {
