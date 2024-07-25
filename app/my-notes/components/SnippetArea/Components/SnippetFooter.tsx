@@ -8,7 +8,7 @@ interface SnippetFooterProps {
 
 const SnippetFooter = ({ language }: SnippetFooterProps) => {
   const [imageExists, setImageExists] = useState(false)
-  const imagePath = `/icons/${language}.svg`
+  const imagePath = `/icons/${language.toLowerCase()}.svg`
 
   useEffect(() => {
     const checkImage = async () => {
