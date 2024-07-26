@@ -12,7 +12,7 @@ import Editor, { useMonaco } from "@monaco-editor/react"
 import { z } from "zod"
 import { snippetFormSchema } from "@/schema/snippetFormSchema"
 import { useTheme } from "next-themes"
-import { BookText, Code, Keyboard, Type, X } from "lucide-react"
+import { BookText, Code, Keyboard, Tag, Type, X } from "lucide-react"
 import { Separator } from "@/components/ui/separator"
 import LanguageCombobox from "@/components/LanguageCombobox"
 
@@ -36,6 +36,8 @@ const ModifySnippet = () => {
   const [description, setDescritpion] = useState<string>("")
   const [code, setCode] = useState<string>("")
   const [language, setLanguage] = useState<string>("")
+  const [tags, setTags] = useState<{ name: string; clerkUserId?: string }[]>([])
+  const [newTag, setNewTag] = useState<string>("")
 
   // UseEffect per impostare valori iniziali quando si apre per modificare snippet
   useEffect(() => {
@@ -45,11 +47,12 @@ const ModifySnippet = () => {
       setDescritpion(selectedSnippet.description)
       setCode(selectedSnippet.code)
       setLanguage(selectedSnippet.language)
+      setTags(selectedSnippet.tags)
     }
   }, [isOpen, selectedSnippet])
 
   // Funzione per aggiornare nel db e in frontend gli snippet
-  const updateField = async (field: string, value: string) => {
+  const updateField = async (field: string, value: any) => {
     if (!singleSnippet) return
 
     const updatedData = { [field]: value }
@@ -66,6 +69,7 @@ const ModifySnippet = () => {
 
       setSingleSnippet({ ...singleSnippet, ...updatedData })
       setAllSnippets(newAllSnippets)
+      if (field === "tags") setTags(value)
     } catch (error) {
       console.error(
         `Failed to update the snippet ${field} in the database:`,
@@ -78,6 +82,18 @@ const ModifySnippet = () => {
   const updateDescription = () => updateField("description", description)
   const updateLanguage = () => updateField("language", language)
   const updateCode = () => updateField("code", code)
+
+  const handleAddTag = () => {
+    if (newTag.trim()) {
+      const updateTags = [...tags, { name: newTag.trim() }]
+      updateField("tags", updateTags)
+      setNewTag("")
+    }
+  }
+  const handleRemoveTag = (tagName: string) => {
+    const updateTags = tags.filter((tag) => tag.name !== tagName)
+    updateField("tags", updateTags)
+  }
 
   // Monaco Editor custom colors
   useEffect(() => {
@@ -160,6 +176,55 @@ const ModifySnippet = () => {
           >
             Update Title
           </Button>
+        </div>
+        <Separator className="mt-2 bg-input" />
+
+        {/* Input per aggiungere/togliere tag */}
+        <div className="flex flex-col mt-4 gap-2">
+          <div className="flex items-center gap-2">
+            <Tag
+              size={24}
+              className="text-input"
+            />
+            <Input
+              placeholder="Add a new tag..."
+              value={newTag}
+              className="bg-secondary shadow-md border-none"
+              onChange={(e) => setNewTag(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleAddTag()
+                }
+              }}
+            />
+            <Button
+              onClick={handleAddTag}
+              className="text-foreground"
+            >
+              Add Tag
+            </Button>
+          </div>
+          <div className="flex flex-wrap gap-2 mt-2 ml-6">
+            {tags.map((tag) => (
+              <div
+                key={tag.name}
+                className="flex items-center bg-green-100 px-2 py-1 rounded-lg text-[12px] "
+              >
+                <span className="text-green-800 p-1 rounded-lg px-2">
+                  {tag.name}
+                </span>
+                <X
+                  size={16}
+                  className="cursor-pointer text-green-800"
+                  onClick={() => handleRemoveTag(tag.name)}
+                />
+              </div>
+            ))}
+          </div>
+          <span className="text-input text-end text-xs">
+            Press "Enter" or click "Add Tag" to add a new tag. Click on "x" to
+            remove a tag.
+          </span>
         </div>
         <Separator className="mt-2 bg-input" />
 

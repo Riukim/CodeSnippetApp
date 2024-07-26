@@ -181,11 +181,11 @@ int main() {
         const data = await response.json()
 
         if (data.snippets) {
-          console.log("snippets: ", data.snippets)
+          //console.log("snippets: ", data.snippets)
           const formattedSnippets = data.snippets.map(
             (snippet: SingleSnippetTypes) => ({
               ...snippet,
-              creationDate: formatDate(snippet.creationDate), // Format the date
+              creationDate: formatDate(snippet.creationDate),
             })
           )
           setAllSnippets(formattedSnippets)
