@@ -7,14 +7,19 @@ import { SingleSnippetTypes } from "@/types/context"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
+import { Separator } from "@/components/ui/separator"
+import LanguageCombobox from "@/components/LanguageCombobox"
+import TitleInput from "@/components/TitleInput"
+import TagsInput from "@/components/TagsInput"
 import Editor, { useMonaco } from "@monaco-editor/react"
 
 import { z } from "zod"
 import { snippetFormSchema } from "@/schema/snippetFormSchema"
 import { useTheme } from "next-themes"
 import { BookText, Code, Keyboard, Tag, Type, X } from "lucide-react"
-import { Separator } from "@/components/ui/separator"
-import LanguageCombobox from "@/components/LanguageCombobox"
+import DescriptionInput from "@/components/DescriptionInput"
+import LanguageSelector from "@/components/LanguageSelector"
+import CodeEditor from "@/components/CodeEditor"
 
 type SnippetFormValues = z.infer<typeof snippetFormSchema>
 
@@ -150,192 +155,47 @@ const ModifySnippet = () => {
         </div>
 
         {/* Input per modificare il titolo */}
-        <div className="flex flex-col mt-4 gap-2">
-          <div className="flex items-center gap-2">
-            <Type
-              size={24}
-              className="text-input"
-            />
-            <Input
-              placeholder="New Title..."
-              value={title}
-              className="bg-secondary shadow-md border-none"
-              onChange={(e) => setTitle(e.target.value)}
-            />
-          </div>
-          <span className="text-input text-end text-xs">
-            Enter a new title for your snippet and click "Update Title" to save
-            the changes.
-          </span>
-        </div>
-        <div className="flex justify-end mt-2">
-          <Button
-            onClick={updateTitle}
-            className="text-foreground"
-            size="sm"
-          >
-            Update Title
-          </Button>
-        </div>
+        <TitleInput
+          title={title}
+          setTitle={setTitle}
+          updateTitle={updateTitle}
+        />
         <Separator className="mt-2 bg-input" />
 
         {/* Input per aggiungere/togliere tag */}
-        <div className="flex flex-col mt-4 gap-2">
-          <div className="flex items-center gap-2">
-            <Tag
-              size={24}
-              className="text-input"
-            />
-            <Input
-              placeholder="Add a new tag..."
-              value={newTag}
-              className="bg-secondary shadow-md border-none"
-              onChange={(e) => setNewTag(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  handleAddTag()
-                }
-              }}
-            />
-            <Button
-              onClick={handleAddTag}
-              className="text-foreground"
-            >
-              Add Tag
-            </Button>
-          </div>
-          <div className="flex flex-wrap gap-2 mt-2 ml-6">
-            {tags.map((tag) => (
-              <div
-                key={tag.name}
-                className="flex items-center bg-green-100 px-2 py-1 rounded-lg text-[12px] "
-              >
-                <span className="text-green-800 p-1 rounded-lg px-2">
-                  {tag.name}
-                </span>
-                <X
-                  size={16}
-                  className="cursor-pointer text-green-800"
-                  onClick={() => handleRemoveTag(tag.name)}
-                />
-              </div>
-            ))}
-          </div>
-          <span className="text-input text-end text-xs">
-            Press "Enter" or click "Add Tag" to add a new tag. Click on "x" to
-            remove a tag.
-          </span>
-        </div>
+        <TagsInput
+          tags={tags}
+          setTags={setTags}
+          newTag={newTag}
+          setNewTag={setNewTag}
+          handleAddTag={handleAddTag}
+          handleRemoveTag={handleRemoveTag}
+        />
         <Separator className="mt-2 bg-input" />
 
         {/* Textarea per modificare la descrizione dello snippet */}
-        <div className="flex flex-col mt-4 gap-2">
-          <div className="flex items-start gap-2">
-            <BookText
-              size={24}
-              className="text-input mt-1"
-            />
-            <Textarea
-              placeholder="New Description..."
-              value={description}
-              className="bg-secondary shadow-md border-none"
-              onChange={(e) => setDescritpion(e.target.value)}
-              rows={5}
-            />
-          </div>
-          <span className="text-input text-end text-xs">
-            Enter a new description for your snippet and click "Update
-            Description" to save the changes.
-          </span>
-        </div>
-        <div className="flex justify-end mt-2">
-          <Button
-            onClick={updateDescription}
-            className="text-foreground"
-            size="sm"
-          >
-            Update Description
-          </Button>
-        </div>
+        <DescriptionInput
+          description={description}
+          setDescription={setDescritpion}
+          updateDescription={updateDescription}
+        />
         <Separator className="mt-2 bg-input" />
 
         {/* Combobox per modificare il linguaggio di programmazione */}
-        <div className="flex flex-col mt-4 gap-2">
-          <div className="flex mt-4 gap-2 justify-between">
-            <Keyboard
-              size={24}
-              className="text-input"
-            />
-            <div className="justify-self-end">
-              <LanguageCombobox
-                language={language}
-                onChange={setLanguage}
-              />
-            </div>
-          </div>
-          <span className="text-input text-end text-xs">
-            Select a new language for your snippet and click "Change Language"
-            to save the changes.
-          </span>
-          <div className="flex justify-end mt-2">
-            <Button
-              size="sm"
-              className="text-foreground"
-              onClick={updateLanguage}
-            >
-              Change Language
-            </Button>
-          </div>
-          <Separator className="mt-2 bg-input" />
-        </div>
+        <LanguageSelector
+          language={language}
+          setLanguage={setLanguage}
+          updateLanguage={updateLanguage}
+        />
+        <Separator className="mt-2 bg-input" />
 
         {/* Monaco Editor per modificare il codice */}
-        <div className="flex flex-col mt-4 gap-2">
-          <div className="flex mt-4 gap-2">
-            <Code
-              size={24}
-              className="text-input mt-1 flex-none"
-            />
-            <Editor
-              height="30vh"
-              theme={theme === "dark" ? "atomOneDark" : "atomOneLight"}
-              options={{
-                dropIntoEditor: {
-                  enabled: true,
-                },
-                fontSize: 14,
-                minimap: {
-                  enabled: false,
-                },
-                wordWrap: "on",
-                lineNumbersMinChars: 3,
-                autoClosingQuotes: "languageDefined",
-                autoIndent: "full",
-                formatOnType: true,
-                formatOnPaste: true,
-                automaticLayout: true,
-              }}
-              defaultLanguage="javascript"
-              language={language.toLowerCase()}
-              value={code}
-              onChange={(newValue) => setCode(newValue || "")}
-              className="rounded-lg overflow-hidden w-auto"
-            />
-          </div>
-          <span className="text-input text-end text-xs">
-            Enter or modify the code for your snippet and click "Update Code" to
-            save the changes.
-          </span>
-        </div>
-        <div className="flex justify-end">
-          <Button
-            onClick={updateCode}
-            className="mt-4 text-foreground"
-            size="sm"
-          >
-            Update Code
-          </Button>
-        </div>
+        <CodeEditor
+          code={code}
+          language={language}
+          setCode={setCode}
+          updateCode={updateCode}
+        />
       </div>
     </div>
   )

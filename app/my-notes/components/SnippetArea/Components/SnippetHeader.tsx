@@ -57,7 +57,7 @@ const SnippetHeader = ({ snippet }: SnippetHeaderProps) => {
           />
         </div>
       </div>
-      <div className="text-muted-foreground text-[12px] flex gap-1 font-normal mx-4 mt-1">
+      <div className="text-muted-foreground text-xs flex gap-1 font-normal mx-4 mt-1">
         <span>{snippet.creationDate}</span>
       </div>
     </>
