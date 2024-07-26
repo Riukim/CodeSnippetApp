@@ -18,6 +18,11 @@ const SingleSnippet = ({ snippet }: SingleSnippetProps) => {
     snippetPanel: { isOpen },
   } = useAppContext()
 
+  const language =
+    typeof snippet.language === "string"
+      ? snippet.language.toLowerCase()
+      : "plaintext"
+
   return (
     <div
       className={`bg-background flex flex-col flex-1 max-sm:w-full max-h-dvh ${
@@ -29,7 +34,7 @@ const SingleSnippet = ({ snippet }: SingleSnippetProps) => {
         <SnippetTags tags={snippet.tags} />
         <SnippetDescription description={snippet.description} />
         <CodeSnippet
-          language={snippet.language.toLowerCase()}
+          language={language}
           code={snippet.code}
         />
       </div>

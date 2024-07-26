@@ -3,7 +3,7 @@ import React from 'react'
 interface SnippetTagsProps {
   tags: { name: string; clerkUserId?: string }[]
 }
-const SnippetTags = ({ tags }: SnippetTagsProps) => {
+const SnippetTags = ({ tags = [] }: SnippetTagsProps) => {
   return (
     <div className="text-xs mx-4 flex-wrap flex gap-2 mt-4">
       {tags.map((tag, index) => (

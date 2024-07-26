@@ -4,24 +4,16 @@
 import { useAppContext } from "@/ContextApi"
 import React, { useEffect, useState } from "react"
 import { SingleSnippetTypes } from "@/types/context"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { Textarea } from "@/components/ui/textarea"
 import { Separator } from "@/components/ui/separator"
-import LanguageCombobox from "@/components/LanguageCombobox"
 import TitleInput from "@/components/TitleInput"
 import TagsInput from "@/components/TagsInput"
-import Editor, { useMonaco } from "@monaco-editor/react"
+import { useMonaco } from "@monaco-editor/react"
 
-import { z } from "zod"
-import { snippetFormSchema } from "@/schema/snippetFormSchema"
 import { useTheme } from "next-themes"
-import { BookText, Code, Keyboard, Tag, Type, X } from "lucide-react"
+import { X } from "lucide-react"
 import DescriptionInput from "@/components/DescriptionInput"
 import LanguageSelector from "@/components/LanguageSelector"
 import CodeEditor from "@/components/CodeEditor"
-
-type SnippetFormValues = z.infer<typeof snippetFormSchema>
 
 const ModifySnippet = () => {
   const {

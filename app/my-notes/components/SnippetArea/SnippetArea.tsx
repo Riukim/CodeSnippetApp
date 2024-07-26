@@ -6,7 +6,8 @@ import { useUser } from '@clerk/nextjs'
 const SnippetArea = () => {
   const {
     snippetPanel: { isOpen },
-    snippetsState: { allSnippets, clerkId, setClerkId }
+    snippetsState: { allSnippets, clerkId, setClerkId },
+    addSnippetState: {isAdding}
   } = useAppContext()
 
   const {user} = useUser()
@@ -21,7 +22,7 @@ const SnippetArea = () => {
   return (
     <div
       className={`grid gap-4  ${
-        isOpen
+        isOpen || isAdding
           ? " max-sm:grid-cols-1 max-lg:grid-cols-1 max-xl:grid-cols-1 grid-cols-1"
           : "grid-cols-3 max-sm:grid-cols-1 max-xl:grid-cols-2"
       }`}

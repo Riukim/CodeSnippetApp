@@ -4,6 +4,7 @@ import { Grid2X2, Heart, LogOut, Trash2 } from "lucide-react"
 import React, { createContext, useContext, useEffect, useState } from "react"
 import { AppContextType, MenuItem, SingleSnippetTypes } from "./types/context"
 import { formatDate } from "./lib/formatDate"
+import { v7 as uuidv7 } from "uuid"
 
 const AppContext = createContext<AppContextType>({
   menuState: {
@@ -28,6 +29,11 @@ const AppContext = createContext<AppContextType>({
   SelectedSnippetState: {
     selectedSnippet: null,
     setSelectedSnippet: () => {},
+  },
+  addSnippetState: {
+    isAdding: false,
+    setIsAdding: () => {},
+    addSnippet: async () => {},
   },
 })
 
@@ -90,6 +96,7 @@ export default function AppContextProvider({
   const [selectedSnippet, setSelectedSnippet] =
     useState<SingleSnippetTypes | null>(null)
   const [clerkId, setClerkId] = useState("")
+  const [isAdding, setIsAdding] = useState(false)
 
   // Effeto per gestire il ridimensionamento della pagina
   const handleResize = () => {
@@ -199,7 +206,10 @@ int main() {
   }, [clerkId])
 
   // Funzione per aggiornare gli Snippet
-  const updateSnippet = async (snippetId: number, updatedData: Partial<SingleSnippetTypes>) => {
+  const updateSnippet = async (
+    snippetId: number | string,
+    updatedData: Partial<SingleSnippetTypes>
+  ) => {
     try {
       const response = await fetch(`/api/snippets?id=${snippetId}`, {
         method: "PATCH",
@@ -221,10 +231,47 @@ int main() {
         )
       )
       return updatedSnippet
-      
     } catch (error) {
       console.log(error)
       throw new Error("Failed to update the snippet")
+    }
+  }
+
+  const addSnippet = async (newSnippetData: Partial<SingleSnippetTypes>) => {
+    const newSnippet: SingleSnippetTypes = {
+      _id: uuidv7(),
+      title: newSnippetData.title || "Untitled Snippet",
+      description: newSnippetData.description || "",
+      code: newSnippetData.code || "",
+      language: newSnippetData.language || "plaintext",
+      tags: newSnippetData.tags || [],
+      creationDate: new Date().toISOString(),
+      isFavorite: false,
+      isPublic: false,
+      isTrash: false,
+      clerkUserId: clerkId,
+    }
+
+    try {
+      const response = await fetch("/api/snippets", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newSnippet),
+      })
+
+      if (!response.ok) {
+        throw new Error("Failed to add the new Snippet")
+      }
+
+      const savedSnippet = await response.json()
+
+      setAllSnippets((prevSnippets) => [...prevSnippets, savedSnippet])
+      return savedSnippet
+    } catch (error) {
+      console.log(error)
+      throw new Error("Failed to add the new Snippet")
     }
   }
 
@@ -242,6 +289,7 @@ int main() {
           updateSnippet,
         },
         SelectedSnippetState: { selectedSnippet, setSelectedSnippet },
+        addSnippetState: { isAdding, setIsAdding, addSnippet },
       }}
     >
       {children}

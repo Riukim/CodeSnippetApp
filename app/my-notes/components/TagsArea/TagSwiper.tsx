@@ -20,12 +20,13 @@ export default function TagSwiper() {
     const {
       snippetPanel: { isOpen },
       isMobileState: { isMobile },
+      addSnippetState: { isAdding },
     } = useAppContext()
 
   return (
     <div
       className={`p-3 bg-background rounded-lg flex items-center mt-4 gap-5 ${
-        isOpen ? `${isMobile ? "blur-sm" : ""}` : ""
+        isOpen || isAdding ? `${isMobile ? "blur-sm" : ""}` : ""
       }`}
     >
       <div className="overflow-auto">

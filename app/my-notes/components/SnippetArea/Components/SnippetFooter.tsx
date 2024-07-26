@@ -6,7 +6,7 @@ interface SnippetFooterProps {
   language: string
 }
 
-const SnippetFooter = ({ language }: SnippetFooterProps) => {
+const SnippetFooter = ({ language = "" }: SnippetFooterProps) => {
   const [imageExists, setImageExists] = useState(false)
   const imagePath = `/icons/${language.toLowerCase()}.svg`
 
