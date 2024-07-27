@@ -4,7 +4,6 @@ import { Grid2X2, Heart, LogOut, Trash2 } from "lucide-react"
 import React, { createContext, useContext, useEffect, useState } from "react"
 import { AppContextType, MenuItem, SingleSnippetTypes } from "./types/context"
 import { formatDate } from "./lib/formatDate"
-import { v7 as uuidv7 } from "uuid"
 
 const AppContext = createContext<AppContextType>({
   menuState: {
@@ -237,20 +236,10 @@ int main() {
     }
   }
 
-  const addSnippet = async (newSnippetData: Partial<SingleSnippetTypes>) => {
-    const newSnippet: SingleSnippetTypes = {
-      _id: uuidv7(),
-      title: newSnippetData.title || "Untitled Snippet",
-      description: newSnippetData.description || "",
-      code: newSnippetData.code || "",
-      language: newSnippetData.language || "plaintext",
-      tags: newSnippetData.tags || [],
-      creationDate: new Date().toISOString(),
-      isFavorite: false,
-      isPublic: false,
-      isTrash: false,
-      clerkUserId: clerkId,
-    }
+  // Funzione per aggiungere snippet in db
+  const addSnippet = async (snippet: Partial<SingleSnippetTypes>) => {
+
+    const { _id, ...snippetWithoutId} = snippet
 
     try {
       const response = await fetch("/api/snippets", {
@@ -258,16 +247,22 @@ int main() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(newSnippet),
+        body: JSON.stringify(snippetWithoutId),
       })
 
       if (!response.ok) {
-        throw new Error("Failed to add the new Snippet")
+        throw new Error(`Failed to add the new Snippet, status: ${response.status}`)
       }
 
-      const savedSnippet = await response.json()
+      const data = await response.json()
+      
+      const id = data.snippets._id
 
-      setAllSnippets((prevSnippets) => [...prevSnippets, savedSnippet])
+      const savedSnippet = { ...data.snippets, _id: id }
+      
+      const updatedSnippets = ([...allSnippets, savedSnippet])
+      setAllSnippets(updatedSnippets)
+
       return savedSnippet
     } catch (error) {
       console.log(error)

@@ -1,4 +1,3 @@
-// AddSnippet.tsx
 "use client"
 
 import React, { useState } from "react"
@@ -11,11 +10,13 @@ import TitleInput from "@/components/TitleInput"
 import DescriptionInput from "@/components/DescriptionInput"
 import CodeEditor from "@/components/CodeEditor"
 import { X } from "lucide-react"
+import { v7 as uuidv7 } from "uuid"
 
 const AddSnippet = () => {
   const {
     isMobileState: { isMobile },
-    snippetsState: { allSnippets ,setAllSnippets, clerkId },
+    snippetPanel: { isOpen, setIsOpen },
+    snippetsState: { allSnippets, setAllSnippets, clerkId },
     addSnippetState: { isAdding, setIsAdding, addSnippet },
   } = useAppContext()
 
@@ -27,29 +28,29 @@ const AddSnippet = () => {
   const [newTag, setNewTag] = useState<string>("")
 
   const handleAddSnippet = async () => {
-
     setIsAdding(true)
 
     try {
       const newSnippet = {
+        id: uuidv7(),
+        creationDate: new Date().toISOString(),
         title,
         description,
         code,
         language,
         tags: tags.map((tag) => ({
           ...tag,
-          clerkUserId: clerkId
+          clerkUserId: clerkId,
         })),
+        clerkUserId: clerkId,
       }
 
       const savedSnippet = await addSnippet(newSnippet)
 
-      setAllSnippets((allSnippets) => [...allSnippets, savedSnippet])
-
-      setIsAdding(false)
-
+      setAllSnippets([...allSnippets, savedSnippet])
     } catch (error) {
       console.error("Failed to add snippet:", error)
+    } finally {
       setIsAdding(false)
     }
   }
@@ -67,16 +68,24 @@ const AddSnippet = () => {
 
   return (
     <div
-      className={`bg-background shadow-md p-3 h-auto rounded-lg ${
+      className={`bg-background shadow-md p-3 h-fit rounded-lg ${
         isAdding ? "block" : "hidden"
-      } ${isMobile ? "absolute left-8 right-8 top-8" : "w-1/2"}`}
+      } 
+      ${isMobile ? "absolute left-8 right-8 top-8" : "w-1/2"}`}
     >
       <div>
         <div className="flex justify-between">
           <h2 className="font-semibold text-lg mb-2">Add a New Snippet</h2>
           <X
             className="hover:text-primary cursor-pointer"
-            onClick={() => setIsAdding(false)}
+            onClick={() => {
+              setIsAdding(false)
+              setTitle("")
+              setDescription("")
+              setCode("")
+              setLanguage("")
+              setNewTag("")
+            }}
           />
         </div>
 

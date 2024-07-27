@@ -12,6 +12,7 @@ interface SnippetHeaderProps {
 const SnippetHeader = ({ snippet }: SnippetHeaderProps) => {
   const {
     snippetPanel: { setIsOpen },
+    addSnippetState: {setIsAdding },
     SelectedSnippetState: { setSelectedSnippet },
     snippetsState: { updateSnippet },
   } = useAppContext()
@@ -36,6 +37,7 @@ const SnippetHeader = ({ snippet }: SnippetHeaderProps) => {
   const handleTitleClick = () => {
     setSelectedSnippet(snippet)
     setIsOpen(true)
+    setIsAdding(false)
   }
 
   return (

@@ -20,7 +20,7 @@ const ModifySnippet = () => {
     snippetPanel: { isOpen, setIsOpen },
     isMobileState: { isMobile },
     snippetsState: { allSnippets, setAllSnippets, updateSnippet },
-    SelectedSnippetState: { selectedSnippet, setSelectedSnippet },
+    SelectedSnippetState: { selectedSnippet },
   } = useAppContext()
 
   const { theme } = useTheme()
@@ -129,7 +129,7 @@ const ModifySnippet = () => {
 
   return (
     <div
-      className={`bg-background shadow-md p-3 h-auto rounded-lg ${
+      className={`bg-background shadow-md p-3 h-fit rounded-lg ${
         isOpen ? "block" : "hidden"
       }  
         ${isMobile ? "absolute left-8 right-8 top-8" : "w-1/2"}

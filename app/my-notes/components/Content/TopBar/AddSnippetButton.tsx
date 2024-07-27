@@ -4,10 +4,12 @@ import React from "react"
 const AddSnippetButton = () => {
   const {
     addSnippetState: { isAdding, setIsAdding },
+    snippetPanel: { setIsOpen },
   } = useAppContext()
 
   const handleClick = () => {
     setIsAdding(true)
+    setIsOpen(false)
   }
 
   console.log(isAdding);
