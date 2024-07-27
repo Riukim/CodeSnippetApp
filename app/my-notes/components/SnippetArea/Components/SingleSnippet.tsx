@@ -38,7 +38,7 @@ const SingleSnippet = ({ snippet }: SingleSnippetProps) => {
           code={snippet.code}
         />
       </div>
-      <SnippetFooter language={snippet.language} />
+      <SnippetFooter language={snippet.language} snippetId={snippet._id} />
     </div>
   )
 }

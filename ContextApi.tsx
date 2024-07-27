@@ -24,6 +24,7 @@ const AppContext = createContext<AppContextType>({
     clerkId: "",
     setClerkId: () => {},
     updateSnippet: async () => {},
+    deleteSnippet: async () => {},
   },
   SelectedSnippetState: {
     selectedSnippet: null,
@@ -112,68 +113,6 @@ export default function AppContextProvider({
     }
   }, [])
 
-  // Effect che simula il caricamento degli snippet di codice
-  /*   useEffect(() => {
-    const updateSnippets = () => {
-      const newSnippets: SingleSnippetTypes[] = [
-        {
-          id: 1,
-          title: "Test",
-          tags: ["react", "nextjs"],
-          description: "Test Description",
-          code: `import React from 'react'
-
-const CodeSnippet = () => {
-  return (
-    <div>CodeSnippet</div>
-    )
-  }
-
-export default CodeSnippet`,
-          language: "Javascript",
-          creationDate: formatDate(new Date()),
-          isFavorite: false,
-          isPublic: false,
-        },
-        {
-          id: 2,
-          title: "Test",
-          tags: ["My Snippet", "nextjs"],
-          description: "Test Description",
-          code: `#include <iostream>
-
-class CodeSnippet {
-public:
-    void render() const {
-        std::cout << "CodeSnippet" << std::endl;
-    }
-};
-
-int main() {
-    CodeSnippet snippet;
-    snippet.render();
-    return 0;
-}
-`,
-          language: "C++",
-          creationDate: formatDate(new Date()),
-          isFavorite: false,
-          isPublic: false,
-        },
-      ]
-      setAllSnippets(newSnippets)
-    }
-
-    const timeoutId = setTimeout(() => {
-      updateSnippets()
-    }, 2000)
-
-    return () => {
-      clearTimeout(timeoutId)
-    }
-
-  }, []) */
-
   // Use Effect per il fetch di tutti gli snippet in base al clerkID
   useEffect(() => {
     if (!clerkId) return
@@ -236,10 +175,9 @@ int main() {
     }
   }
 
-  // Funzione per aggiungere snippet in db
+  // Funzione per aggiungere snippet in db e frontend
   const addSnippet = async (snippet: Partial<SingleSnippetTypes>) => {
-
-    const { _id, ...snippetWithoutId} = snippet
+    const { _id, ...snippetWithoutId } = snippet
 
     try {
       const response = await fetch("/api/snippets", {
@@ -251,22 +189,46 @@ int main() {
       })
 
       if (!response.ok) {
-        throw new Error(`Failed to add the new Snippet, status: ${response.status}`)
+        throw new Error(
+          `Failed to add the new Snippet, status: ${response.status}`
+        )
       }
 
       const data = await response.json()
-      
+
       const id = data.snippets._id
 
       const savedSnippet = { ...data.snippets, _id: id }
-      
-      const updatedSnippets = ([...allSnippets, savedSnippet])
+
+      const updatedSnippets = [...allSnippets, savedSnippet]
       setAllSnippets(updatedSnippets)
 
       return savedSnippet
     } catch (error) {
       console.log(error)
       throw new Error("Failed to add the new Snippet")
+    }
+  }
+
+  // Funzione per eliminare snippet in db e frontend
+  const deleteSnippet = async (snippetId: string | number) => {
+    try {
+      const response = await fetch(`/api/snippets?id=${snippetId}`, {
+        method: "DELETE",
+      })
+
+      if (!response.ok) {
+        throw new Error("Failed to delete the snippet")
+      }
+
+      setAllSnippets((prevSnippets) =>
+        prevSnippets.filter((snippet) => snippet._id !== snippetId)
+      )
+
+      return {message: "Snippet deleted successfully"}
+    } catch (error) {
+      console.log(error)
+      throw new Error("Failed to delete the snippet")
     }
   }
 
@@ -282,6 +244,7 @@ int main() {
           clerkId,
           setClerkId,
           updateSnippet,
+          deleteSnippet,
         },
         SelectedSnippetState: { selectedSnippet, setSelectedSnippet },
         addSnippetState: { isAdding, setIsAdding, addSnippet },

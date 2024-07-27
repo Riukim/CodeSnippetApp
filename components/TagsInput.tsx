@@ -1,8 +1,9 @@
 /* eslint-disable react/no-unescaped-entities */
-import { Tag, X } from "lucide-react";
+import { Tag, X } from "lucide-react"
 import React from "react"
-import { Input } from "./ui/input";
-import { Button } from "./ui/button";
+import { Input } from "./ui/input"
+import { Button } from "./ui/button"
+import { useAppContext } from "@/ContextApi"
 
 interface TagsInputProps {
   tags: { name: string; clerkUserId?: string }[]
@@ -21,6 +22,7 @@ const TagsInput = ({
   handleAddTag,
   handleRemoveTag,
 }: TagsInputProps) => {
+
   return (
     <div className="flex flex-col mt-4 gap-2">
       <div className="flex items-center gap-2">

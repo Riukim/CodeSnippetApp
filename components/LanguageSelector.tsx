@@ -1,8 +1,9 @@
 /* eslint-disable react/no-unescaped-entities */
-import { Keyboard } from 'lucide-react'
-import React from 'react'
-import LanguageCombobox from './LanguageCombobox'
-import { Button } from './ui/button'
+import { Keyboard } from "lucide-react"
+import React from "react"
+import LanguageCombobox from "./LanguageCombobox"
+import { Button } from "./ui/button"
+import { useAppContext } from "@/ContextApi"
 
 interface LanguageSelectorProps {
   language: string
@@ -13,8 +14,12 @@ interface LanguageSelectorProps {
 const LanguageSelector = ({
   language,
   setLanguage,
-  updateLanguage
+  updateLanguage,
 }: LanguageSelectorProps) => {
+  const {
+    snippetPanel: { isOpen },
+  } = useAppContext()
+
   return (
     <div className="flex flex-col mt-4 gap-2">
       <div className="flex mt-4 gap-2 justify-between">
@@ -29,15 +34,27 @@ const LanguageSelector = ({
           />
         </div>
       </div>
-      <span className="text-input text-end text-xs">
-        Select a new language for your snippet and click "Change Language" to
-        save the changes.
-      </span>
-      <div className='flex justify-end mt-2'>
-        <Button size="sm" className='text-foreground' onClick={updateLanguage}>
-          Change Language
-        </Button>
-      </div>
+      {isOpen ? (
+        <span className="text-input text-end text-xs">
+          Select a new language for your snippet and click "Change Language" to
+          save the changes.
+        </span>
+      ) : (
+        <span className="text-input text-end text-xs">
+          Select a new language for your snippet.
+        </span>
+      )}
+      {isOpen && (
+        <div className="flex justify-end mt-2">
+          <Button
+            size="sm"
+            className="text-foreground"
+            onClick={updateLanguage}
+          >
+            Change Language
+          </Button>
+        </div>
+      )}
     </div>
   )
 }

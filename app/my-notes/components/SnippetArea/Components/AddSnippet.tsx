@@ -15,7 +15,6 @@ import { v7 as uuidv7 } from "uuid"
 const AddSnippet = () => {
   const {
     isMobileState: { isMobile },
-    snippetPanel: { isOpen, setIsOpen },
     snippetsState: { allSnippets, setAllSnippets, clerkId },
     addSnippetState: { isAdding, setIsAdding, addSnippet },
   } = useAppContext()
@@ -48,6 +47,12 @@ const AddSnippet = () => {
       const savedSnippet = await addSnippet(newSnippet)
 
       setAllSnippets([...allSnippets, savedSnippet])
+      setIsAdding(false)
+      setTitle("")
+      setDescription("")
+      setCode("")
+      setLanguage("")
+      setNewTag("")
     } catch (error) {
       console.error("Failed to add snippet:", error)
     } finally {
@@ -127,12 +132,9 @@ const AddSnippet = () => {
           updateCode={() => {}}
         />
 
-        <Button
-          onClick={handleAddSnippet}
-          className="mt-4"
-        >
-          Add Snippet
-        </Button>
+        <div className="flex justify-end mt-4">
+          <Button onClick={handleAddSnippet}>Add Snippet</Button>
+        </div>
       </div>
     </div>
   )

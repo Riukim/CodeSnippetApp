@@ -16,7 +16,7 @@ const ContentSection = () => {
   } = useAppContext()
 
   return (
-    <section className="bg-secondary p-5 shadow-md overflow-auto">
+    <section className="bg-secondary p-5 shadow-md h-screen overflow-auto">
       <TopBar />
       <TagSwiper />
       <div className="flex gap-4 mt-5">

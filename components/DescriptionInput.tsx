@@ -3,6 +3,7 @@ import { BookText } from "lucide-react"
 import React from "react"
 import { Textarea } from "./ui/textarea"
 import { Button } from "./ui/button"
+import { useAppContext } from "@/ContextApi"
 
 interface DescriptionInputProps {
   description: string
@@ -15,6 +16,10 @@ const DescriptionInput = ({
   setDescription,
   updateDescription,
 }: DescriptionInputProps) => {
+  const {
+    snippetPanel: { isOpen },
+  } = useAppContext()
+
   return (
     <div className="flex flex-col mt-4 gap-2">
       <div className="flex items-start gap-2">
@@ -30,19 +35,27 @@ const DescriptionInput = ({
           rows={5}
         />
       </div>
-      <span className="text-input text-end text-xs">
-        Enter a new description for your snippet and click "Update Description"
-        to save the changes.
-      </span>
-      <div className="flex justify-end mt-2">
-        <Button
-          className="text-foreground"
-          size="sm"
-          onClick={updateDescription}
-        >
-          Update Description
-        </Button>
-      </div>
+      {isOpen ? (
+        <span className="text-input text-end text-xs">
+          Enter a new description for your snippet and click "Update
+          Description" to save the changes.
+        </span>
+      ) : (
+        <span className="text-input text-end text-xs">
+          Enter a new description for your snippet.
+        </span>
+      )}
+      {isOpen && (
+        <div className="flex justify-end mt-2">
+          <Button
+            className="text-foreground"
+            size="sm"
+            onClick={updateDescription}
+          >
+            Update Description
+          </Button>
+        </div>
+      )}
     </div>
   )
 }

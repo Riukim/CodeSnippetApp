@@ -98,7 +98,7 @@ export async function PATCH(req: any) {
 
     const result = await SingleSnippet.updateOne(
       { _id: id },
-      { $set:  updateData  }
+      { $set: updateData }
     )
 
     if (result.modifiedCount === 0) {
@@ -110,6 +110,29 @@ export async function PATCH(req: any) {
     return NextResponse.json({ message: "Snippet updated successfully" })
   } catch (error) {
     console.error("Update error:", error)
+    return NextResponse.json({ error: error }, { status: 500 })
+  }
+}
+
+export async function DELETE(req: any) {
+  try {
+    await connect()
+    const url = new URL(req.url)
+    const id = url.searchParams.get("id")
+
+    if (!id) {
+      return NextResponse.json({ error: "ID is required" }, { status: 400 })
+    }
+
+    const result = await SingleSnippet.deleteOne({ _id: id })
+
+    if (result.deletedCount === 0) {
+      return NextResponse.json({ error: "Snippet not found" }, { status: 404 })
+    }
+
+    return NextResponse.json({ message: "Snippet deleted successfully" })
+  } catch (error) {
+    console.log("Deletion error: ", error)
     return NextResponse.json({ error: error }, { status: 500 })
   }
 }

@@ -4,6 +4,7 @@ import { Code } from "lucide-react"
 import { useTheme } from "next-themes"
 import React, { useEffect } from "react"
 import { Button } from "./ui/button"
+import { useAppContext } from "@/ContextApi"
 
 interface CodeEditorProps {
   code: string
@@ -18,6 +19,10 @@ const CodeEditor = ({
   language,
   updateCode,
 }: CodeEditorProps) => {
+  const {
+    snippetPanel: { isOpen },
+  } = useAppContext()
+
   const { theme } = useTheme()
   const monaco = useMonaco()
 
@@ -85,19 +90,27 @@ const CodeEditor = ({
           className="rounded-lg overflow-hidden w-auto"
         />
       </div>
-      <span className="text-input text-end text-xs">
-        Enter or modify the code for your snippet and click "Update Code" to
-        save the changes.
-      </span>
-      <div className="flex justify-end">
-        <Button
-          onClick={updateCode}
-          className="mt-4 text-foreground"
-          size="sm"
-        >
-          Update Code
-        </Button>
-      </div>
+      {isOpen ? (
+        <span className="text-input text-end text-xs">
+          Enter or modify the code for your snippet and click "Update Code" to
+          save the changes.
+        </span>
+      ) : (
+        <span className="text-input text-end text-xs">
+          Enter or modify the code for your snippet.
+        </span>
+      )}
+      {isOpen && (
+        <div className="flex justify-end">
+          <Button
+            onClick={updateCode}
+            className="mt-4 text-foreground"
+            size="sm"
+          >
+            Update Code
+          </Button>
+        </div>
+      )}
     </div>
   )
 }

@@ -46,6 +46,7 @@ export interface AppContextType {
       snippetId: number | string,
       updatedData: Partial<SingleSnippetTypes>
     ) => Promise<any>
+    deleteSnippet: (snippetId: number | string) => Promise<any>
   }
   SelectedSnippetState: {
     selectedSnippet: SingleSnippetTypes | null
