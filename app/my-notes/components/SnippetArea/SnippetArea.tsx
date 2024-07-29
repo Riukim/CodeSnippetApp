@@ -2,15 +2,17 @@ import React, { useEffect } from 'react'
 import SingleSnippet from './Components/SingleSnippet'
 import { useAppContext } from '@/ContextApi'
 import { useUser } from '@clerk/nextjs'
+import { usePathname } from 'next/navigation'
 
 const SnippetArea = () => {
   const {
     snippetPanel: { isOpen },
-    snippetsState: { allSnippets, clerkId, setClerkId },
+    snippetsState: { allSnippets, setClerkId },
     addSnippetState: {isAdding}
   } = useAppContext()
 
-  const {user} = useUser()
+  const { user } = useUser()
+  const pathname = usePathname()
 
   useEffect(() => {
     if (user) {
@@ -18,6 +20,18 @@ const SnippetArea = () => {
       setClerkId(clerkId)
     }
   }, [setClerkId, user]);
+
+  const visibleSnippet = allSnippets.filter(snippet => {
+    if (pathname === "/my-notes") {
+      return !snippet.isTrash
+    } else if (pathname === "/trash") {
+      return snippet.isTrash
+    } else if (pathname === "/favorites") {
+      return snippet.isFavorite
+    } else {
+      return true
+    }
+  })
 
   return (
     <div
@@ -27,7 +41,7 @@ const SnippetArea = () => {
           : "grid-cols-3 max-sm:grid-cols-1 max-xl:grid-cols-2"
       }`}
     >
-      {allSnippets.map(snippet => (
+      {visibleSnippet.map(snippet => (
         <SingleSnippet key={snippet._id} snippet={snippet} />
       ))}
     </div>

@@ -1,12 +1,15 @@
 "use client"
 
 import { useAppContext } from "@/ContextApi"
+import { useRouter } from "next/navigation"
 import React from "react"
 
 const QuickLinks = () => {
   const {
     menuState: { menuItems, setMenuItems },
   } = useAppContext()
+
+  const router = useRouter()
 
   function clickedMenuItem(index: number) {
     const updateMenuItem = menuItems.map((menu, i) => {
@@ -18,6 +21,7 @@ const QuickLinks = () => {
     })
 
     setMenuItems(updateMenuItem)
+    router.push(menuItems[index].path)
   }
 
   return (

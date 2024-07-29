@@ -54,7 +54,7 @@ const SnippetHeader = ({ snippet }: SnippetHeaderProps) => {
             size={20}
             fill={isFavorite ? "red" : "none"}
             stroke={isFavorite ? "black" : "currentColor"}
-            className="cursor-pointer hover:fill-red-500"
+            className="cursor-pointer hover:fill-red-600"
             onClick={toggleFavorite}
           />
         </div>

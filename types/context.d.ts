@@ -5,6 +5,7 @@ import React from "react"
 export interface MenuItem {
   id: number
   name: string
+  path:string
   isSelected: boolean
   icon: React.ReactNode
 }
