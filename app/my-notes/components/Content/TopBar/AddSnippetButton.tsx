@@ -12,7 +12,7 @@ const AddSnippetButton = () => {
     setIsOpen(false)
   }
 
-  console.log(isAdding);
+  //console.log(isAdding);
   
   return (
     <div

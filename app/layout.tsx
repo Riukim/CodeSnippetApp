@@ -5,6 +5,7 @@ import { ClerkProvider } from "@clerk/nextjs"
 import { dark } from "@clerk/themes"
 import GlobalContextProvider from "@/ContextApi"
 import { ThemeProvider } from "@/components/ThemeProvider"
+import { Toaster } from "@/components/ui/sonner"
 
 const recursive = Recursive({ subsets: ["latin"] })
 
@@ -33,6 +34,7 @@ export default function RootLayout({
               {children}
             </ThemeProvider>
           </body>
+          <Toaster />
         </GlobalContextProvider>
       </ClerkProvider>
     </html>
