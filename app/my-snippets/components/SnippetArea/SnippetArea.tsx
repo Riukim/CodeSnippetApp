@@ -22,7 +22,7 @@ const SnippetArea = () => {
   }, [setClerkId, user]);
 
   const visibleSnippet = allSnippets.filter(snippet => {
-    if (pathname === "/my-notes") {
+    if (pathname === "/my-snippets") {
       return !snippet.isTrash
     } else if (pathname === "/trash") {
       return snippet.isTrash

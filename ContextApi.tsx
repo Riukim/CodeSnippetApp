@@ -50,8 +50,8 @@ export default function AppContextProvider({
     {
       id: 1,
       name: "All Snippets",
-      isSelected: pathname === "/my-notes",
-      path: "/my-notes",
+      isSelected: pathname === "/my-snippets",
+      path: "/my-snippets",
       icon: (
         <Grid2X2
           size={18}
