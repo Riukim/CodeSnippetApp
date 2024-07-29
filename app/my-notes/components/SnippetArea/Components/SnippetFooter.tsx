@@ -4,6 +4,17 @@ import { Trash2, Undo } from "lucide-react"
 import Image from "next/image"
 import React, { useEffect, useState } from "react"
 import { toast } from "sonner"
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { Button } from "@/components/ui/button"
 
 interface SnippetFooterProps {
   snippet: SingleSnippetTypes
@@ -15,6 +26,7 @@ const SnippetFooter = ({ snippet }: SnippetFooterProps) => {
   } = useAppContext()
 
   const [isTrash, setIsTrash] = useState(snippet.isTrash)
+  const [showDialog, setShowDialog] = useState(false)
 
   const [imageExists, setImageExists] = useState(false)
   const imagePath = `/icons/${snippet.language.toLowerCase()}.svg`
@@ -80,7 +92,8 @@ const SnippetFooter = ({ snippet }: SnippetFooterProps) => {
 
   const handleTrashClick = async () => {
     if (isTrash) {
-      handleDelete()
+      setShowDialog(true)
+      console.log(showDialog);
     } else {
       await toggleIsTrash()
       toast("Snippet has been moved to trash.", {
@@ -91,6 +104,11 @@ const SnippetFooter = ({ snippet }: SnippetFooterProps) => {
         },
       })
     }
+  }
+
+  const confirmDelete = async () => {
+    await handleDelete()
+    setShowDialog(false)
   }
 
   return (
@@ -107,18 +125,49 @@ const SnippetFooter = ({ snippet }: SnippetFooterProps) => {
         <span className="text-muted-foreground">{snippet.language}</span>
       </div>
       <div className="mt-4 flex gap-5">
-        {isTrash && (
-          <Undo
+        {isTrash ? (
+          <>
+            <Undo
+              size={18}
+              className="text-muted-foreground hover:text-green-600 cursor-pointer"
+              onClick={toggleIsTrash}
+            />
+            <Dialog open={showDialog} onOpenChange={setShowDialog}>
+              <DialogTrigger asChild>
+                <Trash2
+                  size={18}
+                  className="text-muted-foreground hover:text-red-500 cursor-pointer"
+                />
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-md">
+                <DialogHeader>
+                  <DialogTitle>Confirm Deletion</DialogTitle>
+                  <DialogDescription>
+                    Are you sure you want to permanently delete this snippet?
+                    This action cannot be undone.
+                  </DialogDescription>
+                </DialogHeader>
+                <DialogFooter className="flex-row justify-between">
+                  <Button
+                    variant="destructive"
+                    onClick={confirmDelete}
+                  >
+                    Delete
+                  </Button>
+                  <DialogClose asChild>
+                    <Button variant="outline">Cancel</Button>
+                  </DialogClose>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+          </>
+        ) : (
+          <Trash2
             size={18}
-            className="text-muted-foreground hover:text-green-600 cursor-pointer"
-            onClick={toggleIsTrash}
+            className="text-muted-foreground hover:text-red-500 cursor-pointer"
+            onClick={handleTrashClick}
           />
         )}
-        <Trash2
-          size={18}
-          className="text-muted-foreground hover:text-red-500 cursor-pointer"
-          onClick={handleTrashClick}
-        />
       </div>
     </div>
   )

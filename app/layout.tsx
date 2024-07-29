@@ -32,9 +32,9 @@ export default function RootLayout({
               attribute="class"
             >
               {children}
+              <Toaster />
             </ThemeProvider>
           </body>
-          <Toaster />
         </GlobalContextProvider>
       </ClerkProvider>
     </html>
