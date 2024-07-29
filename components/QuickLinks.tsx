@@ -12,12 +12,14 @@ const QuickLinks = () => {
   const router = useRouter()
   const pathname = usePathname()
 
+  // useEffect per aggiornare lo stato del menu ogni volta che il percorso dell'URL cambia
   useEffect(() => {
     const updatedMenuItems = menuItems.map((menu) => ({
       ...menu,
       isSelected: pathname === menu.path,
     }))
     setMenuItems(updatedMenuItems)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname])
 
   function clickedMenuItem(index: number) {

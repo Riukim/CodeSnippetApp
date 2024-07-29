@@ -105,12 +105,14 @@ export default function AppContextProvider({
   const [clerkId, setClerkId] = useState("")
   const [isAdding, setIsAdding] = useState(false)
 
+  // useEffect per sincronizzare lo stato del menu con l'URL corrente
   useEffect(() => {
     const updatedMenuItems = menuItems.map((menu) => ({
       ...menu,
       isSelected: pathname === menu.path,
     }))
     setMenuItems(updatedMenuItems)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname])
 
   // Effeto per gestire il ridimensionamento della pagina
