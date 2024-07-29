@@ -61,10 +61,10 @@ const SnippetHeader = ({ snippet }: SnippetHeaderProps) => {
             size={20}
             fill={isFavorite ? "red" : "none"}
             stroke={isFavorite ? "black" : "currentColor"}
-            className={`cursor-pointer ${
+            className={`${
               isTrash
                 ? "text-muted-foreground cursor-not-allowed"
-                : "hover:fill-red-600"
+                : "hover:fill-red-600 cursor-pointer"
             }`}
             onClick={toggleFavorite}
           />
