@@ -32,7 +32,10 @@ const SingleSnippet = ({ snippet }: SingleSnippetProps) => {
       <div className="flex-1">
         <SnippetHeader snippet={snippet} />
         <SnippetTags tags={snippet.tags} />
-        <SnippetDescription description={snippet.description} />
+        <SnippetDescription
+          description={snippet.description}
+          code={snippet.code}
+        />
         <CodeSnippet
           language={language}
           code={snippet.code}
