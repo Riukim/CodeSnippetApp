@@ -2,7 +2,7 @@
 
 import { useAppContext } from "@/ContextApi"
 import { Heart } from "lucide-react"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { SingleSnippetTypes } from "@/types/context"
 
 interface SnippetHeaderProps {
@@ -12,21 +12,28 @@ interface SnippetHeaderProps {
 const SnippetHeader = ({ snippet }: SnippetHeaderProps) => {
   const {
     snippetPanel: { setIsOpen },
-    addSnippetState: {setIsAdding },
+    addSnippetState: { setIsAdding },
     SelectedSnippetState: { setSelectedSnippet },
     snippetsState: { updateSnippet },
   } = useAppContext()
 
   const [isFavorite, setIsFavorite] = useState(snippet.isFavorite)
+  const [isTrash, setIsTrash] = useState(snippet.isTrash)
+
+  useEffect(() => {
+    setIsTrash(snippet.isTrash)
+  }, [snippet.isTrash])
 
   const toggleFavorite = async () => {
+    // se ifTrash è true la funzione non fa nulla
+    if (isTrash) return
+
     // Toggle lo stato di isFavorite
     const newFavoriteStatus = !isFavorite
     setIsFavorite(newFavoriteStatus)
 
     try {
       await updateSnippet(snippet._id, { isFavorite: newFavoriteStatus })
-      
     } catch (error) {
       console.error("Failed to update favorite status:", error)
       // Riporta lo stato al valore precedente in caso di errore
@@ -54,7 +61,11 @@ const SnippetHeader = ({ snippet }: SnippetHeaderProps) => {
             size={20}
             fill={isFavorite ? "red" : "none"}
             stroke={isFavorite ? "black" : "currentColor"}
-            className="cursor-pointer hover:fill-red-600"
+            className={`cursor-pointer ${
+              isTrash
+                ? "text-muted-foreground cursor-not-allowed"
+                : "hover:fill-red-600"
+            }`}
             onClick={toggleFavorite}
           />
         </div>
