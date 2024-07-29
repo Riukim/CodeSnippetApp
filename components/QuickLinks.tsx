@@ -1,8 +1,8 @@
 "use client"
 
 import { useAppContext } from "@/ContextApi"
-import { useRouter } from "next/navigation"
-import React from "react"
+import { usePathname, useRouter } from "next/navigation"
+import React, { useEffect } from "react"
 
 const QuickLinks = () => {
   const {
@@ -10,17 +10,22 @@ const QuickLinks = () => {
   } = useAppContext()
 
   const router = useRouter()
+  const pathname = usePathname()
+
+  useEffect(() => {
+    const updatedMenuItems = menuItems.map((menu) => ({
+      ...menu,
+      isSelected: pathname === menu.path,
+    }))
+    setMenuItems(updatedMenuItems)
+  }, [pathname])
 
   function clickedMenuItem(index: number) {
-    const updateMenuItem = menuItems.map((menu, i) => {
-      if (i === index) {
-        return {...menu, isSelected: true}
-      } else {
-        return {...menu, isSelected: false}
-      }
-    })
-
-    setMenuItems(updateMenuItem)
+    const updatedMenuItems = menuItems.map((menu, i) => ({
+      ...menu,
+      isSelected: i === index,
+    }))
+    setMenuItems(updatedMenuItems)
     router.push(menuItems[index].path)
   }
 
@@ -33,7 +38,9 @@ const QuickLinks = () => {
             key={index}
             onClick={() => clickedMenuItem(index)}
             className={`flex cursor-pointer select-none gap-2 p-[7px] px-2 items-center w-[80%] rounded-md ${
-              menu.isSelected ? "bg-primary text-foreground font-semibold" : "text-slate-400"
+              menu.isSelected
+                ? "bg-primary text-foreground font-semibold"
+                : "text-slate-400"
             }`}
           >
             {menu.icon}

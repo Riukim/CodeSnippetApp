@@ -4,6 +4,7 @@ import { Grid2X2, Heart, LogOut, Trash2 } from "lucide-react"
 import React, { createContext, useContext, useEffect, useState } from "react"
 import { AppContextType, MenuItem, SingleSnippetTypes } from "./types/context"
 import { formatDate } from "./lib/formatDate"
+import { usePathname } from "next/navigation"
 
 const AppContext = createContext<AppContextType>({
   menuState: {
@@ -42,12 +43,14 @@ export default function AppContextProvider({
 }: {
   children: React.ReactNode
 }) {
+  const pathname = usePathname()
+
   // Definisce lo stato del menu della sidebar e la funzione per aggiornarlo
   const [menuItems, setMenuItems] = useState<MenuItem[]>([
     {
       id: 1,
       name: "All Snippets",
-      isSelected: true,
+      isSelected: pathname === "/my-notes",
       path: "/my-notes",
       icon: (
         <Grid2X2
@@ -59,7 +62,7 @@ export default function AppContextProvider({
     {
       id: 2,
       name: "Favorites",
-      isSelected: false,
+      isSelected: pathname === "/favorites",
       path: "/favorites",
       icon: (
         <Heart
@@ -71,7 +74,7 @@ export default function AppContextProvider({
     {
       id: 3,
       name: "Trash",
-      isSelected: false,
+      isSelected: pathname === "/trash",
       path: "/trash",
       icon: (
         <Trash2
@@ -83,7 +86,7 @@ export default function AppContextProvider({
     {
       id: 4,
       name: "Log Out",
-      isSelected: false,
+      isSelected: pathname === "/logout",
       path: "",
       icon: (
         <LogOut
@@ -101,6 +104,14 @@ export default function AppContextProvider({
     useState<SingleSnippetTypes | null>(null)
   const [clerkId, setClerkId] = useState("")
   const [isAdding, setIsAdding] = useState(false)
+
+  useEffect(() => {
+    const updatedMenuItems = menuItems.map((menu) => ({
+      ...menu,
+      isSelected: pathname === menu.path,
+    }))
+    setMenuItems(updatedMenuItems)
+  }, [pathname])
 
   // Effeto per gestire il ridimensionamento della pagina
   const handleResize = () => {
@@ -229,7 +240,7 @@ export default function AppContextProvider({
         prevSnippets.filter((snippet) => snippet._id !== snippetId)
       )
 
-      return {message: "Snippet deleted successfully"}
+      return { message: "Snippet deleted successfully" }
     } catch (error) {
       console.log(error)
       throw new Error("Failed to delete the snippet")
