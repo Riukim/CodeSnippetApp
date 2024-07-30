@@ -29,7 +29,7 @@ const SnippetDescription = ({ description, code }: SnippetDescriptionProps) => {
       <div>
         <Copy
           size={20}
-          className='ml-4 cursor-pointer'
+          className='ml-4 cursor-pointer hover:opacity-70'
           onClick={handleCopy}
         />
       </div>

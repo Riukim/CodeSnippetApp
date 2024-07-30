@@ -48,7 +48,7 @@ export async function GET(req: any) {
 
     if (!clerkId) {
       return NextResponse.json(
-        { error: "clerkId is required" },
+        { error: "ClerkId is required" },
         { status: 400 }
       )
     }

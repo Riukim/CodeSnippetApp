@@ -2,7 +2,7 @@
 
 import { Grid2X2, Heart, LogOut, Trash2 } from "lucide-react"
 import React, { createContext, useContext, useEffect, useState } from "react"
-import { AppContextType, MenuItem, SingleSnippetTypes } from "./types/context"
+import { AppContextType, MenuItem, SingleSnippetTypes, SingleTagType } from "./types/context"
 import { formatDate } from "./lib/formatDate"
 import { usePathname } from "next/navigation"
 
@@ -35,6 +35,12 @@ const AppContext = createContext<AppContextType>({
     isAdding: false,
     setIsAdding: () => {},
     addSnippet: async () => {},
+  },
+  TagsState: {
+    allTags: [],
+    setAllTags: () => {},
+    addTag: async () => {},
+    deleteTag: async () => {},
   },
 })
 
@@ -104,6 +110,7 @@ export default function AppContextProvider({
     useState<SingleSnippetTypes | null>(null)
   const [clerkId, setClerkId] = useState("")
   const [isAdding, setIsAdding] = useState(false)
+  const [allTags, setAllTags] = useState<SingleTagType[]>([])
 
   // useEffect per sincronizzare lo stato del menu con l'URL corrente
   useEffect(() => {
@@ -158,6 +165,27 @@ export default function AppContextProvider({
     }
 
     fetchAllSnippets()
+  }, [clerkId])
+
+  // Use effect per il fetch di tutti i tag
+  useEffect(() => {
+    if (!clerkId) return
+
+    const fetchAllTags = async () => {
+      try {
+        const response = await fetch(`/api/tags?clerkId=${clerkId}`)
+        
+        if (!response) {
+          throw new Error("Unable to fetch tags")
+        }
+        const data = await response.json()
+        setAllTags(data.tags)
+      } catch (error) {
+        console.log("Error fetching tags: ", error);
+      }
+    }
+
+    fetchAllTags()
   }, [clerkId])
 
   // Funzione per aggiornare gli Snippet
@@ -249,6 +277,59 @@ export default function AppContextProvider({
     }
   }
 
+  // Fuznzione per aggiungere un tag in db e frontend
+  const addTag = async (tag: Partial<SingleTagType>) => {
+    const { _id, ...tagWithoutId} = tag
+    console.log("tag: ",tag);
+    
+    try {
+      const response = await fetch("/api/tags", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(tagWithoutId)
+      })
+
+      if (!response.ok) {
+        throw new Error(`Failed to add the new tag, status: ${response.status}`)
+      }
+
+      const data = await response.json()
+      console.log("data: ",data);
+      
+      const id = data.tags._id
+      const savedTag = { ...data.tags, _id: id }
+      
+      const updatedTags = [...allTags, savedTag]
+      setAllTags(updatedTags)
+
+      return savedTag
+    } catch (error) {
+      console.log(error)
+      throw new Error("Failed to add the new Tag")
+    }
+  }
+
+  // Funzione per eliminare tag in db e frontend
+  const deleteTag = async (tagId: number | string) => {
+    try {
+      const response = await fetch(`/api/tags?id=${tagId}`, {
+        method: "DELETE"
+      })
+      if (!response.ok) {
+        throw new Error("Failed to delete the tag.")
+      }
+
+      setAllTags((prevTags) => prevTags.filter((tag) => tag._id !== tagId))
+
+      return {message: "Tag deleted successfully."}
+    } catch (error) {
+      console.log(error);
+      throw new Error("Failed to delete the tag.")
+    }
+  }
+
   return (
     <AppContext.Provider
       value={{
@@ -265,6 +346,7 @@ export default function AppContextProvider({
         },
         SelectedSnippetState: { selectedSnippet, setSelectedSnippet },
         addSnippetState: { isAdding, setIsAdding, addSnippet },
+        TagsState: { allTags, setAllTags, addTag, deleteTag },
       }}
     >
       {children}

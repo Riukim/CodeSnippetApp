@@ -2,6 +2,12 @@
 
 import React from "react"
 
+export interface SingleTagType {
+  _id: number | string,
+  name: string,
+  clerkUserId?: string
+}
+
 export interface MenuItem {
   id: number
   name: string
@@ -59,5 +65,11 @@ export interface AppContextType {
     isAdding: boolean
     setIsAdding: React.Dispatch<React.SetStateAction<boolean>>
     addSnippet: (newSnippetData: Partial<SingleSnippetTypes>) => Promise<any>
+  }
+  TagsState: {
+    allTags: SingleTagType[]
+    setAllTags: React.Dispatch<React.SetStateAction<SingleTagType[]>>,
+    addTag: (newTagData: Partial<SingleTagType>) => Promise<any>
+    deleteTag: (tagId: number | string) => Promise<any>
   }
 }
