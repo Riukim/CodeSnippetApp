@@ -20,13 +20,15 @@ import { v7 as uuidv7 } from "uuid"
 const TagManagment = () => {
   const {
     snippetsState: { clerkId },
-    TagsState: { allTags, setAllTags, addTag, deleteTag },
+    TagsState: { allTags, setAllTags, addTag, deleteTag, updateTag },
   } = useAppContext()
 
   const [searchTerm, setSearchTerm] = useState("")
   const [newTagName, setNewTagName] = useState("")
   const [errorMessage, setErrorMessage] = useState("")
   const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [editTagId, setEditTagId] = useState<string | number>("")
+  const [editTagName, setEditTagName] = useState<string>("")
 
   const handleAddTag = async () => {
     if (newTagName.trim() !== "") {
@@ -53,6 +55,61 @@ const TagManagment = () => {
       } catch (error) {
         console.error("Error adding tag: ", error)
         setErrorMessage("Error adding tag. Please try again.")
+      }
+    } else {
+      setErrorMessage("Tag name cannot be empty!")
+    }
+  }
+
+  const handleUpdateClick = async (
+    tagId: string | number,
+    currentName: string
+  ) => {
+    setEditTagId(tagId)
+    setEditTagName(currentName)
+    setIsDialogOpen(true)
+  }
+
+  const handleUpdate = async () => {
+    if (editTagName.trim() !== "") {
+      // Controllo se il nome è uguale al tag attuale
+      const currentTag = allTags.find((tag) => tag._id === editTagId)
+      if (
+        currentTag &&
+        currentTag.name.toLowerCase() === editTagName.toLowerCase()
+      ) {
+        setErrorMessage("The tag name has not changed!")
+        return
+      }
+      
+      // controllo se esiste giò un altro tag con lo stesso nome
+      const tagExist = allTags.some(
+        (tag) =>
+          tag.name.toLowerCase() === editTagName.toLowerCase() &&
+          tag._id !== editTagId
+      )
+
+      if (tagExist) {
+        setErrorMessage("Tag with this name already exists!")
+        return
+      }
+
+      try {
+        await updateTag(editTagId, { name: editTagName })
+
+        setAllTags((prevTags) =>
+          prevTags.map((tag) =>
+            tag._id === editTagId ? { ...tag, name: editTagName } : tag
+          )
+        )
+
+        setEditTagId("")
+        setEditTagName("")
+        setIsDialogOpen(false)
+        setErrorMessage("")
+      } catch (error) {
+        console.error("Error updating tag:", error)
+        setErrorMessage("Error updating tag. Please try again.")
       }
     } else {
       setErrorMessage("Tag name cannot be empty!")
@@ -165,6 +222,57 @@ const TagManagment = () => {
               )}
             </DialogContent>
           </Dialog>
+
+          {/* Dialog per modificare una Tag */}
+          <Dialog
+            open={isDialogOpen}
+            onOpenChange={(open) => {
+              setIsDialogOpen(open)
+              if (!open) {
+                setEditTagId("")
+                setEditTagName("")
+                setErrorMessage("")
+              }
+            }}
+          >
+            <DialogContent>
+              <DialogHeader>
+                <div className="flex items-center gap-2 px-4">
+                  <TagIcon
+                    size={18}
+                    className="text-green-800"
+                  />
+                  <DialogTitle>Edit Tag</DialogTitle>
+                </div>
+                <DialogDescription className="px-4">
+                  Update the name of the tag.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="flex items-center px-4 gap-2">
+                <Input
+                  placeholder="Tag name..."
+                  value={editTagName}
+                  className="flex-1 focus-visible:ring-transparent"
+                  onChange={(e) => setEditTagName(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      handleUpdate()
+                    }
+                  }}
+                />
+                <Button
+                  className="text-foreground"
+                  onClick={handleUpdate}
+                >
+                  Save
+                </Button>
+              </div>
+              {errorMessage && (
+                <p className="px-4 text-red-600 text-sm">{errorMessage}</p>
+              )}
+            </DialogContent>
+          </Dialog>
+
         </div>
         <div className="p-4 max-h-80 overflow-y-auto border-b">
           {allTags
@@ -184,7 +292,7 @@ const TagManagment = () => {
                     <Pencil
                       size={16}
                       className="text-green-800"
-                      onClick={() => {}}
+                      onClick={() => handleUpdateClick(tag._id, tag.name)}
                     />
                   </div>
                   <div className="p-2 rounded-full hover:bg-red-400 bg-green-100 cursor-pointer">

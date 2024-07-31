@@ -70,6 +70,10 @@ export interface AppContextType {
     allTags: SingleTagType[]
     setAllTags: React.Dispatch<React.SetStateAction<SingleTagType[]>>,
     addTag: (newTagData: Partial<SingleTagType>) => Promise<any>
-    deleteTag: (tagId: number | string) => Promise<any>
+    deleteTag: (tagId: number | string) => Promise<any>,
+    updateTag: (
+      tagId: number | string,
+      updateData: Partial<SingleTagType>
+    ) => Promise<any>
   }
 }

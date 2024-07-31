@@ -48,6 +48,37 @@ export async function GET(req: any) {
   }
 }
 
+export async function PATCH(req: any) {
+  try {
+    await connect()
+
+    const url = new URL(req.url)
+    const id = url.searchParams.get("id")
+    const { name } = await req.json()
+
+    if (!id) {
+      return NextResponse.json({ error: "ID is required" }, { status: 400 })
+    }
+
+    const updateData = {
+      ...(name && { name }),
+    }
+
+    const result = await SingleTag.updateOne({ _id: id }, { $set: updateData })
+
+    if (result.modifiedCount === 0) {
+      return NextResponse.json(
+        { error: "Tag not found or title not modified" },
+        { status: 404 }
+      )
+    }
+    return NextResponse.json({ message: "Tag updated successfully" })
+  } catch (error) {
+    console.error("Error updating tag: ", error)
+    return NextResponse.json({ error: error }, { status: 500 })
+  }
+}
+
 export async function DELETE(req: any) {
   try {
     await connect()

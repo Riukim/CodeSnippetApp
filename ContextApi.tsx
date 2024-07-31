@@ -2,7 +2,12 @@
 
 import { Grid2X2, Heart, LogOut, Trash2 } from "lucide-react"
 import React, { createContext, useContext, useEffect, useState } from "react"
-import { AppContextType, MenuItem, SingleSnippetTypes, SingleTagType } from "./types/context"
+import {
+  AppContextType,
+  MenuItem,
+  SingleSnippetTypes,
+  SingleTagType,
+} from "./types/context"
 import { formatDate } from "./lib/formatDate"
 import { usePathname } from "next/navigation"
 
@@ -41,6 +46,7 @@ const AppContext = createContext<AppContextType>({
     setAllTags: () => {},
     addTag: async () => {},
     deleteTag: async () => {},
+    updateTag: async () => {}
   },
 })
 
@@ -119,7 +125,7 @@ export default function AppContextProvider({
       isSelected: pathname === menu.path,
     }))
     setMenuItems(updatedMenuItems)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname])
 
   // Effeto per gestire il ridimensionamento della pagina
@@ -174,14 +180,14 @@ export default function AppContextProvider({
     const fetchAllTags = async () => {
       try {
         const response = await fetch(`/api/tags?clerkId=${clerkId}`)
-        
+
         if (!response) {
           throw new Error("Unable to fetch tags")
         }
         const data = await response.json()
         setAllTags(data.tags)
       } catch (error) {
-        console.log("Error fetching tags: ", error);
+        console.log("Error fetching tags: ", error)
       }
     }
 
@@ -279,16 +285,16 @@ export default function AppContextProvider({
 
   // Fuznzione per aggiungere un tag in db e frontend
   const addTag = async (tag: Partial<SingleTagType>) => {
-    const { _id, ...tagWithoutId} = tag
-    console.log("tag: ",tag);
-    
+    const { _id, ...tagWithoutId } = tag
+    console.log("tag: ", tag)
+
     try {
       const response = await fetch("/api/tags", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(tagWithoutId)
+        body: JSON.stringify(tagWithoutId),
       })
 
       if (!response.ok) {
@@ -296,11 +302,11 @@ export default function AppContextProvider({
       }
 
       const data = await response.json()
-      console.log("data: ",data);
-      
+      console.log("data: ", data)
+
       const id = data.tags._id
       const savedTag = { ...data.tags, _id: id }
-      
+
       const updatedTags = [...allTags, savedTag]
       setAllTags(updatedTags)
 
@@ -311,11 +317,43 @@ export default function AppContextProvider({
     }
   }
 
+  // Funzione per modificare tag in db e frontend
+  const updateTag = async (
+    tagId: string | number,
+    updateData: Partial<SingleTagType>
+  ) => {
+    try {
+      const response = await fetch(`/api/tags?id=${tagId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updateData),
+      })
+
+      if (!response.ok) {
+        throw new Error("Failed to update the tag")
+      }
+
+      const updatedTag = await response.json()
+
+      setAllTags((prevTags) =>
+        prevTags.map((tag) =>
+          tag._id === tagId ? { ...tag, ...updatedTag } : tag
+        )
+      )
+      return updatedTag
+    } catch (error) {
+      console.log(error)
+      throw new Error("Failed to update the tag")
+    }
+  }
+
   // Funzione per eliminare tag in db e frontend
   const deleteTag = async (tagId: number | string) => {
     try {
       const response = await fetch(`/api/tags?id=${tagId}`, {
-        method: "DELETE"
+        method: "DELETE",
       })
       if (!response.ok) {
         throw new Error("Failed to delete the tag.")
@@ -323,9 +361,9 @@ export default function AppContextProvider({
 
       setAllTags((prevTags) => prevTags.filter((tag) => tag._id !== tagId))
 
-      return {message: "Tag deleted successfully."}
+      return { message: "Tag deleted successfully." }
     } catch (error) {
-      console.log(error);
+      console.log(error)
       throw new Error("Failed to delete the tag.")
     }
   }
@@ -346,7 +384,7 @@ export default function AppContextProvider({
         },
         SelectedSnippetState: { selectedSnippet, setSelectedSnippet },
         addSnippetState: { isAdding, setIsAdding, addSnippet },
-        TagsState: { allTags, setAllTags, addTag, deleteTag },
+        TagsState: { allTags, setAllTags, addTag, deleteTag, updateTag },
       }}
     >
       {children}

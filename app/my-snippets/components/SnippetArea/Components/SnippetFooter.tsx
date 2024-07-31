@@ -22,7 +22,12 @@ interface SnippetFooterProps {
 
 const SnippetFooter = ({ snippet }: SnippetFooterProps) => {
   const {
-    snippetsState: { allSnippets ,deleteSnippet, updateSnippet, setAllSnippets },
+    snippetsState: {
+      allSnippets,
+      deleteSnippet,
+      updateSnippet,
+      setAllSnippets,
+    },
   } = useAppContext()
 
   const [isTrash, setIsTrash] = useState(snippet.isTrash)
@@ -55,9 +60,8 @@ const SnippetFooter = ({ snippet }: SnippetFooterProps) => {
 
     try {
       await updateSnippet(snippet._id, { isTrash: newIsTrashStatus })
-      
     } catch (error) {
-      console.log("Failed to update trash status",error);
+      console.log("Failed to update trash status", error)
       setIsTrash(isTrash)
     }
   }
@@ -66,8 +70,7 @@ const SnippetFooter = ({ snippet }: SnippetFooterProps) => {
   const handleDelete = async () => {
     try {
       await deleteSnippet(snippet._id)
-      console.log("Snippet deleted successfully");
-      
+      console.log("Snippet deleted successfully")
     } catch (error) {
       console.error("Error deleting snippet: ", error)
     }
@@ -93,7 +96,7 @@ const SnippetFooter = ({ snippet }: SnippetFooterProps) => {
   const handleTrashClick = async () => {
     if (isTrash) {
       setShowDialog(true)
-      console.log(showDialog);
+      console.log(showDialog)
     } else {
       await toggleIsTrash()
       toast("Snippet has been moved to trash.", {
@@ -132,7 +135,10 @@ const SnippetFooter = ({ snippet }: SnippetFooterProps) => {
               className="text-muted-foreground hover:text-green-600 cursor-pointer"
               onClick={toggleIsTrash}
             />
-            <Dialog open={showDialog} onOpenChange={setShowDialog}>
+            <Dialog
+              open={showDialog}
+              onOpenChange={setShowDialog}
+            >
               <DialogTrigger asChild>
                 <Trash2
                   size={18}

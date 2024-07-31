@@ -12,21 +12,7 @@ import "swiper/css"
 import "swiper/css/free-mode"
 import "swiper/css/pagination"
 
-import { Button } from "@/components/ui/button"
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Plus, X, Pencil, SearchIcon, TagIcon } from "lucide-react"
 import { useAppContext } from "@/ContextApi"
-import { v7 as uuidv7 } from "uuid"
 import TagManagment from "@/components/TagManagment"
 
 export default function TagSwiper() {
