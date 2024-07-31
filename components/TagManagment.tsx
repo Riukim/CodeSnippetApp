@@ -20,7 +20,7 @@ import { v7 as uuidv7 } from "uuid"
 const TagManagment = () => {
   const {
     snippetsState: { clerkId },
-    TagsState: { allTags, setAllTags, addTag },
+    TagsState: { allTags, setAllTags, addTag, deleteTag },
   } = useAppContext()
 
   const [searchTerm, setSearchTerm] = useState("")
@@ -56,6 +56,16 @@ const TagManagment = () => {
       }
     } else {
       setErrorMessage("Tag name cannot be empty!")
+    }
+  }
+
+  const handleDelete = async (tagId: string | number) => {
+    try {
+      await deleteTag(tagId)
+      setAllTags((prevTags) => prevTags.filter((tag) => tag._id !== tagId))
+    } catch (error) {
+      console.error("Error deleting tag: ", error)
+      setErrorMessage("Error deleting tag, please try again")
     }
   }
 
@@ -170,18 +180,18 @@ const TagManagment = () => {
                   {tag.name}
                 </span>
                 <div className="flex gap-2">
-                  <div className="p-2 rounded-full bg-green-100">
+                  <div className="p-2 rounded-full bg-green-100 cursor-pointer">
                     <Pencil
                       size={16}
-                      className="cursor-pointer text-green-800"
+                      className="text-green-800"
                       onClick={() => {}}
                     />
                   </div>
-                  <div className="p-2 rounded-full bg-green-100">
+                  <div className="p-2 rounded-full hover:bg-red-400 bg-green-100 cursor-pointer">
                     <X
                       size={16}
-                      className="cursor-pointer text-green-800"
-                      onClick={() => {}}
+                      className="text-green-800"
+                      onClick={() => handleDelete(tag._id)}
                     />
                   </div>
                 </div>
