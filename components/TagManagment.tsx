@@ -26,7 +26,8 @@ const TagManagment = () => {
   const [searchTerm, setSearchTerm] = useState("")
   const [newTagName, setNewTagName] = useState("")
   const [errorMessage, setErrorMessage] = useState("")
-  const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [isEditOpen, setIsEditOpen] = useState(false)
+  const [isAddingOpen, setIsAddingOpen] = useState(false)
   const [editTagId, setEditTagId] = useState<string | number>("")
   const [editTagName, setEditTagName] = useState<string>("")
 
@@ -50,7 +51,7 @@ const TagManagment = () => {
         const savedTag = await addTag(newTag)
         setAllTags([...allTags, savedTag])
         setNewTagName("")
-        setIsDialogOpen(false)
+        setIsAddingOpen(false)
         setErrorMessage("")
       } catch (error) {
         console.error("Error adding tag: ", error)
@@ -67,7 +68,7 @@ const TagManagment = () => {
   ) => {
     setEditTagId(tagId)
     setEditTagName(currentName)
-    setIsDialogOpen(true)
+    setIsEditOpen(true)
   }
 
   const handleUpdate = async () => {
@@ -105,7 +106,7 @@ const TagManagment = () => {
 
         setEditTagId("")
         setEditTagName("")
-        setIsDialogOpen(false)
+        setIsEditOpen(false)
         setErrorMessage("")
       } catch (error) {
         console.error("Error updating tag:", error)
@@ -168,14 +169,14 @@ const TagManagment = () => {
 
           {/* Dialog per inserire una nuova Tag */}
           <Dialog
-            open={isDialogOpen}
-            onOpenChange={setIsDialogOpen}
+            open={isAddingOpen}
+            onOpenChange={setIsAddingOpen}
           >
             <DialogTrigger asChild>
               <Button
                 size="default"
                 className="rounded-md px-4 flex gap-1 items-center justify-center text-foreground"
-                onClick={() => setIsDialogOpen(true)}
+                onClick={() => setIsAddingOpen(true)}
               >
                 <Plus
                   size={18}
@@ -225,9 +226,9 @@ const TagManagment = () => {
 
           {/* Dialog per modificare una Tag */}
           <Dialog
-            open={isDialogOpen}
+            open={isEditOpen}
             onOpenChange={(open) => {
-              setIsDialogOpen(open)
+              setIsEditOpen(open)
               if (!open) {
                 setEditTagId("")
                 setEditTagName("")
@@ -272,16 +273,15 @@ const TagManagment = () => {
               )}
             </DialogContent>
           </Dialog>
-
         </div>
         <div className="p-4 max-h-80 overflow-y-auto border-b">
           {allTags
             .filter((tag) =>
               tag.name?.toLowerCase().includes(searchTerm.toLowerCase())
             )
-            .map((tag) => (
+            .map((tag, index) => (
               <div
-                key={tag._id}
+                key={`${tag.name}-${index}`}
                 className="flex justify-between items-center p-2 rounded-lg bg-secondary mb-2"
               >
                 <span className="bg-green-100 text-green-800 p-1 rounded-lg px-2">

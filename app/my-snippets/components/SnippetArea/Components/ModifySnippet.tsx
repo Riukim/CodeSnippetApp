@@ -3,7 +3,7 @@
 
 import { useAppContext } from "@/ContextApi"
 import React, { useEffect, useState } from "react"
-import { SingleSnippetTypes } from "@/types/context"
+import { SingleSnippetTypes, SingleTagType } from "@/types/context"
 import { Separator } from "@/components/ui/separator"
 import TitleInput from "@/components/TitleInput"
 import TagsInput from "@/components/TagsInput"
@@ -14,13 +14,15 @@ import { X } from "lucide-react"
 import DescriptionInput from "@/components/DescriptionInput"
 import LanguageSelector from "@/components/LanguageSelector"
 import CodeEditor from "@/components/CodeEditor"
+import { v7 as uuidv7 } from "uuid"
 
 const ModifySnippet = () => {
   const {
     snippetPanel: { isOpen, setIsOpen },
     isMobileState: { isMobile },
-    snippetsState: { allSnippets, setAllSnippets, updateSnippet },
+    snippetsState: { allSnippets, setAllSnippets, updateSnippet, clerkId },
     SelectedSnippetState: { selectedSnippet },
+    TagsState: { allTags, setAllTags, addTag, deleteTag },
   } = useAppContext()
 
   const { theme } = useTheme()
@@ -35,6 +37,7 @@ const ModifySnippet = () => {
   const [language, setLanguage] = useState<string>("")
   const [tags, setTags] = useState<{ name: string; clerkUserId?: string }[]>([])
   const [newTag, setNewTag] = useState<string>("")
+  const [errorMessage, setErrorMessage] = useState("")
 
   // UseEffect per impostare valori iniziali quando si apre per modificare snippet
   useEffect(() => {
@@ -80,13 +83,69 @@ const ModifySnippet = () => {
   const updateLanguage = () => updateField("language", language)
   const updateCode = () => updateField("code", code)
 
-  const handleAddTag = () => {
-    if (newTag.trim()) {
-      const updateTags = [...tags, { name: newTag.trim() }]
-      updateField("tags", updateTags)
-      setNewTag("")
+  const handleAddTag = async () => {
+    if (newTag.trim() !== "") {
+      // Verifica se il tag esiste già nello snippet
+      if (tags.some((tag) => tag.name === newTag.trim())) {
+        setErrorMessage("Tag already exists!")
+        setTimeout(() => setErrorMessage(""), 5000)
+        return
+      }
+      console.log("nuova tag: ", newTag);
+      
+      try {
+        let existingTag = allTags.find(
+          (tag) => tag.name.toLowerCase() === newTag.trim().toLowerCase()
+        )
+        console.log("existingTag: ", existingTag);
+        
+        if (!existingTag) {
+          const newTagData: SingleTagType = await addTag({
+            name: newTag.trim(),
+            clerkUserId: clerkId,
+          })
+          console.log("newTagData: ",newTagData);
+          
+          const updatedTags = [...allTags, newTagData]
+          setAllTags(updatedTags)
+          console.log("allTags: ", updatedTags);
+          existingTag = newTagData
+          console.log("existingTag2: ", newTagData);
+          
+        }
+
+        // Assicurati che existingTag non sia undefined prima di aggiungerlo
+        if (existingTag) {
+          const updatedTags = [...tags, existingTag]
+          console.log("UpdatedTags: " ,updatedTags);
+          
+          updateField("tags", updatedTags)
+          setTags(updatedTags)
+          console.log("Tags: ", tags);
+          setNewTag("")
+          setErrorMessage("")
+        }
+      } catch (error) {
+        console.error("Error adding tag to snippet:", error)
+        setErrorMessage("Error adding tag. Please try again.")
+      }
     }
   }
+
+  const handleAddTagFromCombobox = (tagName: string) => {
+    if (tagName.trim()) {
+      if (tags.some((tag) => tag.name === tagName.trim())) {
+        setErrorMessage("Tag already exists!")
+        setTimeout(() => setErrorMessage(""), 5000)
+        return
+      }
+      const updatedTags = [...tags, { name: tagName.trim() }]
+      updateField("tags", updatedTags)
+      setTags(updatedTags)
+      setErrorMessage("")
+    }
+  }
+
   const handleRemoveTag = (tagName: string) => {
     const updateTags = tags.filter((tag) => tag.name !== tagName)
     updateField("tags", updateTags)
@@ -162,6 +221,9 @@ const ModifySnippet = () => {
           setNewTag={setNewTag}
           handleAddTag={handleAddTag}
           handleRemoveTag={handleRemoveTag}
+          handleAddTagFromCombobox={handleAddTagFromCombobox}
+          errorMessage={errorMessage}
+          setErrorMessage={setErrorMessage}
         />
         <Separator className="mt-2 bg-input" />
 

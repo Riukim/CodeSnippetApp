@@ -286,8 +286,6 @@ export default function AppContextProvider({
   // Fuznzione per aggiungere un tag in db e frontend
   const addTag = async (tag: Partial<SingleTagType>) => {
     const { _id, ...tagWithoutId } = tag
-    console.log("tag: ", tag)
-
     try {
       const response = await fetch("/api/tags", {
         method: "POST",
@@ -302,7 +300,6 @@ export default function AppContextProvider({
       }
 
       const data = await response.json()
-      console.log("data: ", data)
 
       const id = data.tags._id
       const savedTag = { ...data.tags, _id: id }

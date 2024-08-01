@@ -11,12 +11,14 @@ import DescriptionInput from "@/components/DescriptionInput"
 import CodeEditor from "@/components/CodeEditor"
 import { X } from "lucide-react"
 import { v7 as uuidv7 } from "uuid"
+import { SingleTagType } from "@/types/context"
 
 const AddSnippet = () => {
   const {
     isMobileState: { isMobile },
     snippetsState: { allSnippets, setAllSnippets, clerkId },
     addSnippetState: { isAdding, setIsAdding, addSnippet },
+    TagsState: { allTags, addTag, setAllTags },
   } = useAppContext()
 
   const [title, setTitle] = useState<string>("")
@@ -25,6 +27,7 @@ const AddSnippet = () => {
   const [language, setLanguage] = useState<string>("")
   const [tags, setTags] = useState<{ name: string }[]>([])
   const [newTag, setNewTag] = useState<string>("")
+  const [errorMessage, setErrorMessage] = useState("")
 
   const handleAddSnippet = async () => {
     setIsAdding(true)
@@ -60,10 +63,63 @@ const AddSnippet = () => {
     }
   }
 
-  const handleAddTag = () => {
-    if (newTag.trim()) {
-      setTags([...tags, { name: newTag.trim() }])
-      setNewTag("")
+  const handleAddTag = async () => {
+    if (newTag.trim() !== "") {
+      // Verifica se il tag esiste già nello snippet
+      if (tags.some((tag) => tag.name === newTag.trim())) {
+        setErrorMessage("Tag already exists!")
+        setTimeout(() => setErrorMessage(""), 5000)
+        return
+      }
+      console.log("nuova tag: ", newTag)
+
+      try {
+        let existingTag = allTags.find(
+          (tag) => tag.name.toLowerCase() === newTag.trim().toLowerCase()
+        )
+        console.log("existingTag: ", existingTag)
+
+        if (!existingTag) {
+          const newTagData: SingleTagType = await addTag({
+            name: newTag.trim(),
+            clerkUserId: clerkId,
+          })
+          console.log("newTagData: ", newTagData)
+
+          const updatedTags = [...allTags, newTagData]
+          setAllTags(updatedTags)
+          console.log("allTags: ", updatedTags)
+          existingTag = newTagData
+          console.log("existingTag2: ", newTagData)
+        }
+
+        // Assicurati che existingTag non sia undefined prima di aggiungerlo
+        if (existingTag) {
+          const updatedTags = [...tags, existingTag]
+          console.log("UpdatedTags: ", updatedTags)
+
+          setTags(updatedTags)
+          console.log("Tags: ", tags)
+          setNewTag("")
+          setErrorMessage("")
+        }
+      } catch (error) {
+        console.error("Error adding tag to snippet:", error)
+        setErrorMessage("Error adding tag. Please try again.")
+      }
+    }
+  }
+
+  const handleAddTagFromCombobox = (tagName: string) => {
+    if (tagName.trim()) {
+      if (tags.some((tag) => tag.name === tagName.trim())) {
+        setErrorMessage("Tag already exists!")
+        setTimeout(() => setErrorMessage(""), 5000)
+        return
+      }
+      const updatedTags = [...tags, { name: tagName.trim() }]
+      setTags(updatedTags)
+      setErrorMessage("")
     }
   }
 
@@ -108,6 +164,9 @@ const AddSnippet = () => {
           setNewTag={setNewTag}
           handleAddTag={handleAddTag}
           handleRemoveTag={handleRemoveTag}
+          errorMessage={errorMessage}
+          handleAddTagFromCombobox={handleAddTagFromCombobox}
+          setErrorMessage={setErrorMessage}
         />
         <Separator className="mt-2 bg-input" />
 

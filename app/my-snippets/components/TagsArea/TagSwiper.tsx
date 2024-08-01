@@ -58,9 +58,9 @@ export default function TagSwiper() {
           className="mySwiper max-w-[100vw]"
         >
           <SwiperSlide className="bg-primary min-w-20">All</SwiperSlide>
-          {allTags.map((tag) => (
+          {allTags.map((tag, index) => (
             <SwiperSlide
-              key={tag._id}
+              key={`${tag.name}-${index}`}
               className="text-slate-400 min-w-20"
             >
               {tag.name}
