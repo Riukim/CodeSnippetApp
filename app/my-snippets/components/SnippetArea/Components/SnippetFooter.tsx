@@ -28,13 +28,25 @@ const SnippetFooter = ({ snippet }: SnippetFooterProps) => {
       updateSnippet,
       setAllSnippets,
     },
+    isMobileState: {isMobile}
   } = useAppContext()
 
   const [isTrash, setIsTrash] = useState(snippet.isTrash)
+  const [isFavorite, setIsFavorite] = useState(snippet.isFavorite)
   const [showDialog, setShowDialog] = useState(false)
-
   const [imageExists, setImageExists] = useState(false)
-  const imagePath = `/icons/${snippet.language.toLowerCase()}.svg`
+
+  const getImagePath = (language: string) => {
+    const lowerCaseLanguage = language.toLowerCase()
+
+    if (lowerCaseLanguage === "c#") {
+      return "/icons/csharp.png"
+    }
+
+    return `/icons/${lowerCaseLanguage}.svg`
+  }
+
+  const imagePath = getImagePath(snippet.language)
 
   // Effect per verificare se icona immagine è presente
   useEffect(() => {
@@ -57,12 +69,24 @@ const SnippetFooter = ({ snippet }: SnippetFooterProps) => {
   const toggleIsTrash = async () => {
     const newIsTrashStatus = !isTrash
     setIsTrash(newIsTrashStatus)
+    
+    // Settiamo isFavorite to false se lo snippet viene cestinato
+    let updatedFields = { isTrash: newIsTrashStatus, isFavorite }
+    
+    if (newIsTrashStatus) {
+      updatedFields.isFavorite = false
+      setIsFavorite(false)
+    }
 
     try {
-      await updateSnippet(snippet._id, { isTrash: newIsTrashStatus })
+      await updateSnippet(snippet._id, updatedFields)
     } catch (error) {
       console.log("Failed to update trash status", error)
       setIsTrash(isTrash)
+
+      if (newIsTrashStatus) {
+        setIsFavorite(true)
+      }
     }
   }
 
@@ -100,7 +124,7 @@ const SnippetFooter = ({ snippet }: SnippetFooterProps) => {
     } else {
       await toggleIsTrash()
       toast("Snippet has been moved to trash.", {
-        position: "top-center",
+        position: isMobile ? "bottom-center" : "top-center",
         action: {
           label: "Undo",
           onClick: handleUndo,

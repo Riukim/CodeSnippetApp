@@ -54,6 +54,7 @@ export interface AppContextType {
       updatedData: Partial<SingleSnippetTypes>
     ) => Promise<any>
     deleteSnippet: (snippetId: number | string) => Promise<any>
+    countSnippetByLanguage: () => Promise<any>
   }
   SelectedSnippetState: {
     selectedSnippet: SingleSnippetTypes | null
@@ -68,9 +69,9 @@ export interface AppContextType {
   }
   TagsState: {
     allTags: SingleTagType[]
-    setAllTags: React.Dispatch<React.SetStateAction<SingleTagType[]>>,
+    setAllTags: React.Dispatch<React.SetStateAction<SingleTagType[]>>
     addTag: (newTagData: Partial<SingleTagType>) => Promise<any>
-    deleteTag: (tagId: number | string) => Promise<any>,
+    deleteTag: (tagId: number | string) => Promise<any>
     updateTag: (
       tagId: number | string,
       updateData: Partial<SingleTagType>

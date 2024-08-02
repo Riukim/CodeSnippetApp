@@ -45,6 +45,7 @@ export async function POST(req: Request) {
 export async function GET(req: any) {
   try {
     const clerkId = req.nextUrl.searchParams.get("clerkId")
+    const countByLanguage = req.nextUrl.searchParams.get("countByLanguage")
 
     if (!clerkId) {
       return NextResponse.json(
@@ -55,9 +56,24 @@ export async function GET(req: any) {
 
     await connect()
 
-    const snippets = await SingleSnippet.find({ clerkUserId: clerkId })
+    if (countByLanguage) {
+      const LanguageCount = await SingleSnippet.aggregate([
+        { $match: { clerkUserId: clerkId } },
+        {
+          $group: {
+            _id: "$language",
+            count: { $sum: 1 },
+          },
+        },
+        { $sort: { count: -1 } },
+      ])
 
-    return NextResponse.json({ snippets: snippets })
+      return NextResponse.json({ LanguageCount })
+    } else {
+      const snippets = await SingleSnippet.find({ clerkUserId: clerkId })
+
+      return NextResponse.json({ snippets: snippets })
+    }
   } catch (error) {
     console.error("Database query error:", error)
     return NextResponse.json({ error: error }, { status: 500 })

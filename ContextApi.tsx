@@ -31,6 +31,7 @@ const AppContext = createContext<AppContextType>({
     setClerkId: () => {},
     updateSnippet: async () => {},
     deleteSnippet: async () => {},
+    countSnippetByLanguage: async () => {}
   },
   SelectedSnippetState: {
     selectedSnippet: null,
@@ -46,7 +47,7 @@ const AppContext = createContext<AppContextType>({
     setAllTags: () => {},
     addTag: async () => {},
     deleteTag: async () => {},
-    updateTag: async () => {}
+    updateTag: async () => {},
   },
 })
 
@@ -365,6 +366,25 @@ export default function AppContextProvider({
     }
   }
 
+  const countSnippetByLanguage = async () => {
+    try {
+      const response = await fetch(
+        `/api/snippets?clerkId=${clerkId}&countByLanguage=true`
+      )
+
+      if (!response.ok) {
+        throw new Error("Failed to count snippets by language")
+      }
+
+      const result = await response.json()
+      console.log(result);
+      return result
+    } catch (error) {
+      console.error("Error counting snippets by language: ", error)
+      return []
+    }
+  }
+
   return (
     <AppContext.Provider
       value={{
@@ -378,6 +398,7 @@ export default function AppContextProvider({
           setClerkId,
           updateSnippet,
           deleteSnippet,
+          countSnippetByLanguage,
         },
         SelectedSnippetState: { selectedSnippet, setSelectedSnippet },
         addSnippetState: { isAdding, setIsAdding, addSnippet },
