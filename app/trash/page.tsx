@@ -4,7 +4,7 @@ import ContentSection from "../my-snippets/components/Content/ContentSection"
 
 const trash = () => {
   return (
-    <section className="flex h-auto">
+    <section className="flex h-dvh">
       <Sidebar />
       <ContentSection />
     </section>

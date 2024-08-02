@@ -3,7 +3,7 @@ import Sidebar from "./components/Sidebar/Sidebar"
 
 const page = () => {
   return (
-    <section className="flex h-auto">
+    <section className="flex h-dvh">
       <Sidebar />
       <ContentSection />
     </section>
