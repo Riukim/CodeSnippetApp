@@ -65,7 +65,7 @@ export async function GET(req: any) {
             count: { $sum: 1 },
           },
         },
-        { $sort: { count: -1 } },
+        { $sort: { count: -1, _id: 1 } },
       ])
 
       return NextResponse.json({ LanguageCount })
