@@ -41,7 +41,7 @@ const TagsCombobox = ({ onTagSelect }: TagsComboboxProps) => {
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-[200px] justify-end hover:bg-accent text-input"
+          className="w-[50%] justify-end hover:bg-accent text-input"
         >
           {selectedTag || "Select a tag"}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />

@@ -49,7 +49,7 @@ const TagsInput = ({
         <Input
           placeholder="Add new tag..."
           value={newTag}
-          className="bg-secondary shadow-md border-none min-w-[100px]"
+          className="bg-secondary shadow-md border-none w-[50%] "
           onChange={(e) => setNewTag(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === "Enter") {

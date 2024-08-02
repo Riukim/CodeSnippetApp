@@ -105,6 +105,8 @@ const SnippetFooter = ({ snippet }: SnippetFooterProps) => {
           label: "Undo",
           onClick: handleUndo,
         },
+        closeButton: true,
+        className: "border-none"
       })
     }
   }
