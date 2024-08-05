@@ -23,9 +23,13 @@ const SnippetArea = () => {
 
   useEffect(() => {
     setAllSnippets((prevSnippets) =>
-      prevSnippets.map((snippet) =>
+      prevSnippets
+        .map((snippet) =>
         snippet.isTrash ? { ...snippet, isFavorite: false } : snippet
       )
+        .sort((a, b) => 
+          new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime()
+        )
     )
   }, [setAllSnippets])
 

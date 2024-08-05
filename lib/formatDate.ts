@@ -1,7 +1,9 @@
-import {format} from "date-fns"
+export const formatDate = (date: Date) => {
+  const options: Intl.DateTimeFormatOptions = {
+    day: "numeric",
+    month: "numeric",
+    year: "numeric"
+  }
 
-export const formatDate = (dateString: string): string => {
-  const date = new Date(dateString)
-
-  return format(date, "dd/MM/yyyy")
+  return new Intl.DateTimeFormat("it-IT", options).format(date)
 }

@@ -157,14 +157,7 @@ export default function AppContextProvider({
         const data = await response.json()
 
         if (data.snippets) {
-          //console.log("snippets: ", data.snippets)
-          const formattedSnippets = data.snippets.map(
-            (snippet: SingleSnippetTypes) => ({
-              ...snippet,
-              creationDate: formatDate(snippet.creationDate),
-            })
-          )
-          setAllSnippets(formattedSnippets)
+          setAllSnippets(data.snippets)
         }
       } catch (error) {
         console.log("Error fetching snippets:", error)
@@ -377,7 +370,7 @@ export default function AppContextProvider({
       }
 
       const result = await response.json()
-      console.log(result);
+      //console.log(result);
       return result
     } catch (error) {
       console.error("Error counting snippets by language: ", error)

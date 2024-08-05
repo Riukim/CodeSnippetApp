@@ -1,7 +1,7 @@
 export const languages = [
   { value: "C", label: "C" },
   { value: "C++", label: "C++" },
-  { value: "Csharp", label: "C#" },
+  { value: "C#", label: "C#" },
   { value: "CSS", label: "CSS" },
   { value: "Dart", label: "Dart" },
   { value: "Go", label: "Go" },

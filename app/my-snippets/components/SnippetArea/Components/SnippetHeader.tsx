@@ -4,6 +4,7 @@ import { useAppContext } from "@/ContextApi"
 import { Heart } from "lucide-react"
 import React, { useEffect, useState } from "react"
 import { SingleSnippetTypes } from "@/types/context"
+import { formatDate } from "@/lib/formatDate"
 
 interface SnippetHeaderProps {
   snippet: SingleSnippetTypes
@@ -71,7 +72,7 @@ const SnippetHeader = ({ snippet }: SnippetHeaderProps) => {
         </div>
       </div>
       <div className="text-muted-foreground text-xs flex gap-1 font-normal mx-4 mt-1">
-        <span>{snippet.creationDate}</span>
+        <span>{formatDate(new Date(snippet.creationDate))}</span>
       </div>
     </>
   )

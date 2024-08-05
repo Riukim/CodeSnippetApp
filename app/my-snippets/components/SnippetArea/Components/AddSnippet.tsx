@@ -12,6 +12,7 @@ import CodeEditor from "@/components/CodeEditor"
 import { X } from "lucide-react"
 import { v7 as uuidv7 } from "uuid"
 import { SingleTagType } from "@/types/context"
+import { formatDate } from "@/lib/formatDate"
 
 const AddSnippet = () => {
   const {
@@ -49,7 +50,13 @@ const AddSnippet = () => {
 
       const savedSnippet = await addSnippet(newSnippet)
 
-      setAllSnippets([...allSnippets, savedSnippet])
+      const sortedSnippets = [...allSnippets, savedSnippet].sort(
+        (a, b) =>
+          new Date(b.creationDate).getTime() -
+          new Date(a.creationDate).getTime()
+      )
+    
+      setAllSnippets(sortedSnippets)
       setIsAdding(false)
       setTitle("")
       setDescription("")
