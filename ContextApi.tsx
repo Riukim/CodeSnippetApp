@@ -4,11 +4,11 @@ import { Grid2X2, Heart, LogOut, Trash2 } from "lucide-react"
 import React, { createContext, useContext, useEffect, useState } from "react"
 import {
   AppContextType,
+  LanguageCountType,
   MenuItem,
   SingleSnippetTypes,
   SingleTagType,
 } from "./types/context"
-import { formatDate } from "./lib/formatDate"
 import { usePathname } from "next/navigation"
 
 const AppContext = createContext<AppContextType>({
@@ -31,7 +31,11 @@ const AppContext = createContext<AppContextType>({
     setClerkId: () => {},
     updateSnippet: async () => {},
     deleteSnippet: async () => {},
-    countSnippetByLanguage: async () => {}
+    /* countSnippetByLanguage: async () => { }, */
+    languageCount: [],
+    setLanguageCount: () => { },
+    searchTerm: "",
+    setSearchTerm: () => {},
   },
   SelectedSnippetState: {
     selectedSnippet: null,
@@ -118,6 +122,8 @@ export default function AppContextProvider({
   const [clerkId, setClerkId] = useState("")
   const [isAdding, setIsAdding] = useState(false)
   const [allTags, setAllTags] = useState<SingleTagType[]>([])
+  const [searchTerm, setSearchTerm] = useState("")
+  const [languageCount, setLanguageCount] = useState<LanguageCountType[]>([])
 
   // useEffect per sincronizzare lo stato del menu con l'URL corrente
   useEffect(() => {
@@ -359,24 +365,34 @@ export default function AppContextProvider({
     }
   }
 
-  const countSnippetByLanguage = async () => {
-    try {
-      const response = await fetch(
-        `/api/snippets?clerkId=${clerkId}&countByLanguage=true`
-      )
+  useEffect(() => {
+    const countSnippetByLanguage = async () => {
+      try {
+        const response = await fetch(
+          `/api/snippets?clerkId=${clerkId}&countByLanguage=true`
+        )
 
-      if (!response.ok) {
-        throw new Error("Failed to count snippets by language")
+        if (!response.ok) {
+          throw new Error("Failed to count snippets by language")
+        }
+
+        const result = await response.json()
+        const languageCountArray = result.LanguageCount 
+        
+        if (Array.isArray(languageCountArray)) {
+          setLanguageCount(languageCountArray)
+        } else {
+          console.error("Data received is not an array:", languageCountArray)
+          setLanguageCount([])
+        }
+      } catch (error) {
+        console.error("Error counting snippets by language: ", error)
+        setLanguageCount([])
       }
-
-      const result = await response.json()
-      //console.log(result);
-      return result
-    } catch (error) {
-      console.error("Error counting snippets by language: ", error)
-      return []
     }
-  }
+    countSnippetByLanguage()
+  }, [allSnippets, clerkId])
+  
 
   return (
     <AppContext.Provider
@@ -391,7 +407,10 @@ export default function AppContextProvider({
           setClerkId,
           updateSnippet,
           deleteSnippet,
-          countSnippetByLanguage,
+          searchTerm,
+          setSearchTerm,
+          languageCount,
+          setLanguageCount
         },
         SelectedSnippetState: { selectedSnippet, setSelectedSnippet },
         addSnippetState: { isAdding, setIsAdding, addSnippet },

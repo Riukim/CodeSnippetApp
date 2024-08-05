@@ -2,12 +2,6 @@
 
 import { useAppContext } from "@/ContextApi"
 import Image from "next/image"
-import { useEffect, useState } from "react"
-
-interface LanguageCountType {
-  _id: string
-  count: number
-}
 
 const getIconPath = (language: string) => {
   const lowerCaseLanguage = language.toLowerCase()
@@ -21,28 +15,8 @@ const getIconPath = (language: string) => {
 
 const Languages = () => {
   const {
-    snippetsState: { countSnippetByLanguage },
+    snippetsState: { languageCount },
   } = useAppContext()
-
-  const [languageCount, setLanguageCount] = useState<LanguageCountType[]>([])
-
-  useEffect(() => {
-    const data = async () => {
-      try {
-        const { LanguageCount } = await countSnippetByLanguage() 
-
-        if (Array.isArray(LanguageCount)) {
-          setLanguageCount(LanguageCount)
-        } else {
-          console.error("Data received is not an array:", LanguageCount)
-        }
-      } catch (error) {
-        console.error("Error counting snippets by language:", error)
-      }
-    }
-
-    data()
-  }, [countSnippetByLanguage])
 
   return (
     <div className="mt-12 text-sm">

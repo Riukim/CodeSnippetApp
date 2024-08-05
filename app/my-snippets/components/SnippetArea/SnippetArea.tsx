@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation"
 const SnippetArea = () => {
   const {
     snippetPanel: { isOpen },
-    snippetsState: { allSnippets, setClerkId, setAllSnippets },
+    snippetsState: { allSnippets, setClerkId, setAllSnippets, searchTerm },
     addSnippetState: { isAdding },
   } = useAppContext()
 
@@ -34,14 +34,17 @@ const SnippetArea = () => {
   }, [setAllSnippets])
 
   const visibleSnippet = allSnippets.filter((snippet) => {
+    const titleMatch = snippet.title
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase())
     if (pathname === "/my-snippets") {
-      return !snippet.isTrash
+      return !snippet.isTrash && titleMatch
     } else if (pathname === "/trash") {
-      return snippet.isTrash
+      return snippet.isTrash && titleMatch
     } else if (pathname === "/favorites") {
-      return snippet.isFavorite && !snippet.isTrash
+      return snippet.isFavorite && !snippet.isTrash && titleMatch
     } else {
-      return true
+      return titleMatch
     }
   })
 

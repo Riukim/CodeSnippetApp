@@ -2,6 +2,10 @@
 
 import React from "react"
 
+export interface LanguageCountType {
+  _id: string
+  count: number
+}
 export interface SingleTagType {
   _id: number | string,
   name: string,
@@ -54,7 +58,11 @@ export interface AppContextType {
       updatedData: Partial<SingleSnippetTypes>
     ) => Promise<any>
     deleteSnippet: (snippetId: number | string) => Promise<any>
-    countSnippetByLanguage: () => Promise<any>
+    /* countSnippetByLanguage: () => Promise<any> */
+    languageCount: LanguageCountType[],
+    setLanguageCount: React.Dispatch<React.SetStateAction<LanguageCountType[]>>
+    searchTerm: string
+    setSearchTerm: React.Dispatch<React.SetStateAction<string>>
   }
   SelectedSnippetState: {
     selectedSnippet: SingleSnippetTypes | null
