@@ -52,7 +52,7 @@ const SnippetHeader = ({ snippet }: SnippetHeaderProps) => {
     <>
       <div className="flex justify-between mx-4">
         <span
-          className="font-bold text-lg w-[87%] hover:text-primary cursor-pointer"
+          className="font-bold text-lg w-[87%] hover:text-primary cursor-pointer line-clamp-2 whitespace-normal break-words"
           onClick={handleTitleClick}
         >
           {snippet.title}

@@ -3,6 +3,7 @@ import SingleSnippet from "./Components/SingleSnippet"
 import { useAppContext } from "@/ContextApi"
 import { useUser } from "@clerk/nextjs"
 import { usePathname } from "next/navigation"
+import { SingleSnippetTypes } from "@/types/context"
 
 const SnippetArea = () => {
   const {
@@ -25,28 +26,25 @@ const SnippetArea = () => {
 
   useEffect(() => {
     setAllSnippets((prevSnippets) =>
-      prevSnippets
-        .map((snippet) =>
-          snippet.isTrash ? { ...snippet, isFavorite: false } : snippet
-        )
-        .sort(
-          (a, b) =>
-            new Date(b.creationDate).getTime() -
-            new Date(a.creationDate).getTime()
-        )
+      prevSnippets.map((snippet) =>
+        snippet.isTrash ? { ...snippet, isFavorite: false } : snippet
+      )
     )
   }, [setAllSnippets])
+
+  const sortByDate = (a: SingleSnippetTypes, b: SingleSnippetTypes) =>
+    new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime()
 
   const visibleSnippet = allSnippets
     .filter((snippet) => {
       const titleMatch = snippet.title
         .toLowerCase()
         .includes(searchTerm.toLowerCase())
-      
+
       const tagMatch = selectedTag?.length
         ? snippet.tags.some((tag) => tag.name === selectedTag[0]?.name)
         : true
-      
+
       if (pathname === "/my-snippets") {
         return !snippet.isTrash && titleMatch && tagMatch
       } else if (pathname === "/trash") {
@@ -57,6 +55,7 @@ const SnippetArea = () => {
         return titleMatch && tagMatch
       }
     }) // sort per ordinare la lista degli snippet, in modo che lo snippet selzionato sia sempre il primo della lista
+    .sort(sortByDate)
     .sort((a, b) => {
       if (selectedSnippet && a._id === selectedSnippet._id) return -1
       if (selectedSnippet && b._id === selectedSnippet._id) return 1

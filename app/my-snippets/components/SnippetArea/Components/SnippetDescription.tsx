@@ -24,12 +24,14 @@ const SnippetDescription = ({ description, code }: SnippetDescriptionProps) => {
   }
 
   return (
-    <div className='flex items-center justify-between text-base lg:text-sm -tracking-tight mt-4 mx-4'>
-      <div>{description}</div>
+    <div className="flex items-start justify-between  mt-4 mx-4">
+      <span className="text-base lg:text-sm -tracking-tight line-clamp-4 whitespace-normal break-words">
+        {description}
+      </span>
       <div>
         <Copy
           size={20}
-          className='ml-4 cursor-pointer hover:opacity-70'
+          className="ml-4 cursor-pointer hover:opacity-70"
           onClick={handleCopy}
         />
       </div>
