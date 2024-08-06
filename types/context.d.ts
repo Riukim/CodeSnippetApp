@@ -59,7 +59,7 @@ export interface AppContextType {
     ) => Promise<any>
     deleteSnippet: (snippetId: number | string) => Promise<any>
     /* countSnippetByLanguage: () => Promise<any> */
-    languageCount: LanguageCountType[],
+    languageCount: LanguageCountType[]
     setLanguageCount: React.Dispatch<React.SetStateAction<LanguageCountType[]>>
     searchTerm: string
     setSearchTerm: React.Dispatch<React.SetStateAction<string>>
@@ -84,5 +84,9 @@ export interface AppContextType {
       tagId: number | string,
       updateData: Partial<SingleTagType>
     ) => Promise<any>
+  }
+  SelectedTagState: {
+    selectedTag: SingleTagType[] | null
+    setSelectedTag: React.Dispatch<React.SetStateAction<SingleTagType[] | null>>
   }
 }

@@ -16,7 +16,7 @@ const ContentSection = () => {
   } = useAppContext()
 
   return (
-    <section className={`bg-secondary p-5 shadow-md h-full w-full ${isOpen || isAdding ? "max-sm:overflow-y-hidden h-[150vh]" : "overflow-auto"}`}>
+    <section className={`bg-secondary p-5 shadow-md h-fill w-full ${isOpen || isAdding ? "max-sm:overflow-y-hidden h-fill" : "overflow-auto"}`}>
       <TopBar />
       <TagSwiper />
       <div className="flex gap-4 mt-5">

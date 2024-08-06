@@ -10,6 +10,7 @@ const SnippetArea = () => {
     snippetsState: { allSnippets, setClerkId, setAllSnippets, searchTerm },
     addSnippetState: { isAdding },
     SelectedSnippetState: { selectedSnippet },
+    SelectedTagState: { selectedTag },
   } = useAppContext()
 
   const { user } = useUser()
@@ -41,14 +42,19 @@ const SnippetArea = () => {
       const titleMatch = snippet.title
         .toLowerCase()
         .includes(searchTerm.toLowerCase())
+      
+      const tagMatch = selectedTag?.length
+        ? snippet.tags.some((tag) => tag.name === selectedTag[0]?.name)
+        : true
+      
       if (pathname === "/my-snippets") {
-        return !snippet.isTrash && titleMatch
+        return !snippet.isTrash && titleMatch && tagMatch
       } else if (pathname === "/trash") {
-        return snippet.isTrash && titleMatch
+        return snippet.isTrash && titleMatch && tagMatch
       } else if (pathname === "/favorites") {
-        return snippet.isFavorite && !snippet.isTrash && titleMatch
+        return snippet.isFavorite && !snippet.isTrash && titleMatch && tagMatch
       } else {
-        return titleMatch
+        return titleMatch && tagMatch
       }
     }) // sort per ordinare la lista degli snippet, in modo che lo snippet selzionato sia sempre il primo della lista
     .sort((a, b) => {

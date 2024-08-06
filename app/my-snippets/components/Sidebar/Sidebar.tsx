@@ -5,7 +5,7 @@ import React from 'react'
 
 const Sidebar = () => {
   return (
-    <div className='max-lg:hidden pr-10 p-6 flex flex-col gap-2 h-dvh pt-7 border-r'>
+    <div className='max-lg:hidden h-auto pr-10 p-6 flex flex-col gap-2 pt-7 border-r'>
       <Logo />
       <QuickLinks />
       <Languages />

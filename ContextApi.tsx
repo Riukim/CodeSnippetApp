@@ -53,6 +53,10 @@ const AppContext = createContext<AppContextType>({
     deleteTag: async () => {},
     updateTag: async () => {},
   },
+  SelectedTagState: {
+    selectedTag: null,
+    setSelectedTag: () => {}
+  }
 })
 
 export default function AppContextProvider({
@@ -122,6 +126,7 @@ export default function AppContextProvider({
   const [clerkId, setClerkId] = useState("")
   const [isAdding, setIsAdding] = useState(false)
   const [allTags, setAllTags] = useState<SingleTagType[]>([])
+  const [selectedTag, setSelectedTag] = useState<SingleTagType[] | null>(null)
   const [searchTerm, setSearchTerm] = useState("")
   const [languageCount, setLanguageCount] = useState<LanguageCountType[]>([])
 
@@ -415,6 +420,7 @@ export default function AppContextProvider({
         SelectedSnippetState: { selectedSnippet, setSelectedSnippet },
         addSnippetState: { isAdding, setIsAdding, addSnippet },
         TagsState: { allTags, setAllTags, addTag, deleteTag, updateTag },
+        SelectedTagState: {selectedTag, setSelectedTag}
       }}
     >
       {children}

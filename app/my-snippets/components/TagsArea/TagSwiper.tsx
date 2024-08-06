@@ -14,6 +14,7 @@ import "swiper/css/pagination"
 
 import { useAppContext } from "@/ContextApi"
 import TagManagment from "@/components/TagManagment"
+import { SingleTagType } from "@/types/context"
 
 export default function TagSwiper() {
   const {
@@ -21,7 +22,18 @@ export default function TagSwiper() {
     isMobileState: { isMobile },
     addSnippetState: { isAdding },
     TagsState: { allTags },
+    SelectedTagState: { selectedTag, setSelectedTag },
   } = useAppContext()
+
+  const handleTagSelect = (tag: SingleTagType | null) => {
+    setSelectedTag(tag ? [tag] : [])
+  }
+
+  const isTagSelected = (tagName: string) => {
+    return (
+      selectedTag !== null && selectedTag.some((tag) => tag.name === tagName)
+    )
+  }
 
   return (
     <div
@@ -57,11 +69,25 @@ export default function TagSwiper() {
           modules={[FreeMode, Mousewheel, Pagination]}
           className="mySwiper max-w-[100vw]"
         >
-          <SwiperSlide className="bg-primary min-w-20">All</SwiperSlide>
+          <SwiperSlide
+            className={`min-w-20 ${
+              selectedTag === null || selectedTag.length === 0
+                ? "bg-primary text-white"
+                : "bg-background"
+            }`}
+            onClick={() => handleTagSelect(null)}
+          >
+            All
+          </SwiperSlide>
           {allTags.map((tag, index) => (
             <SwiperSlide
               key={`${tag.name}-${index}`}
-              className="text-slate-400 min-w-20"
+              className={`min-w-20 ${
+                isTagSelected(tag.name)
+                  ? "bg-primary text-white"
+                  : "bg-background"
+              }`}
+              onClick={() => handleTagSelect(tag)}
             >
               {tag.name}
             </SwiperSlide>

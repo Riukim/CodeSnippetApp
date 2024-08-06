@@ -12,7 +12,6 @@ import CodeEditor from "@/components/CodeEditor"
 import { X } from "lucide-react"
 import { v7 as uuidv7 } from "uuid"
 import { SingleTagType } from "@/types/context"
-import { formatDate } from "@/lib/formatDate"
 
 const AddSnippet = () => {
   const {
@@ -62,6 +61,7 @@ const AddSnippet = () => {
       setDescription("")
       setCode("")
       setLanguage("")
+      setTags([])
       setNewTag("")
     } catch (error) {
       console.error("Failed to add snippet:", error)
@@ -78,26 +78,26 @@ const AddSnippet = () => {
         setTimeout(() => setErrorMessage(""), 5000)
         return
       }
-      console.log("nuova tag: ", newTag)
+      //console.log("nuova tag: ", newTag)
 
       try {
         let existingTag = allTags.find(
           (tag) => tag.name.toLowerCase() === newTag.trim().toLowerCase()
         )
-        console.log("existingTag: ", existingTag)
+        //console.log("existingTag: ", existingTag)
 
         if (!existingTag) {
           const newTagData: SingleTagType = await addTag({
             name: newTag.trim(),
             clerkUserId: clerkId,
           })
-          console.log("newTagData: ", newTagData)
+          //console.log("newTagData: ", newTagData)
 
           const updatedTags = [...allTags, newTagData]
           setAllTags(updatedTags)
-          console.log("allTags: ", updatedTags)
+          //console.log("allTags: ", updatedTags)
           existingTag = newTagData
-          console.log("existingTag2: ", newTagData)
+          //console.log("existingTag2: ", newTagData)
         }
 
         // Assicurati che existingTag non sia undefined prima di aggiungerlo
@@ -106,7 +106,7 @@ const AddSnippet = () => {
           console.log("UpdatedTags: ", updatedTags)
 
           setTags(updatedTags)
-          console.log("Tags: ", tags)
+          //console.log("Tags: ", tags)
           setNewTag("")
           setErrorMessage("")
         }
@@ -152,6 +152,7 @@ const AddSnippet = () => {
               setDescription("")
               setCode("")
               setLanguage("")
+              setTags([])
               setNewTag("")
             }}
           />

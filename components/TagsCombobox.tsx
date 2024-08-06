@@ -31,6 +31,10 @@ const TagsCombobox = ({ onTagSelect }: TagsComboboxProps) => {
     setOpen(false)
   }
 
+  useEffect(() => {
+    setSelectedTag("")
+  }, [selectedTag]);
+
   return (
     <Popover
       open={open}
