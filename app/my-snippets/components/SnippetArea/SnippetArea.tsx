@@ -9,6 +9,7 @@ const SnippetArea = () => {
     snippetPanel: { isOpen },
     snippetsState: { allSnippets, setClerkId, setAllSnippets, searchTerm },
     addSnippetState: { isAdding },
+    SelectedSnippetState: { selectedSnippet },
   } = useAppContext()
 
   const { user } = useUser()
@@ -25,28 +26,36 @@ const SnippetArea = () => {
     setAllSnippets((prevSnippets) =>
       prevSnippets
         .map((snippet) =>
-        snippet.isTrash ? { ...snippet, isFavorite: false } : snippet
-      )
-        .sort((a, b) => 
-          new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime()
+          snippet.isTrash ? { ...snippet, isFavorite: false } : snippet
+        )
+        .sort(
+          (a, b) =>
+            new Date(b.creationDate).getTime() -
+            new Date(a.creationDate).getTime()
         )
     )
   }, [setAllSnippets])
 
-  const visibleSnippet = allSnippets.filter((snippet) => {
-    const titleMatch = snippet.title
-      .toLowerCase()
-      .includes(searchTerm.toLowerCase())
-    if (pathname === "/my-snippets") {
-      return !snippet.isTrash && titleMatch
-    } else if (pathname === "/trash") {
-      return snippet.isTrash && titleMatch
-    } else if (pathname === "/favorites") {
-      return snippet.isFavorite && !snippet.isTrash && titleMatch
-    } else {
-      return titleMatch
-    }
-  })
+  const visibleSnippet = allSnippets
+    .filter((snippet) => {
+      const titleMatch = snippet.title
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase())
+      if (pathname === "/my-snippets") {
+        return !snippet.isTrash && titleMatch
+      } else if (pathname === "/trash") {
+        return snippet.isTrash && titleMatch
+      } else if (pathname === "/favorites") {
+        return snippet.isFavorite && !snippet.isTrash && titleMatch
+      } else {
+        return titleMatch
+      }
+    }) // sort per ordinare la lista degli snippet, in modo che lo snippet selzionato sia sempre il primo della lista
+    .sort((a, b) => {
+      if (selectedSnippet && a._id === selectedSnippet._id) return -1
+      if (selectedSnippet && b._id === selectedSnippet._id) return 1
+      return 0
+    })
 
   return (
     <div

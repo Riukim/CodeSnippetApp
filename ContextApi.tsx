@@ -365,6 +365,7 @@ export default function AppContextProvider({
     }
   }
 
+  // UseEffect per contare i linguaggi presenti
   useEffect(() => {
     const countSnippetByLanguage = async () => {
       try {
@@ -393,7 +394,6 @@ export default function AppContextProvider({
     countSnippetByLanguage()
   }, [allSnippets, clerkId])
   
-
   return (
     <AppContext.Provider
       value={{
