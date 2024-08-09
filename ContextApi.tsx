@@ -10,6 +10,7 @@ import {
   SingleTagType,
 } from "./types/context"
 import { usePathname } from "next/navigation"
+import { SignOutButton } from "@clerk/nextjs"
 
 const AppContext = createContext<AppContextType>({
   menuState: {
@@ -33,7 +34,7 @@ const AppContext = createContext<AppContextType>({
     deleteSnippet: async () => {},
     /* countSnippetByLanguage: async () => { }, */
     languageCount: [],
-    setLanguageCount: () => { },
+    setLanguageCount: () => {},
     searchTerm: "",
     setSearchTerm: () => {},
   },
@@ -55,8 +56,8 @@ const AppContext = createContext<AppContextType>({
   },
   SelectedTagState: {
     selectedTag: null,
-    setSelectedTag: () => {}
-  }
+    setSelectedTag: () => {},
+  },
 })
 
 export default function AppContextProvider({
@@ -107,7 +108,7 @@ export default function AppContextProvider({
     {
       id: 4,
       name: "Log Out",
-      isSelected: pathname === "/logout",
+      isSelected: pathname === "/",
       path: "",
       icon: (
         <LogOut
@@ -383,8 +384,8 @@ export default function AppContextProvider({
         }
 
         const result = await response.json()
-        const languageCountArray = result.LanguageCount 
-        
+        const languageCountArray = result.LanguageCount
+
         if (Array.isArray(languageCountArray)) {
           setLanguageCount(languageCountArray)
         } else {
@@ -398,7 +399,7 @@ export default function AppContextProvider({
     }
     countSnippetByLanguage()
   }, [allSnippets, clerkId])
-  
+
   return (
     <AppContext.Provider
       value={{
@@ -415,12 +416,12 @@ export default function AppContextProvider({
           searchTerm,
           setSearchTerm,
           languageCount,
-          setLanguageCount
+          setLanguageCount,
         },
         SelectedSnippetState: { selectedSnippet, setSelectedSnippet },
         addSnippetState: { isAdding, setIsAdding, addSnippet },
         TagsState: { allTags, setAllTags, addTag, deleteTag, updateTag },
-        SelectedTagState: {selectedTag, setSelectedTag}
+        SelectedTagState: { selectedTag, setSelectedTag },
       }}
     >
       {children}

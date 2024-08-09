@@ -1,28 +1,49 @@
 "use client"
 
 import { useAppContext } from "@/ContextApi"
-import { usePathname, useRouter } from "next/navigation"
-import React, { useEffect } from "react"
+import { useRouter } from "next/navigation"
+import { useAuth, useClerk } from "@clerk/nextjs"
+import React from "react"
 
 const QuickLinks = () => {
   const {
     menuState: { menuItems, setMenuItems },
   } = useAppContext()
 
+  const { userId } = useAuth()
+  const { signOut } = useClerk()
+  
   const router = useRouter()
-  const pathname = usePathname()
+
+  const handleLogout = async () => {
+    try {
+      await signOut({ redirectUrl: "/" })
+    } catch (error) {
+      console.error("Logout failed", error)
+    }
+  }
 
   // useEffect per aggiornare lo stato del menu ogni volta che il percorso dell'URL cambia
-  useEffect(() => {
+  /* useEffect(() => {
     const updatedMenuItems = menuItems.map((menu) => ({
       ...menu,
       isSelected: pathname === menu.path,
     }))
     setMenuItems(updatedMenuItems)
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname])
+  }, [pathname]) */
 
-  function clickedMenuItem(index: number) {
+  const clickedMenuItem = async (index: number) => {
+    if (menuItems[index].name === "Log Out") {
+      // Clear menu items and handle logout
+      setMenuItems(
+        menuItems.map((item) => ({ ...item, isSelected: false, path: "/" }))
+      )
+      await handleLogout()
+      return
+    }
+    if (!userId ) return
+
     const updatedMenuItems = menuItems.map((menu, i) => ({
       ...menu,
       isSelected: i === index,
@@ -49,6 +70,18 @@ const QuickLinks = () => {
             <span>{menu.name}</span>
           </li>
         ))}
+        {/* <li
+          className="flex cursor-pointer select-none gap-2 p-[7px] px-2 items-center w-[80%] rounded-md text-slate-400"
+          onClick={handleLogout}
+        >
+          <div className="flex items-center gap-2">
+            <LogOut
+              size={18}
+              className="flex-none"
+            />
+            <span>Log Out</span>
+          </div>
+        </li> */}
       </ul>
     </div>
   )
