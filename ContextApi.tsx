@@ -106,15 +106,21 @@ export default function AppContextProvider({
       ),
     },
     {
+      // Tolto il name perchè andava in conflitto col path e quando facevo logout cercava di reindirizzare nel percorso corrente. Soluzione funzionale
       id: 4,
-      name: "Log Out",
+      name: "",
       isSelected: pathname === "/",
-      path: "",
+      path: "/",
       icon: (
-        <LogOut
-          size={18}
-          className="flex-none"
-        />
+        <div className="flex gap-2">
+          <LogOut
+            size={18}
+            className="flex-none"
+          />
+          <SignOutButton>
+            <button>Log Out</button>
+          </SignOutButton>
+        </div>
       ),
     },
   ])

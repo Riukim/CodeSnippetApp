@@ -2,7 +2,7 @@
 
 import { useAppContext } from "@/ContextApi"
 import { useRouter } from "next/navigation"
-import { useAuth, useClerk } from "@clerk/nextjs"
+import { useAuth } from "@clerk/nextjs"
 import React from "react"
 
 const QuickLinks = () => {
@@ -11,17 +11,17 @@ const QuickLinks = () => {
   } = useAppContext()
 
   const { userId } = useAuth()
-  const { signOut } = useClerk()
+  // const { signOut } = useClerk()
   
   const router = useRouter()
 
-  const handleLogout = async () => {
+/*   const handleLogout = async () => {
     try {
       await signOut({ redirectUrl: "/" })
     } catch (error) {
       console.error("Logout failed", error)
     }
-  }
+  } */
 
   // useEffect per aggiornare lo stato del menu ogni volta che il percorso dell'URL cambia
   /* useEffect(() => {
@@ -34,14 +34,22 @@ const QuickLinks = () => {
   }, [pathname]) */
 
   const clickedMenuItem = async (index: number) => {
-    if (menuItems[index].name === "Log Out") {
+/*     if (menuItems[index].name === "Log Out") {
       // Clear menu items and handle logout
-      setMenuItems(
-        menuItems.map((item) => ({ ...item, isSelected: false, path: "/" }))
-      )
+      const clearMenuItems = menuItems.map((menu, i) => ({
+        ...menu,
+        isSelected: i === index,
+      }))
+
+      console.log("Clear menu Items", clearMenuItems);
       await handleLogout()
+      setMenuItems(clearMenuItems)
+
+      console.log("menuItems prima di logout: ",menuItems);
+      
       return
-    }
+    } */
+    
     if (!userId ) return
 
     const updatedMenuItems = menuItems.map((menu, i) => ({
@@ -49,6 +57,7 @@ const QuickLinks = () => {
       isSelected: i === index,
     }))
     setMenuItems(updatedMenuItems)
+    // console.log("menu items change: ",updatedMenuItems);
     router.push(menuItems[index].path)
   }
 
