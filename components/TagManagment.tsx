@@ -19,7 +19,7 @@ import { v7 as uuidv7 } from "uuid"
 
 const TagManagment = () => {
   const {
-    snippetsState: { clerkId },
+    snippetsState: { clerkId, tagsCount, updateSnippet },
     TagsState: { allTags, setAllTags, addTag, deleteTag, updateTag },
   } = useAppContext()
 
@@ -127,6 +127,11 @@ const TagManagment = () => {
     }
   }
 
+  const getTagCount = (tagName: string) => {
+    const tag = tagsCount.find((tag) => tag._id === tagName)
+    return tag ? tag.count : 0
+  }
+  
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -285,7 +290,7 @@ const TagManagment = () => {
                 className="flex justify-between items-center p-2 rounded-lg bg-secondary mb-2"
               >
                 <span className="bg-green-100 text-green-800 p-1 rounded-lg px-2">
-                  {tag.name}
+                  {tag.name} ({getTagCount(tag.name)})
                 </span>
                 <div className="flex gap-2">
                   <div className="p-2 rounded-full bg-green-100 cursor-pointer">

@@ -46,6 +46,7 @@ export async function GET(req: any) {
   try {
     const clerkId = req.nextUrl.searchParams.get("clerkId")
     const countByLanguage = req.nextUrl.searchParams.get("countByLanguage")
+    const countTags = req.nextUrl.searchParams.get("countTags")
 
     if (!clerkId) {
       return NextResponse.json(
@@ -55,6 +56,22 @@ export async function GET(req: any) {
     }
 
     await connect()
+
+    if (countTags) {
+      const tagsCount = await SingleSnippet.aggregate([
+        { $match: { clerkUserId: clerkId } },
+        { $unwind: "$tags" },
+        {
+          $group: {
+            _id: "$tags.name",
+            count: { $sum: 1 },
+          },
+        },
+        { $sort: { count: -1, _id: 1 } },
+      ])
+
+      return NextResponse.json({tagsCount})
+    }
 
     if (countByLanguage) {
       const LanguageCount = await SingleSnippet.aggregate([

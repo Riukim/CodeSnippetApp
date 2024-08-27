@@ -8,6 +8,7 @@ import {
   MenuItem,
   SingleSnippetTypes,
   SingleTagType,
+  TagsCountType,
 } from "./types/context"
 import { usePathname } from "next/navigation"
 import { SignOutButton } from "@clerk/nextjs"
@@ -35,6 +36,8 @@ const AppContext = createContext<AppContextType>({
     /* countSnippetByLanguage: async () => { }, */
     languageCount: [],
     setLanguageCount: () => {},
+    tagsCount: [],
+    setTagsCount: () => {},
     searchTerm: "",
     setSearchTerm: () => {},
   },
@@ -136,6 +139,7 @@ export default function AppContextProvider({
   const [selectedTag, setSelectedTag] = useState<SingleTagType[] | null>(null)
   const [searchTerm, setSearchTerm] = useState("")
   const [languageCount, setLanguageCount] = useState<LanguageCountType[]>([])
+  const [tagsCount, setTagsCount] = useState<TagsCountType[]>([])
 
   // useEffect per sincronizzare lo stato del menu con l'URL corrente
   useEffect(() => {
@@ -327,36 +331,39 @@ export default function AppContextProvider({
   }
 
   // Funzione per modificare tag in db e frontend
-  const updateTag = async (
-    tagId: string | number,
-    updateData: Partial<SingleTagType>
-  ) => {
-    try {
-      const response = await fetch(`/api/tags?id=${tagId}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updateData),
-      })
+const updateTag = async (
+  tagId: string | number,
+  updateData: Partial<SingleTagType>
+) => {
+  try {
+    // Aggiornamento del tag
+    const response = await fetch(`/api/tags?id=${tagId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updateData),
+    })
 
-      if (!response.ok) {
-        throw new Error("Failed to update the tag")
-      }
-
-      const updatedTag = await response.json()
-
-      setAllTags((prevTags) =>
-        prevTags.map((tag) =>
-          tag._id === tagId ? { ...tag, ...updatedTag } : tag
-        )
-      )
-      return updatedTag
-    } catch (error) {
-      console.log(error)
+    if (!response.ok) {
       throw new Error("Failed to update the tag")
     }
+
+    const updatedTag = await response.json()
+
+    // Aggiornamento del tag nella collezione dei tag
+    setAllTags((prevTags) =>
+      prevTags.map((tag) =>
+        tag._id === tagId ? { ...tag, ...updatedTag } : tag
+      )
+    )
+
+    return updatedTag
+  } catch (error) {
+    console.log(error)
+    throw new Error("Failed to update the tag")
   }
+}
 
   // Funzione per eliminare tag in db e frontend
   const deleteTag = async (tagId: number | string) => {
@@ -395,7 +402,7 @@ export default function AppContextProvider({
         if (Array.isArray(languageCountArray)) {
           setLanguageCount(languageCountArray)
         } else {
-          console.error("Data received is not an array:", languageCountArray)
+          console.error("Data received is not an array: ", languageCountArray)
           setLanguageCount([])
         }
       } catch (error) {
@@ -404,6 +411,35 @@ export default function AppContextProvider({
       }
     }
     countSnippetByLanguage()
+  }, [allSnippets, clerkId])
+
+  // UseEffect per contare le tag presenti
+  useEffect(() => {
+    const countTags = async () => {
+      try {
+        const response = await fetch(
+          `api/snippets?clerkId=${clerkId}&countTags=true`
+        )
+
+        if (!response.ok) {
+          throw new Error("Failed to count number of tags")
+        }
+
+        const result = await response.json()
+        const tagsCountArray = result.tagsCount
+
+        if (Array.isArray(tagsCountArray)) {
+          setTagsCount(tagsCountArray)
+        } else {
+          console.error("Data received is not an array: ", tagsCountArray)
+          setTagsCount([])
+        }
+      } catch (error) {
+        console.error("Error counting tags: ", error)
+        setTagsCount([])
+      }
+    }
+    countTags()
   }, [allSnippets, clerkId])
 
   return (
@@ -423,6 +459,8 @@ export default function AppContextProvider({
           setSearchTerm,
           languageCount,
           setLanguageCount,
+          tagsCount,
+          setTagsCount,
         },
         SelectedSnippetState: { selectedSnippet, setSelectedSnippet },
         addSnippetState: { isAdding, setIsAdding, addSnippet },

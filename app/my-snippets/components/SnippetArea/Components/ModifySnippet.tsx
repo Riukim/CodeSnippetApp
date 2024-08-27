@@ -14,7 +14,6 @@ import { X } from "lucide-react"
 import DescriptionInput from "@/components/DescriptionInput"
 import LanguageSelector from "@/components/LanguageSelector"
 import CodeEditor from "@/components/CodeEditor"
-import { v7 as uuidv7 } from "uuid"
 
 const ModifySnippet = () => {
   const {

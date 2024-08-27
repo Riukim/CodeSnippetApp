@@ -6,6 +6,10 @@ export interface LanguageCountType {
   _id: string
   count: number
 }
+export interface TagsCountType {
+  _id: string
+  count: number
+}
 export interface SingleTagType {
   _id: number | string,
   name: string,
@@ -61,6 +65,8 @@ export interface AppContextType {
     /* countSnippetByLanguage: () => Promise<any> */
     languageCount: LanguageCountType[]
     setLanguageCount: React.Dispatch<React.SetStateAction<LanguageCountType[]>>
+    tagsCount: TagsCountType[],
+    setTagsCount: React.Dispatch<React.SetStateAction<TagsCountType[]>>
     searchTerm: string
     setSearchTerm: React.Dispatch<React.SetStateAction<string>>
   }

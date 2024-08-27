@@ -29,7 +29,7 @@ const TagsInput = ({
 }: TagsInputProps) => {
   const handleTagSelect = (tagName: string) => {
     if (!tags.some((tag) => tag.name === tagName)) {
-      console.log("Tag name dopo select: ", tagName)
+      //console.log("Tag name dopo select: ", tagName)
       handleAddTagFromCombobox(tagName)
       setErrorMessage("")
     } else {
