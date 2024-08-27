@@ -9,7 +9,7 @@ const UserProfile = () => {
   const imgUrl = user?.imageUrl
 
   const loadingImage = (
-    <div className="w-9 h-9 rounded-full mb-[5px] bg-muted animate-pulse"></div>
+    <div className="w-10 h-10 rounded-full mb-[5px] bg-muted animate-pulse items-center"></div>
   )
 
   const loadingEmail = (
@@ -25,13 +25,18 @@ const UserProfile = () => {
       {!user ? (
         loadingImage
       ) : imgUrl ? (
-        <Image
-          src={imgUrl}
-          width={36}
-          height={36}
-          alt={`${user?.firstName} ${user?.lastName}`}
-          className="rounded-full h-9 w-9 max-lg:mr-2"
-        />
+        <div className="flex items-center">
+          <UserButton
+            appearance={{
+              elements: {
+                avatarBox: "h-10 w-10",
+                userButtonAvatar: "rounded-full",
+                userButton: "flex items-center h-12 w-12",
+              },
+            }}
+            userProfileMode="modal"
+          />
+        </div>
       ) : (
         loadingImage
       )}
