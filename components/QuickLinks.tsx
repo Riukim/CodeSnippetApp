@@ -11,46 +11,13 @@ const QuickLinks = () => {
   } = useAppContext()
 
   const { userId } = useAuth()
-  // const { signOut } = useClerk()
-  
   const router = useRouter()
 
-/*   const handleLogout = async () => {
-    try {
-      await signOut({ redirectUrl: "/" })
-    } catch (error) {
-      console.error("Logout failed", error)
-    }
-  } */
-
-  // useEffect per aggiornare lo stato del menu ogni volta che il percorso dell'URL cambia
-  /* useEffect(() => {
-    const updatedMenuItems = menuItems.map((menu) => ({
-      ...menu,
-      isSelected: pathname === menu.path,
-    }))
-    setMenuItems(updatedMenuItems)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname]) */
-
   const clickedMenuItem = async (index: number) => {
-/*     if (menuItems[index].name === "Log Out") {
-      // Clear menu items and handle logout
-      const clearMenuItems = menuItems.map((menu, i) => ({
-        ...menu,
-        isSelected: i === index,
-      }))
-
-      console.log("Clear menu Items", clearMenuItems);
-      await handleLogout()
-      setMenuItems(clearMenuItems)
-
-      console.log("menuItems prima di logout: ",menuItems);
-      
+    if (!userId) {
+      router.push("/")
       return
-    } */
-    
-    if (!userId ) return
+    }
 
     const updatedMenuItems = menuItems.map((menu, i) => ({
       ...menu,
@@ -79,18 +46,6 @@ const QuickLinks = () => {
             <span>{menu.name}</span>
           </li>
         ))}
-        {/* <li
-          className="flex cursor-pointer select-none gap-2 p-[7px] px-2 items-center w-[80%] rounded-md text-slate-400"
-          onClick={handleLogout}
-        >
-          <div className="flex items-center gap-2">
-            <LogOut
-              size={18}
-              className="flex-none"
-            />
-            <span>Log Out</span>
-          </div>
-        </li> */}
       </ul>
     </div>
   )

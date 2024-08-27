@@ -24,7 +24,10 @@ export default function RootLayout({
       lang="en"
       suppressHydrationWarning
     >
-      <ClerkProvider appearance={{ baseTheme: dark }}>
+      <ClerkProvider
+        appearance={{ baseTheme: dark }}
+        afterSignOutUrl={"/"}
+      >
         <GlobalContextProvider>
           <body className={`${recursive.className}`}>
             <ThemeProvider

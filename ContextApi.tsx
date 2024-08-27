@@ -149,7 +149,7 @@ export default function AppContextProvider({
     }))
     setMenuItems(updatedMenuItems)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname])
+  }, [])
 
   // Effeto per gestire il ridimensionamento della pagina
   const handleResize = () => {
