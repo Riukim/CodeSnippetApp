@@ -10,7 +10,9 @@ const Navbar = () => {
     
   return (
     <nav className="flex m-5 max-sm:mt-9 mx-8 items-center justify-between max-sm:flex-col">
-      <Logo />
+      <Link href="/">
+        <Logo />
+      </Link>
       <div className="max-sm:w-full">
         {userId ? (
           <Link href="/my-snippets">

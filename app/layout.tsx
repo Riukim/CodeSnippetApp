@@ -6,6 +6,7 @@ import { dark } from "@clerk/themes"
 import GlobalContextProvider from "@/ContextApi"
 import { ThemeProvider } from "@/components/ThemeProvider"
 import { Toaster } from "@/components/ui/sonner"
+import Navbar from "@/components/Navbar"
 
 const recursive = Recursive({ subsets: ["latin"] })
 

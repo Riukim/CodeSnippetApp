@@ -120,9 +120,7 @@ export default function AppContextProvider({
             size={18}
             className="flex-none"
           />
-          <SignOutButton>
-            <button>Log Out</button>
-          </SignOutButton>
+          <SignOutButton />
         </div>
       ),
     },

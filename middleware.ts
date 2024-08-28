@@ -1,4 +1,5 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server"
+import type { NextRequest } from "next/server"
 
 const isProtectedRoute = createRouteMatcher([
   "/my-snippets(.*)",
@@ -6,11 +7,19 @@ const isProtectedRoute = createRouteMatcher([
   "/favorites(.*)",
 ])
 
-export default clerkMiddleware((auth, req) => {
-  if (!auth().userId && isProtectedRoute(req)) {
-    return auth().redirectToSignIn()
-  }
-})
+export default clerkMiddleware(
+  (auth, req: NextRequest) => {
+    const url = req.nextUrl.clone()
+    //console.log(url.origin);
+    const newUrl = url.origin
+    
+    if (isProtectedRoute(req)) auth().protect({
+      unauthenticatedUrl: newUrl,
+      unauthorizedUrl: newUrl,
+    })
+  },
+  { debug: true }
+)
 
 export const config = {
   matcher: [
