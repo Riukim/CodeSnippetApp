@@ -18,7 +18,6 @@ export default clerkMiddleware(
       unauthorizedUrl: newUrl,
     })
   },
-  { debug: true }
 )
 
 export const config = {
