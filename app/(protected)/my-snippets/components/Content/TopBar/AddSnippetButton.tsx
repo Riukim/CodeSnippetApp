@@ -3,7 +3,7 @@ import React from "react"
 
 const AddSnippetButton = () => {
   const {
-    addSnippetState: { isAdding, setIsAdding },
+    addSnippetState: { setIsAdding },
     snippetPanel: { setIsOpen },
   } = useAppContext()
 
