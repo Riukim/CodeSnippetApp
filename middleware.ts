@@ -11,7 +11,7 @@ export default clerkMiddleware(
   (auth, req: NextRequest) => {
     const url = req.nextUrl.clone()
     //console.log(url.origin);
-    const newUrl = url.origin
+    const newUrl = url.origin + "/not-found"
     
     if (isProtectedRoute(req)) auth().protect({
       unauthenticatedUrl: newUrl,
