@@ -15,6 +15,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
+import { usePathname } from "next/navigation"
 
 interface SnippetFooterProps {
   snippet: SingleSnippetTypes
@@ -30,6 +31,8 @@ const SnippetFooter = ({ snippet }: SnippetFooterProps) => {
     },
     isMobileState: {isMobile}
   } = useAppContext()
+
+  const pathname = usePathname()
 
   const [isTrash, setIsTrash] = useState(snippet.isTrash)
   const [isFavorite, setIsFavorite] = useState(snippet.isFavorite)
@@ -194,11 +197,13 @@ const SnippetFooter = ({ snippet }: SnippetFooterProps) => {
             </Dialog>
           </>
         ) : (
-          <Trash2
-            size={18}
-            className="text-muted-foreground hover:text-red-500 cursor-pointer"
-            onClick={handleTrashClick}
-          />
+          pathname !== "/public-snippets" && (
+            <Trash2
+              size={18}
+              className="text-muted-foreground hover:text-red-500 cursor-pointer"
+              onClick={handleTrashClick}
+            />
+          )
         )}
       </div>
     </div>

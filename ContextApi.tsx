@@ -1,6 +1,6 @@
 "use client"
 
-import { Grid2X2, Heart, LogOut, Trash2 } from "lucide-react"
+import { Grid2X2, Heart, LogOut, Trash2, Globe } from "lucide-react"
 import React, { createContext, useContext, useEffect, useState } from "react"
 import {
   AppContextType,
@@ -109,8 +109,20 @@ export default function AppContextProvider({
       ),
     },
     {
-      // Tolto il name perchè andava in conflitto col path e quando facevo logout cercava di reindirizzare nel percorso corrente. Soluzione funzionale
       id: 4,
+      name: "Public Snippets",
+      isSelected: pathname === "/public-snippets",
+      path: "/public-snippets",
+      icon: (
+        <Globe
+          size={18}
+          className="flex-none"
+        />
+      ),
+    },
+    {
+      // Tolto il name perchè andava in conflitto col path e quando facevo logout cercava di reindirizzare nel percorso corrente. Soluzione funzionale
+      id: 5,
       name: "",
       isSelected: pathname === "/",
       path: "/",
@@ -147,7 +159,7 @@ export default function AppContextProvider({
     }))
     setMenuItems(updatedMenuItems)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [pathname])
 
   // Effeto per gestire il ridimensionamento della pagina
   const handleResize = () => {
@@ -184,8 +196,65 @@ export default function AppContextProvider({
       }
     }
 
-    fetchAllSnippets()
-  }, [clerkId])
+    fetchAllSnippets().catch((error) => {
+      console.log("Error in fetchAllSnippets: ", error)
+    })
+  }, [clerkId, pathname])
+
+  // UseEffect per il fetch degli snippet pubblici
+  useEffect(() => {
+    const fetchPublicSnippets = async () => {
+      try {
+        const response = await fetch("/api/publicSnippets")
+
+        if (!response.ok) {
+          throw new Error("Unable to fetch public snippets")
+        }
+
+        const data = await response.json()
+
+        if (data.snippets) {
+          setAllSnippets(data.snippets)
+        }
+      } catch (error) {
+        console.log("Error fetching public snippets: ", error);
+      }
+    }
+    
+    if (pathname === "/public-snippets") {
+      fetchPublicSnippets()
+    }
+  }, [pathname]);
+
+  // useEffect fetch public languages
+  useEffect(() => {
+    const fetchPublicLanguages = async () => {
+      try {
+        const response = await fetch("/api/publicSnippets?countByLanguage=true")
+
+        if (!response.ok) {
+          throw new Error("Unable to fetch public languages")
+        }
+
+        const data = await response.json()
+        const languageCountArray = data.LanguageCount
+
+        if (Array.isArray(languageCountArray)) {
+          setLanguageCount(languageCountArray)
+        } else {
+          console.error("Data received is not an array: ", languageCountArray)
+          setLanguageCount([])
+        }
+      } catch (error) {
+        console.log("Error fetching public languages: ", error)
+        setLanguageCount([])
+      }
+    }
+
+    if (pathname === "/public-snippets") {
+      fetchPublicLanguages()
+    }
+  }, [pathname]);
 
   // Use effect per il fetch di tutti i tag
   useEffect(() => {
@@ -205,8 +274,10 @@ export default function AppContextProvider({
       }
     }
 
-    fetchAllTags()
-  }, [clerkId])
+    fetchAllTags().catch((error) => {
+      console.log("Error in fetchAllTags:", error)
+    })
+  }, [clerkId, pathname])
 
   // Funzione per aggiornare gli Snippet
   const updateSnippet = async (
@@ -329,39 +400,39 @@ export default function AppContextProvider({
   }
 
   // Funzione per modificare tag in db e frontend
-const updateTag = async (
-  tagId: string | number,
-  updateData: Partial<SingleTagType>
-) => {
-  try {
-    // Aggiornamento del tag
-    const response = await fetch(`/api/tags?id=${tagId}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(updateData),
-    })
+  const updateTag = async (
+    tagId: string | number,
+    updateData: Partial<SingleTagType>
+  ) => {
+    try {
+      // Aggiornamento del tag
+      const response = await fetch(`/api/tags?id=${tagId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updateData),
+      })
 
-    if (!response.ok) {
+      if (!response.ok) {
+        throw new Error("Failed to update the tag")
+      }
+
+      const updatedTag = await response.json()
+
+      // Aggiornamento del tag nella collezione dei tag
+      setAllTags((prevTags) =>
+        prevTags.map((tag) =>
+          tag._id === tagId ? { ...tag, ...updatedTag } : tag
+        )
+      )
+
+      return updatedTag
+    } catch (error) {
+      console.log(error)
       throw new Error("Failed to update the tag")
     }
-
-    const updatedTag = await response.json()
-
-    // Aggiornamento del tag nella collezione dei tag
-    setAllTags((prevTags) =>
-      prevTags.map((tag) =>
-        tag._id === tagId ? { ...tag, ...updatedTag } : tag
-      )
-    )
-
-    return updatedTag
-  } catch (error) {
-    console.log(error)
-    throw new Error("Failed to update the tag")
   }
-}
 
   // Funzione per eliminare tag in db e frontend
   const deleteTag = async (tagId: number | string) => {
@@ -385,6 +456,8 @@ const updateTag = async (
   // UseEffect per contare i linguaggi presenti
   useEffect(() => {
     const countSnippetByLanguage = async () => {
+      if (!clerkId) return
+
       try {
         const response = await fetch(
           `/api/snippets?clerkId=${clerkId}&countByLanguage=true`
@@ -408,11 +481,17 @@ const updateTag = async (
         setLanguageCount([])
       }
     }
-    countSnippetByLanguage()
-  }, [allSnippets, clerkId])
+    if (pathname !== "/public-snippets") {
+      countSnippetByLanguage().catch((error) => {
+        console.log("Error in countSnippetByLanguage", error)
+      })
+    }
+  }, [allSnippets, clerkId, pathname])
 
   // UseEffect per contare le tag presenti
   useEffect(() => {
+    if (!clerkId) return
+
     const countTags = async () => {
       try {
         const response = await fetch(
@@ -437,7 +516,9 @@ const updateTag = async (
         setTagsCount([])
       }
     }
-    countTags()
+    countTags().catch((error) => {
+      console.log("Error in countTags", error)
+    })
   }, [allSnippets, clerkId])
 
   return (

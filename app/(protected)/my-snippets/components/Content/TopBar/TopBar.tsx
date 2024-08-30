@@ -12,7 +12,7 @@ const TopBar = () => {
     snippetPanel: { isOpen },
     isMobileState: { isMobile },
   } = useAppContext()
-
+  
   return (
     <div
       className={`rounded-lg flex justify-between items-center bg-background p-3 shadow-md gap-1 ${

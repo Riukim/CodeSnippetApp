@@ -6,7 +6,6 @@ import { dark } from "@clerk/themes"
 import GlobalContextProvider from "@/ContextApi"
 import { ThemeProvider } from "@/components/ThemeProvider"
 import { Toaster } from "@/components/ui/sonner"
-import Navbar from "@/components/Navbar"
 
 const recursive = Recursive({ subsets: ["latin"] })
 
@@ -27,7 +26,6 @@ export default function RootLayout({
     >
       <ClerkProvider
         appearance={{ baseTheme: dark }}
-        afterSignOutUrl={"/"}
       >
         <GlobalContextProvider>
           <body className={`${recursive.className}`}>

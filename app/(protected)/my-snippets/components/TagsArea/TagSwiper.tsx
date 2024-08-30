@@ -1,10 +1,7 @@
 "use client"
 
-import React, { useState } from "react"
-// Import Swiper React components
+import React, { useEffect } from "react"
 import { Swiper, SwiperSlide } from "swiper/react"
-
-// import required modules
 import { FreeMode, Mousewheel, Pagination } from "swiper/modules"
 
 // Import Swiper styles
@@ -15,21 +12,48 @@ import "swiper/css/pagination"
 import { useAppContext } from "@/ContextApi"
 import TagManagment from "@/components/TagManagment"
 import { SingleTagType } from "@/types/context"
+import { usePathname } from "next/navigation"
 
 export default function TagSwiper() {
   const {
     snippetPanel: { isOpen },
+    snippetsState: { allSnippets },
     isMobileState: { isMobile },
     addSnippetState: { isAdding },
     TagsState: { allTags },
     SelectedTagState: { selectedTag, setSelectedTag },
   } = useAppContext()
 
+  const pathname = usePathname()
+
+  // Filtra solo gli snippet pubblici
+  const publicSnippets = allSnippets.filter((snippet) => snippet.isPublic)
+
+  const publicTags = publicSnippets.reduce((acc: SingleTagType[], snippet) => {
+    snippet.tags.forEach((tag) => {
+      const tagWithId = tag as SingleTagType
+      if (!acc.find((t) => t.name === tagWithId.name)) {
+        acc.push(tagWithId)
+      }
+    })
+    return acc
+  }, [] as SingleTagType[])
+
+  const displayedTags = pathname === "/public-snippets" ? publicTags : allTags
+
+  //console.log("publicTags: ", displayedTags)
+
+  useEffect(() => {
+    setSelectedTag([])
+  }, [pathname, setSelectedTag])
+
   const handleTagSelect = (tag: SingleTagType | null) => {
+    //console.log("Selected Tag: ", tag)
     setSelectedTag(tag ? [tag] : [])
   }
 
   const isTagSelected = (tagName: string) => {
+    //console.log("Checking if tag is selected: ", tagName)
     return (
       selectedTag !== null && selectedTag.some((tag) => tag.name === tagName)
     )
@@ -79,7 +103,7 @@ export default function TagSwiper() {
           >
             All
           </SwiperSlide>
-          {allTags.map((tag, index) => (
+          {displayedTags.map((tag, index) => (
             <SwiperSlide
               key={`${tag.name}-${index}`}
               className={`min-w-20 ${
@@ -94,7 +118,7 @@ export default function TagSwiper() {
           ))}
         </Swiper>
       </div>
-      <TagManagment />
+      {pathname !== "/public-snippets" && <TagManagment />}
     </div>
   )
 }

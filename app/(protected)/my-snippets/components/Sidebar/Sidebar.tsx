@@ -1,13 +1,15 @@
+import AuthLinks from '@/components/AuthLinks'
 import Languages from '@/components/Languages'
 import Logo from '@/components/Logo'
 import QuickLinks from '@/components/QuickLinks'
+import { SidebarProps } from '@/types/context'
 import React from 'react'
 
-const Sidebar = () => {
+const Sidebar = ({showQuickLinks}: SidebarProps) => {
   return (
-    <div className='max-lg:hidden bg-background h-auto pr-10 p-6 flex flex-col gap-2 pt-7 border-r'>
+    <div className="max-lg:hidden bg-background h-auto pr-10 p-6 flex flex-col gap-2 pt-8 border-r">
       <Logo />
-      <QuickLinks />
+      {showQuickLinks ? <QuickLinks /> : <AuthLinks />}
       <Languages />
     </div>
   )

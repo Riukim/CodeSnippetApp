@@ -1,10 +1,11 @@
+import Link from "next/link"
 import { Button } from "./ui/button"
 
 const CtaSection = () => {
   return (
     <section className="flex flex-col mx-16 items-center mt-[8rem] gap-6">
       <h2 className="font-bold text-5xl text-center tracking-tight leading-tight">
-        Organize your Code Snippets {" "}
+        Organize your Code Snippets{" "}
         <span className="text-primary underline">Efficently!</span>
       </h2>
 
@@ -15,12 +16,14 @@ const CtaSection = () => {
         programming languages.
       </p>
 
-      <Button
-        variant="default"
-        className="text-white block px-9 font-medium"
-      >
-        Let&apos;s get started!
-      </Button>
+      <Link href="/public-snippets">
+        <Button
+          variant="default"
+          className="text-white block px-9 font-medium"
+        >
+          Start browsing public Snippets
+        </Button>
+      </Link>
     </section>
   )
 }

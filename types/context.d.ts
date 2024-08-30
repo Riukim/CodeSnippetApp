@@ -24,6 +24,10 @@ export interface MenuItem {
   icon: React.ReactNode
 }
 
+export interface SidebarProps {
+  showQuickLinks: boolean
+}
+
 export interface SingleSnippetTypes {
   _id: number | string
   title: string

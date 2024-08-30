@@ -5,6 +5,7 @@ import { Heart } from "lucide-react"
 import React, { useEffect, useState } from "react"
 import { SingleSnippetTypes } from "@/types/context"
 import { formatDate } from "@/lib/formatDate"
+import { usePathname } from "next/navigation"
 
 interface SnippetHeaderProps {
   snippet: SingleSnippetTypes
@@ -17,6 +18,8 @@ const SnippetHeader = ({ snippet }: SnippetHeaderProps) => {
     SelectedSnippetState: { setSelectedSnippet },
     snippetsState: { updateSnippet },
   } = useAppContext()
+
+  const pathname = usePathname()
 
   const [isFavorite, setIsFavorite] = useState(snippet.isFavorite)
   const [isTrash, setIsTrash] = useState(snippet.isTrash)
@@ -57,19 +60,21 @@ const SnippetHeader = ({ snippet }: SnippetHeaderProps) => {
         >
           {snippet.title}
         </span>
-        <div className="pt-1">
-          <Heart
-            size={20}
-            fill={isFavorite ? "red" : "none"}
-            stroke={isFavorite ? "black" : "currentColor"}
-            className={`${
-              isTrash
-                ? "text-muted-foreground cursor-not-allowed"
-                : "hover:fill-red-600 cursor-pointer"
-            }`}
-            onClick={toggleFavorite}
-          />
-        </div>
+        {pathname !== "/public-snippets" && (
+          <div className="pt-1">
+            <Heart
+              size={20}
+              fill={isFavorite ? "red" : "none"}
+              stroke={isFavorite ? "black" : "currentColor"}
+              className={`${
+                isTrash
+                  ? "text-muted-foreground cursor-not-allowed"
+                  : "hover:fill-red-600 cursor-pointer"
+              }`}
+              onClick={toggleFavorite}
+            />
+          </div>
+        )}
       </div>
       <div className="text-muted-foreground text-xs flex gap-1 font-normal mx-4 mt-1">
         <span>{formatDate(new Date(snippet.creationDate))}</span>

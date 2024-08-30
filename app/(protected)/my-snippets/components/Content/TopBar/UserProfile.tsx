@@ -1,7 +1,6 @@
 "use client"
 
 import { UserButton, useUser } from "@clerk/nextjs"
-import Image from "next/image"
 import React from "react"
 
 const UserProfile = () => {

@@ -19,7 +19,7 @@ import { v7 as uuidv7 } from "uuid"
 
 const TagManagment = () => {
   const {
-    snippetsState: { clerkId, tagsCount, updateSnippet },
+    snippetsState: { clerkId, tagsCount },
     TagsState: { allTags, setAllTags, addTag, deleteTag, updateTag },
   } = useAppContext()
 
