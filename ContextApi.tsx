@@ -132,7 +132,9 @@ export default function AppContextProvider({
             size={18}
             className="flex-none"
           />
-          <SignOutButton />
+          <SignOutButton>
+            <p>Sign out</p>
+          </SignOutButton>
         </div>
       ),
     },
@@ -179,6 +181,9 @@ export default function AppContextProvider({
   // Use Effect per il fetch di tutti gli snippet in base al clerkID
   useEffect(() => {
     if (!clerkId) return
+    if (pathname === "/public-snippets") {
+      return
+    }
 
     const fetchAllSnippets = async () => {
       try {
@@ -217,14 +222,14 @@ export default function AppContextProvider({
           setAllSnippets(data.snippets)
         }
       } catch (error) {
-        console.log("Error fetching public snippets: ", error);
+        console.log("Error fetching public snippets: ", error)
       }
     }
-    
+
     if (pathname === "/public-snippets") {
       fetchPublicSnippets()
     }
-  }, [pathname]);
+  }, [pathname])
 
   // useEffect fetch public languages
   useEffect(() => {
@@ -254,11 +259,14 @@ export default function AppContextProvider({
     if (pathname === "/public-snippets") {
       fetchPublicLanguages()
     }
-  }, [pathname]);
+  }, [pathname])
 
   // Use effect per il fetch di tutti i tag
   useEffect(() => {
     if (!clerkId) return
+    if (pathname === "/public-snippets") {
+      return
+    }
 
     const fetchAllTags = async () => {
       try {
@@ -457,6 +465,9 @@ export default function AppContextProvider({
   useEffect(() => {
     const countSnippetByLanguage = async () => {
       if (!clerkId) return
+      if (pathname === "/public-snippets") {
+        return
+      }
 
       try {
         const response = await fetch(
@@ -491,6 +502,9 @@ export default function AppContextProvider({
   // UseEffect per contare le tag presenti
   useEffect(() => {
     if (!clerkId) return
+    if (pathname === "/public-snippets") {
+      return
+    }
 
     const countTags = async () => {
       try {
@@ -519,7 +533,7 @@ export default function AppContextProvider({
     countTags().catch((error) => {
       console.log("Error in countTags", error)
     })
-  }, [allSnippets, clerkId])
+  }, [allSnippets, clerkId, pathname])
 
   return (
     <AppContext.Provider

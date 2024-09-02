@@ -90,22 +90,22 @@ const ModifySnippet = () => {
     setLanguageError("")
 
     if (field === "title" && !title) {
-      setTitleError("Title is required")
+      setTitleError("Title is required!")
       isValid = false
       setTimeout(() => setTitleError(""), 5000)
     }
     if (field === "description" && !description) {
-      setDescriptionError("Description is required")
+      setDescriptionError("Description is required!")
       isValid = false
       setTimeout(() => setDescriptionError(""), 5000)
     }
     if (field === "code" && !code) {
-      setCodeError("Code is required")
+      setCodeError("Code is required!")
       isValid = false
       setTimeout(() => setCodeError(""), 5000)
     }
     if (field === "language" && !language) {
-      setLanguageError("Language is required")
+      setLanguageError("Please select a language!")
       isValid = false
       setTimeout(() => setLanguageError(""), 5000)
     }

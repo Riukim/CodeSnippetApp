@@ -60,7 +60,7 @@ const AddSnippet = () => {
     }
 
     if (!language) {
-      setLanguageError("Language is required!")
+      setLanguageError("Please select a language!")
       isValid = false
       setTimeout(() => setLanguageError(""), 5000)
     }

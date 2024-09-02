@@ -11,30 +11,8 @@ interface CodeSnippetProps {
   code: string
 }
 
-const Skeleton = () => {
-  return (
-    <div className="rounded-lg h-fit bg-gray-100 dark:bg-gray-700 overflow-hidden text-sm mt-4 mx-4 animate-pulse">
-      <div className="bg-gray-400 h-4 w-1/4 mx-4 my-4 rounded-lg"></div>
-      <div className="bg-gray-400 h-4 w-1/2 mx-4 my-2 rounded-lg"></div>
-      <div className="bg-gray-400 h-4 w-1/3 mx-4 my-2 rounded-lg"></div>
-      <div className="bg-gray-400 h-4 w-3/4 mx-4 my-2 rounded-lg"></div>
-      <div className="bg-gray-400 h-4 w-1/2 mx-4 my-2 rounded-lg"></div>
-      <div className="bg-gray-400 h-4 w-1/4 mx-4 my-4 rounded-lg"></div>
-    </div>
-  )
-}
-
 const CodeSnippet = ({ language, code }: CodeSnippetProps) => {
-  const [mounted, setMounted] = useState(false)
   const { theme } = useTheme()
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  if (!mounted) {
-    return <Skeleton />
-  }
 
   const style = theme === "dark" ? vs2015 : vs
 
