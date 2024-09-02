@@ -32,7 +32,7 @@ const PublicSnippets = () => {
     })
 
   return (
-    <div className="grid py-5 shadow-md gap-4 grid-cols-3 max-sm:grid-cols-1 max-xl:grid-cols-2">
+    <div className="grid gap-4 py-5 w-full grid-cols-3 max-sm:grid-cols-1 max-xl:grid-cols-2">
       {isLoading ? (
         <>
           <LoadingSkeleton />
@@ -55,7 +55,7 @@ export default PublicSnippets
 
 const LoadingSkeleton = () => {
   return (
-    <div className="bg-background flex flex-col flex-1 w-[396px] max-h-dvh rounded-lg shadow-md py-4 animate-pulse">
+    <div className="bg-background flex flex-col flex-1 max-sm:w-full w-auto max-h-dvh rounded-lg shadow-md py-4 animate-pulse">
       {/* Placeholder per il titolo */}
       <div className="h-6 bg-gray-300 rounded w-2/3 mb-4 mx-4"></div>
       {/* Placeholder per i tag */}

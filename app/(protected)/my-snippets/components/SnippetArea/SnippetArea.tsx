@@ -155,7 +155,7 @@ export default SnippetArea
 
 const LoadingSkeleton = () => {
   return (
-    <div className="bg-background flex flex-col flex-1 w-[396px] max-h-dvh rounded-lg shadow-md py-4 animate-pulse">
+    <div className="bg-background flex flex-col flex-1 max-h-dvh rounded-lg shadow-md py-4 animate-pulse">
       {/* Placeholder per il titolo */}
       <div className="h-6 bg-gray-300 rounded w-2/3 mb-4 mx-4"></div>
       {/* Placeholder per i tag */}

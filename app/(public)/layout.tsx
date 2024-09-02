@@ -12,7 +12,7 @@ export default function RootLayout({
     <>
       <main className="bg-secondary flex flex-col lg:flex-row min-h-screen h-fill w-full">
         <SidebarWrapper />
-        <div className="px-5 flex-grow">
+        <div className="px-5 w-full">
           <TopBar />
           <TagSwiper />
           {children}
