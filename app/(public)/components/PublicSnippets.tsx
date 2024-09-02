@@ -42,7 +42,7 @@ const PublicSnippets = () => {
       ) : (
         visibleSnippet.map((snippet) => (
           <SingleSnippet
-            key={snippet._id}
+            key={snippet.title}
             snippet={snippet}
           />
         ))
