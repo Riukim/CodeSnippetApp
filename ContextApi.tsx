@@ -199,7 +199,7 @@ export default function AppContextProvider({
     fetchAllSnippets().catch((error) => {
       console.log("Error in fetchAllSnippets: ", error)
     })
-  }, [clerkId, pathname])
+  }, [pathname, clerkId])
 
   // UseEffect per il fetch degli snippet pubblici
   useEffect(() => {

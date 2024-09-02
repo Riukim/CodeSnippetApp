@@ -22,14 +22,50 @@ const AddSnippet = () => {
   } = useAppContext()
 
   const [title, setTitle] = useState<string>("")
+  const [titleError, setTitleError] = useState<string>("")
   const [description, setDescription] = useState<string>("")
+  const [descriptionError, setDescriptionError] = useState<string>("")
   const [code, setCode] = useState<string>("")
+  const [codeError, setCodeError] = useState<string>("")
   const [language, setLanguage] = useState<string>("")
+  const [languageError, setLanguageError] = useState<string>("")
   const [tags, setTags] = useState<{ name: string }[]>([])
   const [newTag, setNewTag] = useState<string>("")
-  const [errorMessage, setErrorMessage] = useState("")
+  const [tagsError, setTagsError] = useState("")
 
   const handleAddSnippet = async () => {
+    let isValid = true
+
+    setTitleError("")
+    setDescriptionError("")
+    setCodeError("")
+    setLanguageError("")
+
+    if (!title) {
+      setTitleError("Title is required!")
+      isValid = false
+      setTimeout(() => setTitleError(""), 5000)
+    }
+
+    if (!description) {
+      setDescriptionError("Description is required!")
+      isValid = false
+      setTimeout(() => setDescriptionError(""), 5000)
+    }
+
+    if (!code) {
+      setCodeError("Code is required!")
+      isValid = false
+      setTimeout(() => setCodeError(""), 5000)
+    }
+
+    if (!language) {
+      setLanguageError("Language is required!")
+      isValid = false
+      setTimeout(() => setLanguageError(""), 5000)
+    }
+
+    if (!isValid) return
     setIsAdding(true)
 
     try {
@@ -54,7 +90,7 @@ const AddSnippet = () => {
           new Date(b.creationDate).getTime() -
           new Date(a.creationDate).getTime()
       )
-    
+
       setAllSnippets(sortedSnippets)
       setIsAdding(false)
       setTitle("")
@@ -74,8 +110,8 @@ const AddSnippet = () => {
     if (newTag.trim() !== "") {
       // Verifica se il tag esiste già nello snippet
       if (tags.some((tag) => tag.name === newTag.trim())) {
-        setErrorMessage("Tag already exists!")
-        setTimeout(() => setErrorMessage(""), 5000)
+        setTagsError("Tag already exists!")
+        setTimeout(() => setTagsError(""), 5000)
         return
       }
       //console.log("nuova tag: ", newTag)
@@ -108,11 +144,11 @@ const AddSnippet = () => {
           setTags(updatedTags)
           //console.log("Tags: ", tags)
           setNewTag("")
-          setErrorMessage("")
+          setTagsError("")
         }
       } catch (error) {
         console.error("Error adding tag to snippet:", error)
-        setErrorMessage("Error adding tag. Please try again.")
+        setTagsError("Error adding tag. Please try again.")
       }
     }
   }
@@ -120,13 +156,13 @@ const AddSnippet = () => {
   const handleAddTagFromCombobox = (tagName: string) => {
     if (tagName.trim()) {
       if (tags.some((tag) => tag.name === tagName.trim())) {
-        setErrorMessage("Tag already exists!")
-        setTimeout(() => setErrorMessage(""), 5000)
+        setTagsError("Tag already exists!")
+        setTimeout(() => setTagsError(""), 5000)
         return
       }
       const updatedTags = [...tags, { name: tagName.trim() }]
       setTags(updatedTags)
-      setErrorMessage("")
+      setTagsError("")
     }
   }
 
@@ -163,6 +199,9 @@ const AddSnippet = () => {
           setTitle={setTitle}
           updateTitle={() => {}}
         />
+        {titleError && (
+          <p className="text-red-500 text-sm mt-1">{titleError}</p>
+        )}
         <Separator className="mt-2 bg-input" />
 
         <TagsInput
@@ -172,9 +211,9 @@ const AddSnippet = () => {
           setNewTag={setNewTag}
           handleAddTag={handleAddTag}
           handleRemoveTag={handleRemoveTag}
-          errorMessage={errorMessage}
+          errorMessage={tagsError}
           handleAddTagFromCombobox={handleAddTagFromCombobox}
-          setErrorMessage={setErrorMessage}
+          setErrorMessage={setTagsError}
         />
         <Separator className="mt-2 bg-input" />
 
@@ -183,6 +222,9 @@ const AddSnippet = () => {
           setDescription={setDescription}
           updateDescription={() => {}}
         />
+        {descriptionError && (
+          <p className="text-red-500 text-sm mt-1">{descriptionError}</p>
+        )}
         <Separator className="mt-2 bg-input" />
 
         <LanguageSelector
@@ -190,6 +232,9 @@ const AddSnippet = () => {
           setLanguage={setLanguage}
           updateLanguage={() => {}}
         />
+        {languageError && (
+          <p className="text-red-500 text-sm mt-1">{languageError}</p>
+        )}
         <Separator className="mt-2 bg-input" />
 
         <CodeEditor
@@ -198,9 +243,17 @@ const AddSnippet = () => {
           setCode={setCode}
           updateCode={() => {}}
         />
+        {codeError && (
+          <p className="text-red-500 text-sm mt-1">{codeError}</p>
+        )}
 
         <div className="flex justify-end mt-4">
-          <Button onClick={handleAddSnippet}>Add Snippet</Button>
+          <Button
+            className="text-foreground"
+            onClick={handleAddSnippet}
+          >
+            Add Snippet
+          </Button>
         </div>
       </div>
     </div>

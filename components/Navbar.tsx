@@ -9,7 +9,7 @@ const Navbar = () => {
   const { userId } = useAuth()
     
   return (
-    <nav className="flex m-5 max-sm:mt-9 mx-8 items-center justify-between max-sm:flex-col">
+    <nav className="flex mt-8 mx-6 max-sm:mt-9 items-center justify-between max-sm:flex-col">
       <Link href="/">
         <Logo />
       </Link>

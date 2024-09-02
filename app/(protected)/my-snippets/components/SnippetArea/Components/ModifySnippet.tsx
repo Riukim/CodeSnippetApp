@@ -31,12 +31,16 @@ const ModifySnippet = () => {
     SingleSnippetTypes | undefined
   >(undefined)
   const [title, setTitle] = useState<string>("")
+  const [titleError, setTitleError] = useState<string>("")
   const [description, setDescritpion] = useState<string>("")
+  const [descriptionError, setDescriptionError] = useState<string>("")
   const [code, setCode] = useState<string>("")
+  const [codeError, setCodeError] = useState<string>("")
   const [language, setLanguage] = useState<string>("")
+  const [languageError, setLanguageError] = useState<string>("")
   const [tags, setTags] = useState<{ name: string; clerkUserId?: string }[]>([])
   const [newTag, setNewTag] = useState<string>("")
-  const [errorMessage, setErrorMessage] = useState("")
+  const [tagsError, setTagsError] = useState("")
 
   // UseEffect per impostare valori iniziali quando si apre per modificare snippet
   useEffect(() => {
@@ -77,56 +81,89 @@ const ModifySnippet = () => {
     }
   }
 
-  const updateTitle = () => updateField("title", title)
-  const updateDescription = () => updateField("description", description)
-  const updateLanguage = () => updateField("language", language)
-  const updateCode = () => updateField("code", code)
+  const validateField = (field: string) => {
+    let isValid = true
+
+    setTitleError("")
+    setDescriptionError("")
+    setCodeError("")
+    setLanguageError("")
+
+    if (field === "title" && !title) {
+      setTitleError("Title is required")
+      isValid = false
+      setTimeout(() => setTitleError(""), 5000)
+    }
+    if (field === "description" && !description) {
+      setDescriptionError("Description is required")
+      isValid = false
+      setTimeout(() => setDescriptionError(""), 5000)
+    }
+    if (field === "code" && !code) {
+      setCodeError("Code is required")
+      isValid = false
+      setTimeout(() => setCodeError(""), 5000)
+    }
+    if (field === "language" && !language) {
+      setLanguageError("Language is required")
+      isValid = false
+      setTimeout(() => setLanguageError(""), 5000)
+    }
+
+    if (isValid) {
+      updateField(field, eval(field))
+    }
+  }
+
+  const updateTitle = () => validateField("title")
+  const updateDescription = () => validateField("description")
+  const updateLanguage = () => validateField("language")
+  const updateCode = () => validateField("code")
 
   const handleAddTag = async () => {
     if (newTag.trim() !== "") {
       // Verifica se il tag esiste già nello snippet
       if (tags.some((tag) => tag.name === newTag.trim())) {
-        setErrorMessage("Tag already exists!")
-        setTimeout(() => setErrorMessage(""), 5000)
+        setTagsError("Tag already exists!")
+        setTimeout(() => setTagsError(""), 5000)
         return
       }
-      console.log("nuova tag: ", newTag);
-      
+      console.log("nuova tag: ", newTag)
+
       try {
         let existingTag = allTags.find(
           (tag) => tag.name.toLowerCase() === newTag.trim().toLowerCase()
         )
-        console.log("existingTag: ", existingTag);
-        
+        console.log("existingTag: ", existingTag)
+
         if (!existingTag) {
           const newTagData: SingleTagType = await addTag({
             name: newTag.trim(),
             clerkUserId: clerkId,
           })
-          console.log("newTagData: ",newTagData);
-          
+          console.log("newTagData: ", newTagData)
+
           const updatedTags = [...allTags, newTagData]
           setAllTags(updatedTags)
-          console.log("allTags: ", updatedTags);
+          console.log("allTags: ", updatedTags)
           existingTag = newTagData
-          console.log("existingTag2: ", newTagData);
-          
+          console.log("existingTag2: ", newTagData)
         }
 
         // Assicurati che existingTag non sia undefined prima di aggiungerlo
         if (existingTag) {
           const updatedTags = [...tags, existingTag]
-          console.log("UpdatedTags: " ,updatedTags);
-          
+          console.log("UpdatedTags: ", updatedTags)
+
           updateField("tags", updatedTags)
           setTags(updatedTags)
-          console.log("Tags: ", tags);
+          console.log("Tags: ", tags)
           setNewTag("")
-          setErrorMessage("")
+          setTagsError("")
         }
       } catch (error) {
         console.error("Error adding tag to snippet:", error)
-        setErrorMessage("Error adding tag. Please try again.")
+        setTagsError("Error adding tag. Please try again.")
       }
     }
   }
@@ -134,14 +171,14 @@ const ModifySnippet = () => {
   const handleAddTagFromCombobox = (tagName: string) => {
     if (tagName.trim()) {
       if (tags.some((tag) => tag.name === tagName.trim())) {
-        setErrorMessage("Tag already exists!")
-        setTimeout(() => setErrorMessage(""), 5000)
+        setTagsError("Tag already exists!")
+        setTimeout(() => setTagsError(""), 5000)
         return
       }
       const updatedTags = [...tags, { name: tagName.trim() }]
       updateField("tags", updatedTags)
       setTags(updatedTags)
-      setErrorMessage("")
+      setTagsError("")
     }
   }
 
@@ -210,6 +247,9 @@ const ModifySnippet = () => {
           setTitle={setTitle}
           updateTitle={updateTitle}
         />
+        {titleError && (
+          <p className="text-red-500 text-sm mt-1">{titleError}</p>
+        )}
         <Separator className="mt-2 bg-input" />
 
         {/* Input per aggiungere/togliere tag */}
@@ -221,8 +261,8 @@ const ModifySnippet = () => {
           handleAddTag={handleAddTag}
           handleRemoveTag={handleRemoveTag}
           handleAddTagFromCombobox={handleAddTagFromCombobox}
-          errorMessage={errorMessage}
-          setErrorMessage={setErrorMessage}
+          errorMessage={tagsError}
+          setErrorMessage={setTagsError}
         />
         <Separator className="mt-2 bg-input" />
 
@@ -232,6 +272,9 @@ const ModifySnippet = () => {
           setDescription={setDescritpion}
           updateDescription={updateDescription}
         />
+        {descriptionError && (
+          <p className="text-red-500 text-sm mt-1">{descriptionError}</p>
+        )}
         <Separator className="mt-2 bg-input" />
 
         {/* Combobox per modificare il linguaggio di programmazione */}
@@ -240,6 +283,9 @@ const ModifySnippet = () => {
           setLanguage={setLanguage}
           updateLanguage={updateLanguage}
         />
+        {languageError && (
+          <p className="text-red-500 text-sm mt-1">{languageError}</p>
+        )}
         <Separator className="mt-2 bg-input" />
 
         {/* Monaco Editor per modificare il codice */}
@@ -249,6 +295,7 @@ const ModifySnippet = () => {
           setCode={setCode}
           updateCode={updateCode}
         />
+        {codeError && <p className="text-red-500 text-sm mt-1">{codeError}</p>}
       </div>
     </div>
   )

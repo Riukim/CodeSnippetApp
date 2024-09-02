@@ -5,6 +5,8 @@ const isProtectedRoute = createRouteMatcher([
   "/my-snippets(.*)",
   "/trash(.*)",
   "/favorites(.*)",
+  "/api/snippets(.*)",
+  "/api/tags(.*)"
 ])
 
 export default clerkMiddleware(
