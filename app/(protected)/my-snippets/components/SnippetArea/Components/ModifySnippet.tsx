@@ -7,6 +7,7 @@ import { SingleSnippetTypes, SingleTagType } from "@/types/context"
 import { Separator } from "@/components/ui/separator"
 import TitleInput from "@/components/TitleInput"
 import TagsInput from "@/components/TagsInput"
+import { Switch } from "@/components/ui/switch"
 import { useMonaco } from "@monaco-editor/react"
 
 import { useTheme } from "next-themes"
@@ -14,6 +15,7 @@ import { X } from "lucide-react"
 import DescriptionInput from "@/components/DescriptionInput"
 import LanguageSelector from "@/components/LanguageSelector"
 import CodeEditor from "@/components/CodeEditor"
+import { usePathname } from "next/navigation"
 
 const ModifySnippet = () => {
   const {
@@ -41,6 +43,13 @@ const ModifySnippet = () => {
   const [tags, setTags] = useState<{ name: string; clerkUserId?: string }[]>([])
   const [newTag, setNewTag] = useState<string>("")
   const [tagsError, setTagsError] = useState("")
+  const [isPublic, setIsPublic] = useState<boolean>(false)
+
+  const pathname = usePathname()
+  useEffect(() => {
+    setIsOpen(false)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname])
 
   // UseEffect per impostare valori iniziali quando si apre per modificare snippet
   useEffect(() => {
@@ -51,6 +60,7 @@ const ModifySnippet = () => {
       setCode(selectedSnippet.code)
       setLanguage(selectedSnippet.language)
       setTags(selectedSnippet.tags)
+      setIsPublic(selectedSnippet.isPublic)
     }
   }, [isOpen, selectedSnippet])
 
@@ -187,6 +197,11 @@ const ModifySnippet = () => {
     updateField("tags", updateTags)
   }
 
+  const handleIsPublicChange = async (checked: boolean) => {
+    setIsPublic(checked)
+    await updateField("isPublic", checked)
+  }
+
   // Monaco Editor custom colors
   useEffect(() => {
     if (monaco) {
@@ -296,6 +311,20 @@ const ModifySnippet = () => {
           updateCode={updateCode}
         />
         {codeError && <p className="text-red-500 text-sm mt-1">{codeError}</p>}
+        <Separator className="mt-2 bg-input" />
+
+        <div className="flex flex-col">
+          <div className="flex items-center mt-4 justify-end">
+            <span className="mr-4">Set Public Snippet</span>
+            <Switch
+              checked={isPublic}
+              onCheckedChange={handleIsPublicChange}
+            />
+          </div>
+          <span className="text-input text-end mt-2 text-xs">
+            Set your snippet public so other people can see it.
+          </span>
+        </div>
       </div>
     </div>
   )

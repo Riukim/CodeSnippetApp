@@ -97,7 +97,7 @@ const CodeEditor = ({
         </span>
       ) : (
         <span className="text-input text-end text-xs">
-          Enter or modify the code for your snippet.
+          Enter the code for your snippet.
         </span>
       )}
       {isOpen && (

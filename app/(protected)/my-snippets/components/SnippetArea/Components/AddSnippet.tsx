@@ -1,17 +1,19 @@
 "use client"
 
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useAppContext } from "@/ContextApi"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
+import { Switch } from "@/components/ui/switch"
 import LanguageSelector from "@/components/LanguageSelector"
 import TagsInput from "@/components/TagsInput"
 import TitleInput from "@/components/TitleInput"
 import DescriptionInput from "@/components/DescriptionInput"
 import CodeEditor from "@/components/CodeEditor"
-import { X } from "lucide-react"
+import { Globe, X } from "lucide-react"
 import { v7 as uuidv7 } from "uuid"
 import { SingleTagType } from "@/types/context"
+import { usePathname } from "next/navigation"
 
 const AddSnippet = () => {
   const {
@@ -32,6 +34,13 @@ const AddSnippet = () => {
   const [tags, setTags] = useState<{ name: string }[]>([])
   const [newTag, setNewTag] = useState<string>("")
   const [tagsError, setTagsError] = useState("")
+  const [isPublic, setIsPublic] = useState<boolean>(false)
+
+  const pathname = usePathname()
+  useEffect(() => {
+    setIsAdding(false)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname])
 
   const handleAddSnippet = async () => {
     let isValid = true
@@ -81,6 +90,7 @@ const AddSnippet = () => {
           clerkUserId: clerkId,
         })),
         clerkUserId: clerkId,
+        isPublic,
       }
 
       const savedSnippet = await addSnippet(newSnippet)
@@ -243,9 +253,25 @@ const AddSnippet = () => {
           setCode={setCode}
           updateCode={() => {}}
         />
-        {codeError && (
-          <p className="text-red-500 text-sm mt-1">{codeError}</p>
-        )}
+        {codeError && <p className="text-red-500 text-sm mt-1">{codeError}</p>}
+        <Separator className="mt-2 bg-input" />
+
+        <div className="flex flex-col">
+          <div className="flex items-center mt-4">
+            <Globe className="text-input mt-1 flex-none" />
+            <div className="ml-auto">
+              <span className="mr-4">Set Public Snippet</span>
+              <Switch
+                checked={isPublic}
+                onCheckedChange={(checked) => setIsPublic(checked)}
+              />
+            </div>
+          </div>
+          <span className="text-input text-end mt-2 text-xs">
+            Set your snippet public so other people can see it.
+          </span>
+        </div>
+        <Separator className="mt-2 bg-input" />
 
         <div className="flex justify-end mt-4">
           <Button
