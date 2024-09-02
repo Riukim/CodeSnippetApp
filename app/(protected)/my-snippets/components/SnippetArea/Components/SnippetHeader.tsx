@@ -1,7 +1,7 @@
 "use client"
 
 import { useAppContext } from "@/ContextApi"
-import { Heart } from "lucide-react"
+import { Heart, Globe } from "lucide-react"
 import React, { useEffect, useState } from "react"
 import { SingleSnippetTypes } from "@/types/context"
 import { formatDate } from "@/lib/formatDate"
@@ -54,12 +54,20 @@ const SnippetHeader = ({ snippet }: SnippetHeaderProps) => {
   return (
     <>
       <div className="flex justify-between mx-4">
-        <span
-          className="font-bold text-lg w-[87%] hover:text-primary cursor-pointer line-clamp-2 whitespace-normal break-words"
-          onClick={handleTitleClick}
-        >
-          {snippet.title}
-        </span>
+        <div className="flex gap-2">
+          <span
+            className="font-bold text-lg w-auto hover:text-primary cursor-pointer line-clamp-2 whitespace-normal break-words"
+            onClick={handleTitleClick}
+          >
+            {snippet.title}
+          </span>
+          {snippet.isPublic && (
+            <Globe
+              size={20}
+              className="mt-1 text-primary mr-auto"
+            />
+          )}
+        </div>
         {pathname !== "/public-snippets" && (
           <div className="pt-1">
             <Heart
