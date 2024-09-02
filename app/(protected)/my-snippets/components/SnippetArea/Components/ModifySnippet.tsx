@@ -23,7 +23,7 @@ const ModifySnippet = () => {
     isMobileState: { isMobile },
     snippetsState: { allSnippets, setAllSnippets, updateSnippet, clerkId },
     SelectedSnippetState: { selectedSnippet },
-    TagsState: { allTags, setAllTags, addTag, deleteTag },
+    TagsState: { allTags, setAllTags, addTag },
   } = useAppContext()
 
   const { theme } = useTheme()

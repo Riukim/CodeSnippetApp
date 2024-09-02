@@ -30,6 +30,7 @@ const TagManagment = () => {
   const [isAddingOpen, setIsAddingOpen] = useState(false)
   const [editTagId, setEditTagId] = useState<string | number>("")
   const [editTagName, setEditTagName] = useState<string>("")
+  const [tagError, setTagError] = useState<Record<string, string>>({})
 
   const handleAddTag = async () => {
     if (newTagName.trim() !== "") {
@@ -80,9 +81,10 @@ const TagManagment = () => {
         currentTag.name.toLowerCase() === editTagName.toLowerCase()
       ) {
         setErrorMessage("The tag name has not changed!")
+        setTimeout(() => setErrorMessage(""), 2500)
         return
       }
-      
+
       // controllo se esiste giò un altro tag con lo stesso nome
       const tagExist = allTags.some(
         (tag) =>
@@ -92,6 +94,14 @@ const TagManagment = () => {
 
       if (tagExist) {
         setErrorMessage("Tag with this name already exists!")
+        setTimeout(() => setErrorMessage(""), 2500)
+        return
+      }
+
+      const currentTagCount = getTagCount(currentTag!.name)
+      if (currentTagCount > 0) {
+        setErrorMessage("Tag cannot be modified because it's in use.")
+        setTimeout(() => setErrorMessage(""), 2500)
         return
       }
 
@@ -118,6 +128,18 @@ const TagManagment = () => {
   }
 
   const handleDelete = async (tagId: string | number) => {
+    const currentTagCount = getTagCount(
+      allTags.find((tag) => tag._id === tagId)?.name || ""
+    )
+    if (currentTagCount > 0) {
+      setTagError((prev) => ({
+        ...prev,
+        [tagId]: "Tag cannot be deleted because it's in use.",
+      }))
+      setTimeout(() => setTagError((prev) => ({ ...prev, [tagId]: "" })), 2500)
+      return
+    }
+
     try {
       await deleteTag(tagId)
       setAllTags((prevTags) => prevTags.filter((tag) => tag._id !== tagId))
@@ -131,7 +153,7 @@ const TagManagment = () => {
     const tag = tagsCount.find((tag) => tag._id === tagName)
     return tag ? tag.count : 0
   }
-  
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -287,27 +309,34 @@ const TagManagment = () => {
             .map((tag, index) => (
               <div
                 key={`${tag.name}-${index}`}
-                className="flex justify-between items-center p-2 rounded-lg bg-secondary mb-2"
+                className="flex flex-col p-2 rounded-lg bg-secondary mb-2"
               >
-                <span className="bg-green-100 text-green-800 p-1 rounded-lg px-2">
-                  {tag.name} ({getTagCount(tag.name)})
-                </span>
-                <div className="flex gap-2">
-                  <div className="p-2 rounded-full bg-green-100 cursor-pointer">
-                    <Pencil
-                      size={16}
-                      className="text-green-800"
-                      onClick={() => handleUpdateClick(tag._id, tag.name)}
-                    />
-                  </div>
-                  <div className="p-2 rounded-full hover:bg-red-400 bg-green-100 cursor-pointer">
-                    <X
-                      size={16}
-                      className="text-green-800"
-                      onClick={() => handleDelete(tag._id)}
-                    />
+                <div className="flex justify-between items-center">
+                  <span className="bg-green-100 text-green-800 p-1 rounded-lg px-2">
+                    {tag.name} ({getTagCount(tag.name)})
+                  </span>
+                  <div className="flex gap-2">
+                    <div className="p-2 rounded-full bg-green-100 cursor-pointer">
+                      <Pencil
+                        size={16}
+                        className="text-green-800"
+                        onClick={() => handleUpdateClick(tag._id, tag.name)}
+                      />
+                    </div>
+                    <div className="p-2 rounded-full hover:bg-red-400 bg-green-100 cursor-pointer">
+                      <X
+                        size={16}
+                        className="text-green-800"
+                        onClick={() => handleDelete(tag._id)}
+                      />
+                    </div>
                   </div>
                 </div>
+                {tagError[tag._id] && (
+                  <p className="text-red-600 text-sm mt-1">
+                    {tagError[tag._id]}
+                  </p>
+                )}
               </div>
             ))}
         </div>
