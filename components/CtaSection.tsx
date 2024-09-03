@@ -38,8 +38,8 @@ const CtaSection = () => {
         width={1240}
         height={632}
         alt="hero image"
-        src="images/snippetshare.png"
-        className="mb-6"
+        src="images/snippetshare2.png"
+        className="mb-6 border border-secondary"
       />
     </section>
   )
