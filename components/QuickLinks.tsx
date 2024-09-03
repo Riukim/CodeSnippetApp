@@ -2,16 +2,25 @@
 
 import { useAppContext } from "@/ContextApi"
 import { useRouter } from "next/navigation"
-import { useAuth } from "@clerk/nextjs"
+import { useAuth, useClerk } from "@clerk/nextjs"
 import React from "react"
+import { LogOut } from "lucide-react"
 
 const QuickLinks = () => {
   const {
     menuState: { menuItems, setMenuItems },
+    resetContext,
   } = useAppContext()
 
+  const { signOut } = useClerk()
   const { userId } = useAuth()
   const router = useRouter()
+
+  const handleLogout = async () => {
+    signOut()
+    router.push("/")
+    resetContext()
+  }
 
   const clickedMenuItem = async (index: number) => {
     if (!userId) {
@@ -46,6 +55,13 @@ const QuickLinks = () => {
             <span>{menu.name}</span>
           </li>
         ))}
+        <li
+          className="flex cursor-pointer select-none gap-2 p-[7px] px-2 items-center w-[80%] rounded-md text-slate-400"
+          onClick={handleLogout}
+        >
+          <LogOut size={18} className="flex-none" />
+          <p>Sign Out</p>
+        </li>
       </ul>
     </div>
   )

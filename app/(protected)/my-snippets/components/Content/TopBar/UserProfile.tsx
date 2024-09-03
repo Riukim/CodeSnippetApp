@@ -1,11 +1,24 @@
 "use client"
 
-import { UserButton, useUser } from "@clerk/nextjs"
+import { useAppContext } from "@/ContextApi"
+import { useClerk, UserButton, useUser } from "@clerk/nextjs"
+import { LogOut } from "lucide-react"
+import { useRouter } from "next/navigation"
 import React from "react"
 
 const UserProfile = () => {
+  const { resetContext } = useAppContext()
+
   const { user } = useUser()
+  const { signOut } = useClerk()
+  const router = useRouter()
   const imgUrl = user?.imageUrl
+
+  const handleLogout = async () => {
+    signOut()
+    router.push("/")
+    resetContext()
+  }
 
   const loadingImage = (
     <div className="w-10 h-10 rounded-full mb-[5px] bg-muted animate-pulse items-center"></div>
@@ -19,6 +32,18 @@ const UserProfile = () => {
     <span className="font-semibold animate-pulse bg-muted h-4 w-[100px]"></span>
   )
 
+  const DotIcon = () => {
+    return (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 512 512"
+        fill="currentColor"
+      >
+        <path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512z" />
+      </svg>
+    )
+  }
+
   return (
     <div className="flex gap-3 items-center justify-center">
       {!user ? (
@@ -26,16 +51,25 @@ const UserProfile = () => {
       ) : imgUrl ? (
         <div className="flex items-center">
           <UserButton
-            afterSignOutUrl="/"
+            /* afterSignOutUrl="/" */
             appearance={{
               elements: {
                 avatarBox: "h-10 w-10",
                 userButtonAvatar: "rounded-full",
                 userButton: "flex items-center h-12 w-12",
+                userButtonPopoverActionButton__signOut: "hidden"
               },
             }}
             userProfileMode="modal"
-          />
+          >
+            <UserButton.MenuItems>
+                <UserButton.Action
+                label="Sign Out"
+                labelIcon={<LogOut size={16} />}
+                onClick={handleLogout}
+              />
+            </UserButton.MenuItems>
+          </UserButton>
         </div>
       ) : (
         loadingImage

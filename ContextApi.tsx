@@ -11,7 +11,9 @@ import {
   TagsCountType,
 } from "./types/context"
 import { usePathname } from "next/navigation"
-import { SignOutButton } from "@clerk/nextjs"
+import { SignOutButton, useAuth, useClerk } from "@clerk/nextjs"
+import { Button } from "./components/ui/button"
+import { SignOutOptions } from "@clerk/types"
 
 const AppContext = createContext<AppContextType>({
   menuState: {
@@ -61,6 +63,7 @@ const AppContext = createContext<AppContextType>({
     selectedTag: null,
     setSelectedTag: () => {},
   },
+  resetContext: () => {},
 })
 
 export default function AppContextProvider({
@@ -69,6 +72,22 @@ export default function AppContextProvider({
   children: React.ReactNode
 }) {
   const pathname = usePathname()
+  const { signOut } = useClerk()
+
+  const resetContext = () => {
+    setAllSnippets([])
+    setSelectedSnippet(null)
+    setClerkId("")
+    setAllTags([])
+    setSelectedTag(null)
+    setLanguageCount([])
+    setTagsCount([])
+  }
+
+  const handleLogout = async () => {
+    signOut()
+    resetContext()
+  }
 
   // Definisce lo stato del menu della sidebar e la funzione per aggiornarlo
   const [menuItems, setMenuItems] = useState<MenuItem[]>([
@@ -118,24 +137,6 @@ export default function AppContextProvider({
           size={18}
           className="flex-none"
         />
-      ),
-    },
-    {
-      // Tolto il name perchè andava in conflitto col path e quando facevo logout cercava di reindirizzare nel percorso corrente. Soluzione funzionale
-      id: 5,
-      name: "",
-      isSelected: pathname === "/",
-      path: "/",
-      icon: (
-        <div className="flex gap-2">
-          <LogOut
-            size={18}
-            className="flex-none"
-          />
-          <SignOutButton>
-            <p>Sign out</p>
-          </SignOutButton>
-        </div>
       ),
     },
   ])
@@ -559,6 +560,7 @@ export default function AppContextProvider({
         addSnippetState: { isAdding, setIsAdding, addSnippet },
         TagsState: { allTags, setAllTags, addTag, deleteTag, updateTag },
         SelectedTagState: { selectedTag, setSelectedTag },
+        resetContext,
       }}
     >
       {children}

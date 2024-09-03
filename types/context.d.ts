@@ -99,4 +99,5 @@ export interface AppContextType {
     selectedTag: SingleTagType[] | null
     setSelectedTag: React.Dispatch<React.SetStateAction<SingleTagType[] | null>>
   }
+  resetContext: () => void
 }
