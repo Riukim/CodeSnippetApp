@@ -25,7 +25,7 @@ export default function RootLayout({
     >
       <body className={`${recursive.className}`}>
         <ThemeProvider
-          defaultTheme="system"
+          defaultTheme="dark"
           attribute="class"
         >
           <ClerkThemeProvider>
