@@ -50,7 +50,7 @@ const SnippetArea = () => {
       if (allSnippets.length === 0) {
         setTimeout(() => {
           setIsLoading(false)
-        }, 1000);
+        }, 2000);
       } else {
         setIsLoading(false)
       }
