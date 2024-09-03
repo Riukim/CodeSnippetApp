@@ -2,6 +2,7 @@
 
 import { useAppContext } from "@/ContextApi"
 import Image from "next/image"
+import { useEffect, useState } from "react"
 
 const getIconPath = (language: string) => {
   const lowerCaseLanguage = language.toLowerCase()
@@ -18,12 +19,37 @@ const Languages = () => {
     snippetsState: { languageCount },
   } = useAppContext()
 
-  const noLanguages = languageCount.length === 0
+  const [isloading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    const loadingState = () => {
+      if (languageCount.length === 0) {
+        setTimeout(() => {
+          setIsLoading(false)
+        }, 1000)
+      } else {
+        setIsLoading(false)
+      }
+    }
+    loadingState()
+  }, [languageCount])
+
+  if (isloading) {
+    return (
+      <>
+        <div className="mt-12 font-bold text-sm">Languages</div>
+        <ul className="text-slate-400 mt-4 flex flex-col gap-4">
+          <li className="animate-pulse bg-gray-300 rounded-md h-6 w-[80%]"></li>
+          <li className="animate-pulse bg-gray-300 rounded-md h-6 w-[80%]"></li>
+        </ul>
+      </>
+    )
+  }
 
   return (
     <div className="mt-12 text-sm">
       <div className="font-bold">Languages</div>
-      {noLanguages ? (
+      {languageCount.length === 0 ? (
         <p className="mt-5 text-slate-400 w-[80%]">
           No languages yet.
           <br /> Add a new snippet to show the languages.

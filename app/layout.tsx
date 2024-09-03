@@ -30,7 +30,7 @@ export default function RootLayout({
         <GlobalContextProvider>
           <body className={`${recursive.className}`}>
             <ThemeProvider
-              defaultTheme="light"
+              defaultTheme="system"
               attribute="class"
             >
               {children}
