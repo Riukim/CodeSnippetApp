@@ -7,7 +7,6 @@ import { useUser } from "@clerk/nextjs"
 import { usePathname } from "next/navigation"
 import { SingleSnippetTypes } from "@/types/context"
 import { Trash2, HeartCrack } from "lucide-react"
-import { Separator } from "@/components/ui/separator"
 
 const SnippetArea = () => {
   const {
@@ -18,7 +17,7 @@ const SnippetArea = () => {
     SelectedTagState: { selectedTag },
   } = useAppContext()
 
-  const [isMounted, setIsMounted] = useState(false)
+  const [isloading, setIsLoading] = useState(true)
 
   const { user } = useUser()
   const pathname = usePathname()
@@ -37,16 +36,27 @@ const SnippetArea = () => {
 
   useEffect(() => {
     const fetchSnippets = async () => {
-      setIsMounted(false)
       setAllSnippets((prevSnippets) =>
         prevSnippets.map((snippet) =>
           snippet.isTrash ? { ...snippet, isFavorite: false } : snippet
         )
       )
-      setIsMounted(true)
     }
     fetchSnippets()
   }, [setAllSnippets])
+
+  useEffect(() => {
+    const loadingState = () => {
+      if (allSnippets.length === 0) {
+        setTimeout(() => {
+          setIsLoading(false)
+        }, 1000);
+      } else {
+        setIsLoading(false)
+      }
+    }
+    loadingState()
+  }, [allSnippets]);
 
   const sortByDate = (a: SingleSnippetTypes, b: SingleSnippetTypes) =>
     new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime()
@@ -78,12 +88,7 @@ const SnippetArea = () => {
       return 0
     })
   
-  useEffect(() => {
-    console.log("All Snippets:", allSnippets)
-    console.log("Visible Snippets:", visibleSnippet)
-  }, [allSnippets, visibleSnippet])
-
-  if (!isMounted) {
+  if (isloading) {
     return (
       <div
         className={`grid gap-4 ${
