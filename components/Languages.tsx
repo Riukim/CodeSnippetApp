@@ -16,7 +16,7 @@ const getIconPath = (language: string) => {
 
 const Languages = () => {
   const {
-    snippetsState: { languageCount },
+    snippetsState: { languageCount, setLanguageCount },
   } = useAppContext()
 
   const [isloading, setIsLoading] = useState(true)
@@ -32,6 +32,8 @@ const Languages = () => {
       }
     }
     loadingState()
+    setLanguageCount(languageCount)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [languageCount])
 
   if (isloading) {
