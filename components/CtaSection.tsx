@@ -5,7 +5,7 @@ import { SignInButton } from "@clerk/nextjs"
 
 const CtaSection = () => {
   return (
-    <section className="flex flex-col mx-16 items-center mt-[4rem] gap-6">
+    <section className="flex flex-col mx-16 items-center mt-[3rem] gap-6">
       <h2 className="font-bold text-5xl text-center tracking-tight leading-tight">
         Organize your Code Snippets{" "}
         <span className="text-primary underline">Efficently!</span>
@@ -39,7 +39,7 @@ const CtaSection = () => {
         height={632}
         alt="hero image"
         src="images/snippetshare2.png"
-        className="mb-6 border border-secondary"
+        className="mb-4 border border-secondary"
       />
     </section>
   )
