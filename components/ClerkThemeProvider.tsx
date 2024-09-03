@@ -7,7 +7,6 @@ import { useTheme } from "next-themes"
 
 const ClerkThemeProvider = ({ children }: { children: React.ReactNode }) => {
   const { theme } = useTheme()
-  console.log("theme: ", theme);
   
   if (theme === "dark") {
     return (

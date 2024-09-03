@@ -5,11 +5,24 @@ import { Button } from "./ui/button"
 import Image from "next/image"
 import { SignInButton } from "@clerk/nextjs"
 import { useTheme } from "next-themes"
+import { useEffect, useState } from "react"
 
 const CtaSection = () => {
   const { theme } = useTheme()
-  
-  const imgSrc = theme === "dark" ? "images/snippetshare2.png" : "/images/snippetsharelight.png"
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted) {
+    return null
+  }
+
+  const imgSrc =
+    theme === "dark"
+      ? "images/snippetshare2.png"
+      : "/images/snippetsharelight.png"
 
   return (
     <section className="flex flex-col mx-16 items-center mt-[3rem] gap-6">
