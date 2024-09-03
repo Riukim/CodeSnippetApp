@@ -17,9 +17,9 @@ const SnippetArea = () => {
     SelectedTagState: { selectedTag },
   } = useAppContext()
 
-  const [isloading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(true)
 
-  const { user } = useUser()
+  const { user, isLoaded } = useUser()
   const pathname = usePathname()
 
   const handleClick = () => {
@@ -28,7 +28,7 @@ const SnippetArea = () => {
   }
 
   useEffect(() => {
-    if (user) {
+    if (user && isLoaded) {
       const clerkId = user.id
       setClerkId(clerkId)
     }
@@ -44,21 +44,6 @@ const SnippetArea = () => {
     }
     fetchSnippets()
   }, [setAllSnippets])
-
-  useEffect(() => {
-    const loadingState = async () => {
-      if (allSnippets.length === 0) {
-        setTimeout(() => {
-          setIsLoading(false)
-        }, 2000);
-      } else {
-        setIsLoading(false)
-        setAllSnippets(allSnippets)
-      }
-    }
-    loadingState()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [allSnippets]);
 
   const sortByDate = (a: SingleSnippetTypes, b: SingleSnippetTypes) =>
     new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime()
@@ -89,8 +74,22 @@ const SnippetArea = () => {
       if (selectedSnippet && b._id === selectedSnippet._id) return 1
       return 0
     })
-  
-  if (isloading) {
+
+  useEffect(() => {
+    const loadingState = async () => {
+      if (visibleSnippet.length > 0) {
+        setIsLoading(false)
+      } else {
+        setTimeout(() => {
+          setIsLoading(false)
+        }, 2000)
+      }
+    }
+    loadingState()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [visibleSnippet])
+
+  if (isLoading) {
     return (
       <div
         className={`grid gap-4 ${
@@ -106,7 +105,7 @@ const SnippetArea = () => {
     )
   }
 
-  if (visibleSnippet.length === 0) {
+  if (!isLoading && visibleSnippet.length === 0) {
     return (
       <div className="flex items-center justify-center col-span-full mt-20">
         {pathname === "/my-snippets" && !isAdding && (

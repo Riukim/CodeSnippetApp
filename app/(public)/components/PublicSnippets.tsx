@@ -12,35 +12,34 @@ const PublicSnippets = () => {
   } = useAppContext()
 
   const [isLoading, setIsLoading] = useState(true)
-  const generateKey = (snippet: SingleSnippetTypes) => `${snippet.creationDate}-${snippet.title}`
-  
+  const generateKey = (snippet: SingleSnippetTypes) =>
+    `${snippet.creationDate}-${snippet.title}`
+
+  const visibleSnippet = allSnippets.filter((snippet) => {
+    const titleMatch = snippet.title
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase())
+
+    const tagMatch = selectedTag?.length
+      ? snippet.tags.some((tag) => tag.name === selectedTag[0]?.name)
+      : true
+
+    return snippet.isPublic && titleMatch && tagMatch
+  })
+
   useEffect(() => {
     const loadingState = () => {
-      if (allSnippets.length === 0) {
+      if (visibleSnippet.length === 0) {
         setTimeout(() => {
           setIsLoading(false)
         }, 1000)
       } else {
         setIsLoading(false)
-        setAllSnippets(allSnippets)
       }
     }
     loadingState()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [allSnippets])
-
-  const visibleSnippet = allSnippets
-    .filter((snippet) => {
-      const titleMatch = snippet.title
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase())
-      
-      const tagMatch = selectedTag?.length
-        ? snippet.tags.some((tag) => tag.name === selectedTag[0]?.name)
-        : true
-      
-    return snippet.isPublic && titleMatch && tagMatch
-    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [visibleSnippet])
 
   return (
     <div className="grid gap-4 py-5 w-full grid-cols-3 max-sm:grid-cols-1 max-xl:grid-cols-2">

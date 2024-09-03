@@ -32,7 +32,6 @@ const AppContext = createContext<AppContextType>({
     setClerkId: () => {},
     updateSnippet: async () => {},
     deleteSnippet: async () => {},
-    /* countSnippetByLanguage: async () => { }, */
     languageCount: [],
     setLanguageCount: () => {},
     tagsCount: [],
@@ -60,7 +59,7 @@ const AppContext = createContext<AppContextType>({
     selectedTag: null,
     setSelectedTag: () => {},
   },
-  resetContext: () => {},
+  resetContext: () => {}
 })
 
 export default function AppContextProvider({
@@ -551,7 +550,7 @@ export default function AppContextProvider({
         addSnippetState: { isAdding, setIsAdding, addSnippet },
         TagsState: { allTags, setAllTags, addTag, deleteTag, updateTag },
         SelectedTagState: { selectedTag, setSelectedTag },
-        resetContext,
+        resetContext
       }}
     >
       {children}

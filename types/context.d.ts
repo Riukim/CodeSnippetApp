@@ -11,15 +11,15 @@ export interface TagsCountType {
   count: number
 }
 export interface SingleTagType {
-  _id: number | string,
-  name: string,
+  _id: number | string
+  name: string
   clerkUserId?: string
 }
 
 export interface MenuItem {
   id: number
   name: string
-  path:string
+  path: string
   isSelected: boolean
   icon: React.ReactNode
 }
