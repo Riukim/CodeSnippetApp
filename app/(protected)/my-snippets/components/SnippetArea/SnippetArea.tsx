@@ -46,16 +46,18 @@ const SnippetArea = () => {
   }, [setAllSnippets])
 
   useEffect(() => {
-    const loadingState = () => {
+    const loadingState = async () => {
       if (allSnippets.length === 0) {
         setTimeout(() => {
           setIsLoading(false)
         }, 2000);
       } else {
         setIsLoading(false)
+        setAllSnippets(allSnippets)
       }
     }
     loadingState()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allSnippets]);
 
   const sortByDate = (a: SingleSnippetTypes, b: SingleSnippetTypes) =>

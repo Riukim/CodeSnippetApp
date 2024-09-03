@@ -7,8 +7,8 @@ import React, { useEffect, useState } from "react"
 
 const PublicSnippets = () => {
   const {
-    snippetsState: { allSnippets, searchTerm },
-    SelectedTagState: {selectedTag}
+    snippetsState: { allSnippets, searchTerm, setAllSnippets },
+    SelectedTagState: { selectedTag },
   } = useAppContext()
 
   const [isLoading, setIsLoading] = useState(true)
@@ -22,9 +22,11 @@ const PublicSnippets = () => {
         }, 1000)
       } else {
         setIsLoading(false)
+        setAllSnippets(allSnippets)
       }
     }
     loadingState()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allSnippets])
 
   const visibleSnippet = allSnippets
