@@ -1,9 +1,16 @@
+"use client"
+
 import Link from "next/link"
 import { Button } from "./ui/button"
 import Image from "next/image"
 import { SignInButton } from "@clerk/nextjs"
+import { useTheme } from "next-themes"
 
 const CtaSection = () => {
+  const { theme } = useTheme()
+  
+  const imgSrc = theme === "dark" ? "images/snippetshare2.png" : "/images/snippetsharelight.png"
+
   return (
     <section className="flex flex-col mx-16 items-center mt-[3rem] gap-6">
       <h2 className="font-bold text-5xl text-center tracking-tight leading-tight">
@@ -38,7 +45,7 @@ const CtaSection = () => {
         width={1240}
         height={632}
         alt="hero image"
-        src="images/snippetshare2.png"
+        src={imgSrc}
         className="mb-4 border border-secondary"
       />
     </section>

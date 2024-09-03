@@ -45,7 +45,7 @@ const QuickLinks = () => {
           <li
             key={index}
             onClick={() => clickedMenuItem(index)}
-            className={`flex cursor-pointer select-none gap-2 p-[7px] px-2 items-center w-[80%] rounded-md ${
+            className={`flex cursor-pointer select-none gap-2 p-[7px] px-2 items-center w-[80%] rounded-md hover:bg-primary hover:text-foreground ${
               menu.isSelected
                 ? "bg-primary text-foreground font-semibold"
                 : "text-slate-400"
@@ -56,10 +56,13 @@ const QuickLinks = () => {
           </li>
         ))}
         <li
-          className="flex cursor-pointer select-none gap-2 p-[7px] px-2 items-center w-[80%] rounded-md text-slate-400"
+          className="flex cursor-pointer select-none gap-2 p-[7px] px-2 items-center w-[80%] rounded-md text-slate-400 hover:bg-primary hover:text-foreground"
           onClick={handleLogout}
         >
-          <LogOut size={18} className="flex-none" />
+          <LogOut
+            size={18}
+            className="flex-none"
+          />
           <p>Sign Out</p>
         </li>
       </ul>

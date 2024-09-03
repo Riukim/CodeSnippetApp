@@ -1,11 +1,10 @@
 import type { Metadata } from "next"
 import { Recursive } from "next/font/google"
 import "./globals.css"
-import { ClerkProvider } from "@clerk/nextjs"
-import { dark } from "@clerk/themes"
 import GlobalContextProvider from "@/ContextApi"
 import { ThemeProvider } from "@/components/ThemeProvider"
 import { Toaster } from "@/components/ui/sonner"
+import ClerkThemeProvider from "@/components/ClerkThemeProvider"
 
 const recursive = Recursive({ subsets: ["latin"] })
 
@@ -24,21 +23,19 @@ export default function RootLayout({
       lang="en"
       suppressHydrationWarning
     >
-      <ClerkProvider
-        appearance={{ baseTheme: dark }}
-      >
-        <GlobalContextProvider>
-          <body className={`${recursive.className}`}>
-            <ThemeProvider
-              defaultTheme="system"
-              attribute="class"
-            >
+      <body className={`${recursive.className}`}>
+        <ThemeProvider
+          defaultTheme="system"
+          attribute="class"
+        >
+          <ClerkThemeProvider>
+            <GlobalContextProvider>
               {children}
               <Toaster />
-            </ThemeProvider>
-          </body>
-        </GlobalContextProvider>
-      </ClerkProvider>
+            </GlobalContextProvider>
+          </ClerkThemeProvider>
+        </ThemeProvider>
+      </body>
     </html>
   )
 }
