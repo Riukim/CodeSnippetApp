@@ -2,8 +2,8 @@
 
 import SingleSnippet from "@/app/(protected)/my-snippets/components/SnippetArea/Components/SingleSnippet"
 import { useAppContext } from "@/ContextApi"
+import { SingleSnippetTypes } from "@/types/context"
 import React, { useEffect, useState } from "react"
-import { v7 as uuidv7 } from "uuid"
 
 const PublicSnippets = () => {
   const {
@@ -12,7 +12,8 @@ const PublicSnippets = () => {
   } = useAppContext()
 
   const [isLoading, setIsLoading] = useState(true)
-
+  const generateKey = (snippet: SingleSnippetTypes) => `${snippet.creationDate}-${snippet.title}`
+  
   useEffect(() => {
     const loadingState = () => {
       if (allSnippets.length === 0) {
@@ -50,7 +51,7 @@ const PublicSnippets = () => {
       ) : (
         visibleSnippet.map((snippet) => (
           <SingleSnippet
-            key={uuidv7()}
+            key={generateKey(snippet)}
             snippet={snippet}
           />
         ))
