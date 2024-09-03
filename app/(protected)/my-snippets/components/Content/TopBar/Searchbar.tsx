@@ -1,9 +1,8 @@
-import { SearchIcon } from 'lucide-react'
-import React from 'react'
-import AddSnippetButton from './AddSnippetButton'
-import { useState } from 'react'
 import { useAppContext } from '@/ContextApi'
+import { SearchIcon } from 'lucide-react'
 import { usePathname } from "next/navigation"
+import { useState } from 'react'
+import AddSnippetButton from './AddSnippetButton'
 
 const Searchbar = () => {
   const [searchTerm, setSearchTerm] = useState("")

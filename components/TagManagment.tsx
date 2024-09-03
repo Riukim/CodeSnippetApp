@@ -1,6 +1,5 @@
 "use client"
 
-import React, { useState } from "react"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -13,8 +12,9 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
-import { Pencil, Plus, SearchIcon, TagIcon, X } from "lucide-react"
 import { useAppContext } from "@/ContextApi"
+import { Pencil, Plus, SearchIcon, TagIcon, X } from "lucide-react"
+import { useState } from "react"
 import { v7 as uuidv7 } from "uuid"
 
 const TagManagment = () => {

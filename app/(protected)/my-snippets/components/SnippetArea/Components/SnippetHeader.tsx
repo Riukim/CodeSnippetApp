@@ -1,11 +1,11 @@
 "use client"
 
 import { useAppContext } from "@/ContextApi"
-import { Heart, Globe } from "lucide-react"
-import React, { useEffect, useState } from "react"
-import { SingleSnippetTypes } from "@/types/context"
 import { formatDate } from "@/lib/formatDate"
+import { SingleSnippetTypes } from "@/types/context"
+import { Globe, Heart } from "lucide-react"
 import { usePathname } from "next/navigation"
+import { useEffect, useState } from "react"
 
 interface SnippetHeaderProps {
   snippet: SingleSnippetTypes

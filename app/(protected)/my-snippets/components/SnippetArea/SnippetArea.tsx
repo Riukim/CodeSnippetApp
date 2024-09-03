@@ -1,12 +1,12 @@
 "use client"
 
-import React, { useEffect, useState } from "react"
-import SingleSnippet from "./Components/SingleSnippet"
 import { useAppContext } from "@/ContextApi"
-import { useUser } from "@clerk/nextjs"
-import { usePathname } from "next/navigation"
 import { SingleSnippetTypes } from "@/types/context"
-import { Trash2, HeartCrack } from "lucide-react"
+import { useUser } from "@clerk/nextjs"
+import { HeartCrack, Trash2 } from "lucide-react"
+import { usePathname } from "next/navigation"
+import { useEffect, useState } from "react"
+import SingleSnippet from "./Components/SingleSnippet"
 
 const SnippetArea = () => {
   const {

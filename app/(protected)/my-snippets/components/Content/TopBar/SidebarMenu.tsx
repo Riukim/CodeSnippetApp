@@ -1,4 +1,6 @@
-import { Menu } from 'lucide-react'
+import Languages from '@/components/Languages'
+import Logo from '@/components/Logo'
+import QuickLinks from '@/components/QuickLinks'
 import { Button } from "@/components/ui/button"
 import {
   Sheet,
@@ -8,10 +10,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
-import React from 'react'
-import Logo from '@/components/Logo'
-import QuickLinks from '@/components/QuickLinks'
-import Languages from '@/components/Languages'
+import { Menu } from 'lucide-react'
 
 const SidebarMenu = () => {
   return (

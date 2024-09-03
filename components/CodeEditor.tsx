@@ -1,10 +1,10 @@
 /* eslint-disable react/no-unescaped-entities */
+import { useAppContext } from "@/ContextApi"
 import { Editor, useMonaco } from "@monaco-editor/react"
 import { Code } from "lucide-react"
 import { useTheme } from "next-themes"
-import React, { useEffect } from "react"
+import { useEffect } from "react"
 import { Button } from "./ui/button"
-import { useAppContext } from "@/ContextApi"
 
 interface CodeEditorProps {
   code: string

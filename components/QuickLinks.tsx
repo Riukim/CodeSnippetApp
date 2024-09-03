@@ -1,10 +1,9 @@
 "use client"
 
 import { useAppContext } from "@/ContextApi"
-import { useRouter } from "next/navigation"
 import { useAuth, useClerk } from "@clerk/nextjs"
-import React from "react"
 import { LogOut } from "lucide-react"
+import { useRouter } from "next/navigation"
 
 const QuickLinks = () => {
   const {
@@ -17,7 +16,7 @@ const QuickLinks = () => {
   const router = useRouter()
 
   const handleLogout = async () => {
-    signOut()
+    await signOut()
     router.push("/")
     resetContext()
   }

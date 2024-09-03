@@ -1,6 +1,5 @@
-import React from "react"
-import ContentSection from "../my-snippets/components/Content/ContentSection"
 import SidebarWrapper from "@/app/(public)/components/SidebarWrapper"
+import ContentSection from "../my-snippets/components/Content/ContentSection"
 
 const trash = () => {
   return (

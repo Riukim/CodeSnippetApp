@@ -1,10 +1,10 @@
+import GlobalContextProvider from "@/ContextApi"
+import ClerkThemeProvider from "@/components/ClerkThemeProvider"
+import { ThemeProvider } from "@/components/ThemeProvider"
+import { Toaster } from "@/components/ui/sonner"
 import type { Metadata } from "next"
 import { Recursive } from "next/font/google"
 import "./globals.css"
-import GlobalContextProvider from "@/ContextApi"
-import { ThemeProvider } from "@/components/ThemeProvider"
-import { Toaster } from "@/components/ui/sonner"
-import ClerkThemeProvider from "@/components/ClerkThemeProvider"
 
 const recursive = Recursive({ subsets: ["latin"] })
 

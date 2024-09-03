@@ -4,7 +4,6 @@ import { useAppContext } from "@/ContextApi"
 import { useClerk, UserButton, useUser } from "@clerk/nextjs"
 import { LogOut } from "lucide-react"
 import { useRouter } from "next/navigation"
-import React from "react"
 
 const UserProfile = () => {
   const { resetContext } = useAppContext()
@@ -15,7 +14,7 @@ const UserProfile = () => {
   const imgUrl = user?.imageUrl
 
   const handleLogout = async () => {
-    signOut()
+    await signOut()
     router.push("/")
     resetContext()
   }

@@ -1,9 +1,7 @@
-import { ChevronsUpDown, Tag, X } from "lucide-react"
-import React, { useEffect, useState } from "react"
-import { Input } from "./ui/input"
-import { Button } from "./ui/button"
 import { useAppContext } from "@/ContextApi"
-import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover"
+import { ChevronsUpDown } from "lucide-react"
+import { useEffect, useState } from "react"
+import { Button } from "./ui/button"
 import {
   Command,
   CommandEmpty,
@@ -12,6 +10,7 @@ import {
   CommandItem,
   CommandList,
 } from "./ui/command"
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover"
 
 interface TagsComboboxProps {
   onTagSelect: (tagName: string) => void

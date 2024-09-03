@@ -1,9 +1,8 @@
 /* eslint-disable react/no-unescaped-entities */
-import { BookText } from "lucide-react"
-import React from "react"
-import { Textarea } from "./ui/textarea"
-import { Button } from "./ui/button"
 import { useAppContext } from "@/ContextApi"
+import { BookText } from "lucide-react"
+import { Button } from "./ui/button"
+import { Textarea } from "./ui/textarea"
 
 interface DescriptionInputProps {
   description: string

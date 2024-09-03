@@ -1,12 +1,11 @@
 "use client"
 
-import React from "react"
-import TopBar from "./TopBar/TopBar"
-import TagSwiper from "../TagsArea/TagSwiper"
-import SnippetArea from "../SnippetArea/SnippetArea"
-import ModifySnippet from "../SnippetArea/Components/ModifySnippet"
 import { useAppContext } from "@/ContextApi"
 import AddSnippet from "../SnippetArea/Components/AddSnippet"
+import ModifySnippet from "../SnippetArea/Components/ModifySnippet"
+import SnippetArea from "../SnippetArea/SnippetArea"
+import TagSwiper from "../TagsArea/TagSwiper"
+import TopBar from "./TopBar/TopBar"
 
 const ContentSection = () => {
   const {

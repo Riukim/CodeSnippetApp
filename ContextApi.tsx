@@ -1,6 +1,7 @@
 "use client"
 
-import { Grid2X2, Heart, LogOut, Trash2, Globe } from "lucide-react"
+import { Globe, Grid2X2, Heart, Trash2 } from "lucide-react"
+import { usePathname } from "next/navigation"
 import React, { createContext, useContext, useEffect, useState } from "react"
 import {
   AppContextType,
@@ -10,10 +11,6 @@ import {
   SingleTagType,
   TagsCountType,
 } from "./types/context"
-import { usePathname } from "next/navigation"
-import { SignOutButton, useAuth, useClerk } from "@clerk/nextjs"
-import { Button } from "./components/ui/button"
-import { SignOutOptions } from "@clerk/types"
 
 const AppContext = createContext<AppContextType>({
   menuState: {
@@ -72,7 +69,6 @@ export default function AppContextProvider({
   children: React.ReactNode
 }) {
   const pathname = usePathname()
-  const { signOut } = useClerk()
 
   const resetContext = () => {
     setAllSnippets([])
@@ -82,11 +78,6 @@ export default function AppContextProvider({
     setSelectedTag(null)
     setLanguageCount([])
     setTagsCount([])
-  }
-
-  const handleLogout = async () => {
-    signOut()
-    resetContext()
   }
 
   // Definisce lo stato del menu della sidebar e la funzione per aggiornarlo

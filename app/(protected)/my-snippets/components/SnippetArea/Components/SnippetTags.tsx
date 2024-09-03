@@ -1,4 +1,3 @@
-import React from 'react'
 
 interface SnippetTagsProps {
   tags: { name: string; clerkUserId?: string }[]

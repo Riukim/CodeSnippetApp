@@ -1,11 +1,11 @@
 "use client"
 
-import Link from "next/link"
-import { Button } from "./ui/button"
-import Image from "next/image"
 import { SignInButton } from "@clerk/nextjs"
 import { useTheme } from "next-themes"
+import Image from "next/image"
+import Link from "next/link"
 import { useEffect, useState } from "react"
+import { Button } from "./ui/button"
 
 const CtaSection = () => {
   const { theme } = useTheme()

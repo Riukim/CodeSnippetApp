@@ -1,9 +1,8 @@
 /* eslint-disable react/no-unescaped-entities */
 import { Tag, X } from "lucide-react"
-import React from "react"
-import { Input } from "./ui/input"
-import { Button } from "./ui/button"
 import TagsCombobox from "./TagsCombobox"
+import { Button } from "./ui/button"
+import { Input } from "./ui/input"
 
 interface TagsInputProps {
   tags: { name: string; clerkUserId?: string }[]

@@ -5,7 +5,6 @@ import Searchbar from "@/app/(protected)/my-snippets/components/Content/TopBar/S
 import SidebarMenu from "@/app/(protected)/my-snippets/components/Content/TopBar/SidebarMenu"
 import UserProfile from "@/app/(protected)/my-snippets/components/Content/TopBar/UserProfile"
 import { useUser } from "@clerk/nextjs"
-import React from "react"
 
 const TopBar = () => {
   const { user } = useUser()

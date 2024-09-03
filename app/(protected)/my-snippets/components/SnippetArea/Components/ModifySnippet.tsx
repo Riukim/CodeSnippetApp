@@ -1,20 +1,20 @@
 /* eslint-disable react/no-unescaped-entities */
 "use client"
 
-import { useAppContext } from "@/ContextApi"
-import React, { useEffect, useState } from "react"
-import { SingleSnippetTypes, SingleTagType } from "@/types/context"
-import { Separator } from "@/components/ui/separator"
-import TitleInput from "@/components/TitleInput"
 import TagsInput from "@/components/TagsInput"
+import TitleInput from "@/components/TitleInput"
+import { Separator } from "@/components/ui/separator"
 import { Switch } from "@/components/ui/switch"
+import { useAppContext } from "@/ContextApi"
+import { SingleSnippetTypes, SingleTagType } from "@/types/context"
 import { useMonaco } from "@monaco-editor/react"
+import { useEffect, useState } from "react"
 
-import { useTheme } from "next-themes"
-import { X } from "lucide-react"
+import CodeEditor from "@/components/CodeEditor"
 import DescriptionInput from "@/components/DescriptionInput"
 import LanguageSelector from "@/components/LanguageSelector"
-import CodeEditor from "@/components/CodeEditor"
+import { X } from "lucide-react"
+import { useTheme } from "next-themes"
 import { usePathname } from "next/navigation"
 
 const ModifySnippet = () => {

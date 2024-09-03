@@ -1,11 +1,10 @@
 "use client"
 
-import React from 'react'
-import UserProfile from './UserProfile'
-import Searchbar from './Searchbar'
-import DarkMode from './DarkMode'
-import SidebarMenu from './SidebarMenu'
 import { useAppContext } from '@/ContextApi'
+import DarkMode from './DarkMode'
+import Searchbar from './Searchbar'
+import SidebarMenu from './SidebarMenu'
+import UserProfile from './UserProfile'
 
 const TopBar = () => {
   const {

@@ -1,5 +1,4 @@
 import { Copy } from 'lucide-react'
-import React from 'react'
 import { toast } from 'sonner'
 
 interface SnippetDescriptionProps {

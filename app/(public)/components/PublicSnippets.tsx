@@ -3,7 +3,7 @@
 import SingleSnippet from "@/app/(protected)/my-snippets/components/SnippetArea/Components/SingleSnippet"
 import { useAppContext } from "@/ContextApi"
 import { SingleSnippetTypes } from "@/types/context"
-import React, { useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 
 const PublicSnippets = () => {
   const {

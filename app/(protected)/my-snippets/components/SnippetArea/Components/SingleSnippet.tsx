@@ -1,13 +1,12 @@
 "use client"
 
-import React from "react"
-import SnippetHeader from "./SnippetHeader"
-import SnippetTags from "./SnippetTags"
-import SnippetDescription from "./SnippetDescription"
-import CodeSnippet from "./CodeSnippet"
-import SnippetFooter from "./SnippetFooter"
 import { useAppContext } from "@/ContextApi"
 import { SingleSnippetTypes } from "@/types/context"
+import CodeSnippet from "./CodeSnippet"
+import SnippetDescription from "./SnippetDescription"
+import SnippetFooter from "./SnippetFooter"
+import SnippetHeader from "./SnippetHeader"
+import SnippetTags from "./SnippetTags"
 
 interface SingleSnippetProps {
   snippet: SingleSnippetTypes

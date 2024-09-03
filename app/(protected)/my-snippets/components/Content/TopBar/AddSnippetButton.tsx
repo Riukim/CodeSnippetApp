@@ -1,5 +1,4 @@
 import { useAppContext } from "@/ContextApi"
-import React from "react"
 
 const AddSnippetButton = () => {
   const {

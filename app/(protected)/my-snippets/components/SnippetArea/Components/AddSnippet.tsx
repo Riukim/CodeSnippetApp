@@ -1,19 +1,19 @@
 "use client"
 
-import React, { useEffect, useState } from "react"
 import { useAppContext } from "@/ContextApi"
-import { Button } from "@/components/ui/button"
-import { Separator } from "@/components/ui/separator"
-import { Switch } from "@/components/ui/switch"
+import CodeEditor from "@/components/CodeEditor"
+import DescriptionInput from "@/components/DescriptionInput"
 import LanguageSelector from "@/components/LanguageSelector"
 import TagsInput from "@/components/TagsInput"
 import TitleInput from "@/components/TitleInput"
-import DescriptionInput from "@/components/DescriptionInput"
-import CodeEditor from "@/components/CodeEditor"
-import { Globe, X } from "lucide-react"
-import { v7 as uuidv7 } from "uuid"
+import { Button } from "@/components/ui/button"
+import { Separator } from "@/components/ui/separator"
+import { Switch } from "@/components/ui/switch"
 import { SingleTagType } from "@/types/context"
+import { Globe, X } from "lucide-react"
 import { usePathname } from "next/navigation"
+import { useEffect, useState } from "react"
+import { v7 as uuidv7 } from "uuid"
 
 const AddSnippet = () => {
   const {

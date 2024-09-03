@@ -1,9 +1,9 @@
 "use client"
 
 import { SignInButton, SignUpButton, useAuth } from "@clerk/nextjs"
+import Link from "next/link"
 import Logo from "./Logo"
 import { Button } from "./ui/button"
-import Link from "next/link"
 
 const Navbar = () => {
   const { userId } = useAuth()

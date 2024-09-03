@@ -6,7 +6,6 @@ import Logo from '@/components/Logo'
 import QuickLinks from '@/components/QuickLinks'
 import { SidebarProps } from '@/types/context'
 import Link from 'next/link'
-import React from "react"
 
 const Sidebar = ({ showQuickLinks }: SidebarProps) => {
   return (

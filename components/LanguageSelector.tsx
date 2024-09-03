@@ -1,9 +1,8 @@
 /* eslint-disable react/no-unescaped-entities */
+import { useAppContext } from "@/ContextApi"
 import { Keyboard } from "lucide-react"
-import React from "react"
 import LanguageCombobox from "./LanguageCombobox"
 import { Button } from "./ui/button"
-import { useAppContext } from "@/ContextApi"
 
 interface LanguageSelectorProps {
   language: string

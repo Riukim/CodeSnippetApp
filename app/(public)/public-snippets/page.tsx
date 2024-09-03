@@ -1,4 +1,3 @@
-import React from 'react'
 import PublicSnippets from '../components/PublicSnippets'
 
 const page = () => {

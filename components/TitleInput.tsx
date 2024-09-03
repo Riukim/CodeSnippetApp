@@ -1,9 +1,8 @@
 /* eslint-disable react/no-unescaped-entities */
-import { Type } from "lucide-react"
-import React from "react"
-import { Input } from "./ui/input"
-import { Button } from "./ui/button"
 import { useAppContext } from "@/ContextApi"
+import { Type } from "lucide-react"
+import { Button } from "./ui/button"
+import { Input } from "./ui/input"
 
 interface TitleInputProps {
   title: string

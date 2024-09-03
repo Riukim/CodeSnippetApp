@@ -1,9 +1,4 @@
-import { useAppContext } from "@/ContextApi"
-import { SingleSnippetTypes } from "@/types/context"
-import { Trash2, Undo } from "lucide-react"
-import Image from "next/image"
-import React, { useEffect, useState } from "react"
-import { toast } from "sonner"
+import { Button } from "@/components/ui/button"
 import {
   Dialog,
   DialogClose,
@@ -14,8 +9,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { Button } from "@/components/ui/button"
+import { useAppContext } from "@/ContextApi"
+import { SingleSnippetTypes } from "@/types/context"
+import { Trash2, Undo } from "lucide-react"
+import Image from "next/image"
 import { usePathname } from "next/navigation"
+import { useEffect, useState } from "react"
+import { toast } from "sonner"
 
 interface SnippetFooterProps {
   snippet: SingleSnippetTypes
