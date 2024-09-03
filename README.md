@@ -33,7 +33,7 @@
   - ![Node.js](https://img.shields.io/badge/Node.js-339933?style=flat-square&logo=node.js&logoColor=white)
   - ![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=flat-square&logo=mongodb&logoColor=white)
  
-### Prerequisites
+### To test the App
 
-- Node.js and npm installed
-- MongoDB database running
+- email: johndoe@gmail.com
+- password: testtest
