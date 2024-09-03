@@ -3,6 +3,7 @@
 import SingleSnippet from "@/app/(protected)/my-snippets/components/SnippetArea/Components/SingleSnippet"
 import { useAppContext } from "@/ContextApi"
 import React, { useEffect, useState } from "react"
+import { v7 as uuidv7 } from "uuid"
 
 const PublicSnippets = () => {
   const {
@@ -13,10 +14,17 @@ const PublicSnippets = () => {
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    setTimeout(() => {
-      setIsLoading(false)
-    }, 1500)
-  }, [])
+    const loadingState = () => {
+      if (allSnippets.length === 0) {
+        setTimeout(() => {
+          setIsLoading(false)
+        }, 1000)
+      } else {
+        setIsLoading(false)
+      }
+    }
+    loadingState()
+  }, [allSnippets])
 
   const visibleSnippet = allSnippets
     .filter((snippet) => {
@@ -42,7 +50,7 @@ const PublicSnippets = () => {
       ) : (
         visibleSnippet.map((snippet) => (
           <SingleSnippet
-            key={snippet.title}
+            key={uuidv7()}
             snippet={snippet}
           />
         ))
