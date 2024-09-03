@@ -18,7 +18,7 @@ const SnippetArea = () => {
     SelectedTagState: { selectedTag },
   } = useAppContext()
 
-  const [isLoading, setIsLoading] = useState(true)
+  const [isMounted, setIsMounted] = useState(false)
 
   const { user } = useUser()
   const pathname = usePathname()
@@ -37,18 +37,14 @@ const SnippetArea = () => {
 
   useEffect(() => {
     const fetchSnippets = async () => {
-      setIsLoading(true)
-      // Simula la chiamata API
-      setTimeout(() => {
-        setAllSnippets((prevSnippets) =>
-          prevSnippets.map((snippet) =>
-            snippet.isTrash ? { ...snippet, isFavorite: false } : snippet
-          )
+      setIsMounted(false)
+      setAllSnippets((prevSnippets) =>
+        prevSnippets.map((snippet) =>
+          snippet.isTrash ? { ...snippet, isFavorite: false } : snippet
         )
-        setIsLoading(false)
-      }, 1000) // Simulazione del tempo di caricamento
+      )
+      setIsMounted(true)
     }
-
     fetchSnippets()
   }, [setAllSnippets])
 
@@ -81,8 +77,70 @@ const SnippetArea = () => {
       if (selectedSnippet && b._id === selectedSnippet._id) return 1
       return 0
     })
+  
+  useEffect(() => {
+    console.log("All Snippets:", allSnippets)
+    console.log("Visible Snippets:", visibleSnippet)
+  }, [allSnippets, visibleSnippet])
 
-  const noSnippets = visibleSnippet.length === 0
+  if (!isMounted) {
+    return (
+      <div
+        className={`grid gap-4 ${
+          isOpen || isAdding
+            ? " max-sm:grid-cols-1 max-lg:grid-cols-1 max-xl:grid-cols-1 grid-cols-1"
+            : "grid-cols-3 max-sm:grid-cols-1 max-xl:grid-cols-2"
+        }`}
+      >
+        <LoadingSkeleton />
+        <LoadingSkeleton />
+        <LoadingSkeleton />
+      </div>
+    )
+  }
+
+  if (visibleSnippet.length === 0) {
+    return (
+      <div className="flex items-center justify-center col-span-full mt-20">
+        {pathname === "/my-snippets" && !isAdding && (
+          <div className="flex flex-col items-center gap-4 mt-8">
+            <p className="text-xl font-semibold text-primary">
+              Ready to start?
+            </p>
+            <p className="">
+              Quickly create and organize your favorite code snippets!
+            </p>
+            <button
+              className="bg-primary p-2 rounded-lg"
+              onClick={handleClick}
+            >
+              Add New Snippet
+            </button>
+          </div>
+        )}
+        {pathname === "/favorites" && (
+          <div className="flex flex-col items-center gap-5">
+            <HeartCrack
+              className="text-gray-500"
+              size={36}
+            />
+            <p className="text-center text-gray-500">
+              No favorites yet. Add some to display them here.
+            </p>
+          </div>
+        )}
+        {pathname === "/trash" && (
+          <div className="flex flex-col items-center gap-5">
+            <Trash2
+              className="text-gray-500"
+              size={36}
+            />
+            <p className="text-center text-gray-500">The trash is empty.</p>
+          </div>
+        )}
+      </div>
+    )
+  }
 
   return (
     <div
@@ -92,61 +150,12 @@ const SnippetArea = () => {
           : "grid-cols-3 max-sm:grid-cols-1 max-xl:grid-cols-2"
       }`}
     >
-      {isLoading ? (
-        <>
-          <LoadingSkeleton />
-          <LoadingSkeleton />
-          <LoadingSkeleton />
-        </>
-      ) : noSnippets ? (
-        <>
-          <div className="flex items-center justify-center col-span-full mt-20">
-            {pathname === "/my-snippets" && !isAdding && (
-              <div className="flex flex-col items-center gap-4 mt-8">
-                <p className="text-xl font-semibold text-primary">
-                  Ready to start?
-                </p>
-                <p className="">
-                  Quickly create and organize your favorite code snippets!
-                </p>
-                <button
-                  className="bg-primary p-2 rounded-lg"
-                  onClick={handleClick}
-                >
-                  Add New Snippet
-                </button>
-              </div>
-            )}
-            {pathname === "/favorites" && (
-              <div className="flex flex-col items-center gap-5">
-                <HeartCrack
-                  className="text-gray-500"
-                  size={36}
-                />
-                <p className="text-center text-gray-500">
-                  No favorites yet. Add some to display them here.
-                </p>
-              </div>
-            )}
-            {pathname === "/trash" && (
-              <div className="flex flex-col items-center gap-5">
-                <Trash2
-                  className="text-gray-500"
-                  size={36}
-                />
-                <p className="text-center text-gray-500">The trash is empty.</p>
-              </div>
-            )}
-          </div>
-        </>
-      ) : (
-        visibleSnippet.map((snippet) => (
-          <SingleSnippet
-            key={snippet._id}
-            snippet={snippet}
-          />
-        ))
-      )}
+      {visibleSnippet.map((snippet) => (
+        <SingleSnippet
+          key={snippet._id}
+          snippet={snippet}
+        />
+      ))}
     </div>
   )
 }
