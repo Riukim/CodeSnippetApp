@@ -5,12 +5,15 @@ import DarkMode from './DarkMode'
 import Searchbar from './Searchbar'
 import SidebarMenu from './SidebarMenu'
 import UserProfile from './UserProfile'
+import { useUser } from '@clerk/nextjs'
 
 const TopBar = () => {
   const {
     snippetPanel: { isOpen },
     isMobileState: { isMobile },
   } = useAppContext()
+
+  const { user } = useUser()
   
   return (
     <div
@@ -23,7 +26,7 @@ const TopBar = () => {
 
       <div className="flex justify-between items-center">
         <DarkMode />
-        <SidebarMenu />
+        <SidebarMenu showQuickLinks={!!user} />
       </div>
     </div>
   )
