@@ -1,3 +1,4 @@
+import AuthLinks from '@/components/AuthLinks'
 import Languages from '@/components/Languages'
 import Logo from '@/components/Logo'
 import QuickLinks from '@/components/QuickLinks'
@@ -10,9 +11,10 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
+import { SidebarProps } from '@/types/context'
 import { Menu } from 'lucide-react'
 
-const SidebarMenu = () => {
+const SidebarMenu = ({ showQuickLinks }: SidebarProps) => {
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -31,7 +33,7 @@ const SidebarMenu = () => {
         <SheetDescription hidden>
           This is the sidebar menu with quick links and language options.
         </SheetDescription>
-        <QuickLinks />
+        {showQuickLinks ? <QuickLinks /> : <AuthLinks />}
         <Languages />
       </SheetContent>
     </Sheet>

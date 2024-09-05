@@ -16,7 +16,7 @@ const TopBar = () => {
         <Searchbar />
         <div className="flex gap-2 items-center">
           <DarkMode />
-          <SidebarMenu />
+          <SidebarMenu showQuickLinks={!!user} />
         </div>
       </div>
     </section>
